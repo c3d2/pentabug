@@ -8,17 +8,15 @@
 
 static inline void init_pwm(void)
 {
-	// TCCR1A xx01xx10
-	TCCR1A &= ~0b00100001;
-	TCCR1A |= 0b00000010;
-
-	// TCCR1B xxx11001
-	TCCR1B &= ~0b00000110;
-	TCCR1B |= 0b00011001;
-
 	//PB1 set to output:
 	DDRB |= 0b10;
-	return;
+	OCR1B = 0xefff; //preselect some default
+	ICR1  = 0xffff;  // TOP-wert
+
+	TCCR1A = (1<<COM1B1) | (1<<WGM11); // only b-chan , fastpwm (mode 14)
+	TCCR1B = (1<<WGM13)|(1<<WGM12) | (1<<CS10); //Fastpwm, no prescale
+
+	return 
 }
 
 static void init_leds(void)
@@ -54,16 +52,18 @@ static void stupid_pwmtest(void)
 		OCR1BL = 0xff;
 		_delay_ms(1);
 	}
-
+	return; //never
 }
 
 int main(void)
 {
 
+	//hardware initialisation:
 	init_leds();
 	init_motor();
 	init_pwm();
 
+	//just stupid test for now....
 	stupid_pwmtest();
 
 	//never get here
