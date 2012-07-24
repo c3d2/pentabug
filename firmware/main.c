@@ -9,7 +9,7 @@
 static inline void init_pwm(void)
 {
 	//PB1 set to output:
-	DDRB |= 0b10;
+	DDRB |= (1<<PORTB2);
 	OCR1B = 0xefff; //preselect some default
 	ICR1  = 0xffff; // TOP-wert
 
@@ -44,11 +44,20 @@ static void init_motor(void)
 
 static void stupid_pwmtest(void)
 {
+	uint8_t i,t,r;
+		ICR1 = 0xAA00;
+		r=1;
 	for (;;) {
-		OCR1B = 0xc3d2;
-		_delay_ms(1);
-		OCR1B = 0xeff;
-		_delay_ms(1);
+
+		t = (r)?(t+1):(t-1);
+
+		ICR1 = (t << 7);
+		if(t=0) r ^= 1;
+		for(i=1;i<100;i++) __asm("nop");
+
+
+	
+		
 	}
 	return; //never
 }
