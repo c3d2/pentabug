@@ -11,12 +11,12 @@ static inline void init_pwm(void)
 	//PB1 set to output:
 	DDRB |= 0b10;
 	OCR1B = 0xefff; //preselect some default
-	ICR1  = 0xffff;  // TOP-wert
+	ICR1  = 0xffff; // TOP-wert
 
 	TCCR1A = (1<<COM1B1) | (1<<WGM11); // only b-chan , fastpwm (mode 14)
 	TCCR1B = (1<<WGM13)|(1<<WGM12) | (1<<CS10); //Fastpwm, no prescale
 
-	return 
+	return ;
 }
 
 static void init_leds(void)
@@ -30,8 +30,8 @@ static void init_leds(void)
 inline void setleds(uint8_t state)
 {
 	//set leds according to
-	PORTC |= (state | 0 b00001111);
-	PORTC &= ~(state | 0 b11110000);
+	PORTC |= (state | 0b00001111);
+	PORTC &= ~(state | 0b11110000);
 	return;
 }
 
@@ -45,11 +45,9 @@ static void init_motor(void)
 static void stupid_pwmtest(void)
 {
 	for (;;) {
-		OCR1BH = 0;
-		OCR1BL = 0;
+		OCR1B = 0xc3d2;
 		_delay_ms(1);
-		OCR1BH = 0xff;
-		OCR1BL = 0xff;
+		OCR1B = 0xeff;
 		_delay_ms(1);
 	}
 	return; //never
@@ -58,7 +56,7 @@ static void stupid_pwmtest(void)
 int main(void)
 {
 
-	//hardware initialisation:
+	//hardware initialisation: 
 	init_leds();
 	init_motor();
 	init_pwm();
