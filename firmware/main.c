@@ -6,6 +6,28 @@
 
 #include "main.h"
 
+
+//25kHz
+ISR (TIMER0_OVF_vect)
+{
+
+}
+
+static void init_sampletimer(void)
+{
+	// Timer 0
+	//
+	//set timer0 to CTC & prescaler 64 == 125k
+	TCCR0A = (1<<WGM01);
+	TCCR0B = (1<<CS00)|(1<<CS01);
+	//count up to 5 :
+	OCR0A = 5;
+
+	//enable interrupt
+	TIMSK0 |= (1<<TOIE0);	
+}
+
+
 static inline void init_pwm(void)
 {
 	//PB1 set to output:
