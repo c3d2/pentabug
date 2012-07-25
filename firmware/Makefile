@@ -60,7 +60,7 @@ EXTRAINCDIRS =
 #  -Wall...:  warning level
 #  -Wa,...:   tell GCC to pass this to the assembler.
 #    -ahlms:  create assembler listing
-CFLAGS  = -O$(OPT)
+CFLAGS  = -O$(OPT) -g
 CFLAGS += -funsigned-char
 CFLAGS += -funsigned-bitfields
 CFLAGS += -fpack-struct
