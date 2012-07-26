@@ -134,6 +134,7 @@ int main(void)
 	init_leds();
 	init_motor();
 	init_pwm();
+	init_sampletimer();
 	sample_pending = 0;
 	synth_init();
 
