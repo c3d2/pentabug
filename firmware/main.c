@@ -8,12 +8,6 @@
 
 volatile uint8_t sample_pending;
 
-//25kHz
-ISR(TIMER0_OVF_vect)
-{
-	ICR1 = synth.output;
-	sample_pending = 1;
-}
 
 // sample rate is 8M / (5 * 64) = 25000
 
@@ -34,6 +28,14 @@ typedef struct {
 
 static synth_t synth;
 
+//25kHz
+ISR(TIMER0_OVF_vect)
+{
+	PORTC ^= 0b1;
+	ICR1 = synth.output;
+	sample_pending = 1;
+}
+
 static void synth_init(void)
 {
 	// some test values
@@ -52,7 +54,7 @@ static inline void synth_mix(void)
 		synth_channel_t *chan = &synth.channels[i];
 		chan->phase += chan->speed;
 
-		synth.output += (chan->phase >> 16) & 0xff;
+		synth.output += (chan->phase >> 8) & 0xff;
 	}
 }
 
@@ -94,8 +96,8 @@ static void init_leds(void)
 inline void setleds(uint8_t state)
 {
 	//set leds according to
-	PORTC |= (state | 0 b00001111);
-	PORTC &= ~(state | 0 b11110000);
+	PORTC |= (state | 0b00001111);
+	PORTC &= ~(state | 0b11110000);
 	return;
 }
 
@@ -132,12 +134,12 @@ int main(void)
 	init_leds();
 	init_motor();
 	init_pwm();
-	sample_pending=0;
+	sample_pending = 0;
 	synth_init();
 
 	sei();
 
-	while(1){
+	while(1) {
 		while (0 == sample_pending) ;
 		sample_pending = 0;
 		synth_mix();
