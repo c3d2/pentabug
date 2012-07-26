@@ -43,7 +43,7 @@ static void synth_init(void)
 	synth.channels[0].speed = 1153;
 
 	synth.channels[1].phase = 0;
-	synth.channels[1].speed = 23456;
+	synth.channels[1].speed = 1728;
 }
 
 static inline void synth_mix(void)
