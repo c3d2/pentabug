@@ -5759,71 +5759,6 @@ DIN A4, landscape with location and doc. field</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="buglbr">
-<packages>
-<package name="LA4-432">
-<wire x1="0" y1="3.85" x2="16" y2="3.85" width="0.127" layer="20"/>
-<wire x1="16" y1="3.85" x2="16" y2="-1.1" width="0.127" layer="20"/>
-<wire x1="16" y1="-1.1" x2="0" y2="-1.1" width="0.127" layer="20"/>
-<wire x1="0" y1="-1.1" x2="0" y2="3.85" width="0.127" layer="20"/>
-<circle x="13.15" y="1.2" radius="2" width="0.127" layer="21"/>
-<circle x="13.2" y="1.15" radius="0.1802" width="0.127" layer="21"/>
-<pad name="P$1" x="0" y="2.7" drill="0.7" diameter="1.778" shape="square"/>
-<pad name="P$2" x="0" y="0" drill="0.7" diameter="1.778" shape="square"/>
-<rectangle x1="0.1" y1="2.2" x2="3.1" y2="4.2" layer="1"/>
-<rectangle x1="0" y1="-2" x2="3" y2="0" layer="1"/>
-<polygon width="0.127" layer="21">
-<vertex x="0" y="-1.15"/>
-<vertex x="0.05" y="3.8"/>
-<vertex x="9.95" y="3.8"/>
-<vertex x="9.95" y="-1.15"/>
-</polygon>
-<polygon width="0.127" layer="21">
-<vertex x="15" y="2"/>
-<vertex x="12.05" y="-0.45"/>
-<vertex x="12.45" y="-0.65"/>
-<vertex x="12.9" y="-0.75"/>
-<vertex x="13.45" y="-0.75"/>
-<vertex x="14.1" y="-0.55"/>
-<vertex x="14.6" y="-0.15"/>
-<vertex x="14.9" y="0.3"/>
-<vertex x="15.05" y="0.8"/>
-<vertex x="15.1" y="1.3"/>
-<vertex x="15.1" y="1.65"/>
-<vertex x="14.95" y="2"/>
-</polygon>
-</package>
-</packages>
-<symbols>
-<symbol name="VIBRAMOTOR">
-<wire x1="-7.62" y1="-5.08" x2="-2.54" y2="7.62" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="7.62" x2="0" y2="-5.08" width="0.254" layer="94"/>
-<wire x1="0" y1="-5.08" x2="5.08" y2="7.62" width="0.254" layer="94"/>
-<wire x1="5.08" y1="7.62" x2="7.62" y2="-5.08" width="0.254" layer="94"/>
-<circle x="0" y="0" radius="10.16" width="0.254" layer="94"/>
-<pin name="P$1" x="-15.24" y="-2.54" length="middle" direction="pwr"/>
-<pin name="P$2" x="-15.24" y="2.54" length="middle" direction="pwr"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="VIBRAMOTOR">
-<gates>
-<gate name="G$1" symbol="VIBRAMOTOR" x="15.24" y="2.54"/>
-</gates>
-<devices>
-<device name="" package="LA4-432">
-<connects>
-<connect gate="G$1" pin="P$1" pad="P$1"/>
-<connect gate="G$1" pin="P$2" pad="P$2"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="seb">
 <packages>
 <package name="BATTERY_2XAAA">
@@ -5928,6 +5863,71 @@ DIN A4, landscape with location and doc. field</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="buglbr">
+<packages>
+<package name="LA4-432">
+<wire x1="-6.985" y1="2.58" x2="9.015" y2="2.58" width="0.127" layer="20"/>
+<wire x1="9.015" y1="2.58" x2="9.015" y2="-2.37" width="0.127" layer="20"/>
+<wire x1="9.015" y1="-2.37" x2="-6.985" y2="-2.37" width="0.127" layer="20"/>
+<wire x1="-6.985" y1="-2.37" x2="-6.985" y2="2.58" width="0.127" layer="20"/>
+<circle x="6.165" y="-0.07" radius="2" width="0.127" layer="21"/>
+<circle x="6.215" y="-0.12" radius="0.1802" width="0.127" layer="21"/>
+<pad name="P$1" x="-6.985" y="1.35" drill="0.7" diameter="1.778" shape="square"/>
+<pad name="P$2" x="-6.985" y="-1.35" drill="0.7" diameter="1.778" shape="square"/>
+<rectangle x1="-6.885" y1="1.1" x2="-3.885" y2="3.1" layer="1"/>
+<rectangle x1="-6.985" y1="-3.1" x2="-3.985" y2="-1.1" layer="1"/>
+<polygon width="0.127" layer="21">
+<vertex x="-6.985" y="-2.42"/>
+<vertex x="-6.935" y="2.53"/>
+<vertex x="2.965" y="2.53"/>
+<vertex x="2.965" y="-2.42"/>
+</polygon>
+<polygon width="0.127" layer="21">
+<vertex x="8.015" y="0.73"/>
+<vertex x="5.065" y="-1.72"/>
+<vertex x="5.465" y="-1.92"/>
+<vertex x="5.915" y="-2.02"/>
+<vertex x="6.465" y="-2.02"/>
+<vertex x="7.115" y="-1.82"/>
+<vertex x="7.615" y="-1.42"/>
+<vertex x="7.915" y="-0.97"/>
+<vertex x="8.065" y="-0.47"/>
+<vertex x="8.115" y="0.03"/>
+<vertex x="8.115" y="0.38"/>
+<vertex x="7.965" y="0.73"/>
+</polygon>
+</package>
+</packages>
+<symbols>
+<symbol name="VIBRAMOTOR">
+<wire x1="-7.62" y1="-5.08" x2="-2.54" y2="7.62" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="7.62" x2="0" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="0" y1="-5.08" x2="5.08" y2="7.62" width="0.254" layer="94"/>
+<wire x1="5.08" y1="7.62" x2="7.62" y2="-5.08" width="0.254" layer="94"/>
+<circle x="0" y="0" radius="10.16" width="0.254" layer="94"/>
+<pin name="P$1" x="-15.24" y="-2.54" length="middle" direction="pwr"/>
+<pin name="P$2" x="-15.24" y="2.54" length="middle" direction="pwr"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="VIBRAMOTOR">
+<gates>
+<gate name="G$1" symbol="VIBRAMOTOR" x="15.24" y="2.54"/>
+</gates>
+<devices>
+<device name="" package="LA4-432">
+<connects>
+<connect gate="G$1" pin="P$1" pad="P$2"/>
+<connect gate="G$1" pin="P$2" pad="P$1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -5963,11 +5963,11 @@ DIN A4, landscape with location and doc. field</description>
 <part name="JP1" library="pinhead" deviceset="PINHD-1X3" device=""/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
 <part name="FRAME1" library="frames" deviceset="A4L-LOC" device=""/>
-<part name="U$1" library="buglbr" deviceset="VIBRAMOTOR" device=""/>
 <part name="BAT1" library="seb" deviceset="BATTERY_2XAAA" device=""/>
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
 <part name="P+3" library="supply1" deviceset="VCC" device=""/>
 <part name="JP2" library="pinhead" deviceset="PINHD-2X3" device=""/>
+<part name="U$1" library="buglbr" deviceset="VIBRAMOTOR" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -6024,11 +6024,11 @@ DIN A4, landscape with location and doc. field</description>
 <instance part="JP1" gate="A" x="152.4" y="83.82"/>
 <instance part="GND3" gate="1" x="86.36" y="-7.62" smashed="yes"/>
 <instance part="FRAME1" gate="G$1" x="-50.8" y="-55.88"/>
-<instance part="U$1" gate="G$1" x="139.7" y="38.1"/>
 <instance part="BAT1" gate="G$1" x="180.34" y="2.54" rot="R90"/>
 <instance part="GND9" gate="1" x="180.34" y="-7.62" smashed="yes"/>
 <instance part="P+3" gate="VCC" x="180.34" y="12.7"/>
 <instance part="JP2" gate="A" x="180.34" y="83.82"/>
+<instance part="U$1" gate="G$1" x="139.7" y="38.1"/>
 </instances>
 <busses>
 </busses>
