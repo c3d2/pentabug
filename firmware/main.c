@@ -31,7 +31,7 @@ static synth_t synth;
 
 uint8_t counter = 0;
 uint8_t pulsewidth = 0;
-uint8_t maxcounter = 0xFF;
+uint16_t maxcounter = 0xFF;
 uint16_t pulsecounter = 0;
 
 static void synth_init(void)
@@ -75,7 +75,7 @@ static inline void init_pwm(void)
 	//PB2 set to output:
 	DDRB |= (1 << PORTB2);
 	OCR1B = 0x001F;		//preselect some default
-	ICR1 = 0x003F;		// TOP-wert
+	ICR1 = 0x00FF;		// TOP-wert
 
 	TCCR1A = (1 << COM1B1) | (1 << WGM11);	// only b-chan , fastpwm (mode 14)
 	TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS10);	//Fastpwm, no prescale
