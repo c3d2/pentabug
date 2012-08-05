@@ -32,7 +32,7 @@ static synth_t synth;
 ISR(TIMER0_OVF_vect)
 {
 	PORTC ^= 0b1;
-	ICR1 = synth.output;
+	OCR1B = (++OCR1B % 0x1000);
 	sample_pending = 1;
 }
 
@@ -67,17 +67,16 @@ static void init_sampletimer(void)
 	TCCR0B = (1 << CS00) | (1 << CS01);
 	//count up to 5 :
 	OCR0A = 5;
-
 	//enable interrupt
 	TIMSK0 |= (1 << TOIE0);
 }
 
 static inline void init_pwm(void)
 {
-	//PB1 set to output:
+	//PB2 set to output:
 	DDRB |= (1 << PORTB2);
-	OCR1B = 0xefff;		//preselect some default
-	ICR1 = 0xffff;		// TOP-wert
+	OCR1B = 0x100;		//preselect some default
+	ICR1 = 0x1000;		// TOP-wert
 
 	TCCR1A = (1 << COM1B1) | (1 << WGM11);	// only b-chan , fastpwm (mode 14)
 	TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS10);	//Fastpwm, no prescale
@@ -108,24 +107,6 @@ static void init_motor(void)
 
 }
 
-static void stupid_pwmtest(void)
-{
-	uint8_t i, t, r;
-	ICR1 = 0xAA00;
-	t = r = 1;
-	for (;;) {
-
-		t = (r) ? (t + 1) : (t - 1);
-
-		ICR1 = (t << 7);
-		if (t == 0)
-			r ^= 1;
-		for (i = 1; i < 100; i++)
-			__asm("nop");
-
-	}
-	return;			//never
-}
 
 int main(void)
 {
@@ -140,6 +121,7 @@ int main(void)
 
 	sei();
 
+	while(1);
 	while(1) {
 		while (0 == sample_pending) ;
 		sample_pending = 0;
