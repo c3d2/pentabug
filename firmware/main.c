@@ -11,6 +11,7 @@ volatile uint8_t sample_pending;
 
 // sample rate is 8M / (5 * 64) = 25000
 
+
 enum {
 	synth_channel_count = 2
 };
@@ -27,6 +28,11 @@ typedef struct {
 } synth_t;
 
 static synth_t synth;
+
+uint8_t counter = 0;
+uint8_t pulsewidth = 0;
+uint8_t maxcounter = 0xFF;
+uint16_t pulsecounter = 0;
 
 static void synth_init(void)
 {
@@ -58,9 +64,10 @@ static void init_sampletimer(void)
 	TCCR0A = (1 << WGM01);
 	TCCR0B = (1 << CS00) | (1 << CS01);
 	//count up to 5 :
-	OCR0A = 5;
+	OCR0A = 3;
+	TCNT0=0;
 	//enable interrupt
-	TIMSK0 |= (1 << TOIE0);
+	TIMSK0 |=  (1<<OCIE0A);
 }
 
 static inline void init_pwm(void)
@@ -68,12 +75,12 @@ static inline void init_pwm(void)
 	//PB2 set to output:
 	DDRB |= (1 << PORTB2);
 	OCR1B = 0x001F;		//preselect some default
-	ICR1 = 0x00FF;		// TOP-wert
+	ICR1 = 0x003F;		// TOP-wert
 
 	TCCR1A = (1 << COM1B1) | (1 << WGM11);	// only b-chan , fastpwm (mode 14)
 	TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS10);	//Fastpwm, no prescale
 
-	TIMSK1 |=  (1 << OCIE1B); //enabke timer 1 Output compare
+	//TIMSK1 |=  (1 << OCIE1B); //enable timer 1 Output compare
 	return;
 }
 
@@ -101,19 +108,25 @@ static void init_motor(void)
 }
 
 
+
+
 int main(void)
 {
 
 	//hardware initialisation:
 	init_leds();
-	init_motor();
+	//init_motor();
 	init_pwm();
 	init_sampletimer();
-	sample_pending = 0;
-	synth_init();
-//OCR1B = 0x00F0;
+	//sample_pending = 0;
+	//synth_init();
+	//OCR1B = 0x00F0;
 	sei();
 
+
+	while(1){
+		//PORTC ^= 0b1;
+	}
 	while(1);
 	while(1) {
 		while (0 == sample_pending) ;
@@ -125,17 +138,45 @@ int main(void)
 	return 0;
 }
 
-ISR(TIMER1_COMPB_vect)
+/*ISR(TIMER1_COMPB_vect)
 {
-   //OCR1B = 0x00F0;	
-} 
+   OCR1B = 0x00F0;	
+} */
 
 //25kHz
-ISR(TIMER0_OVF_vect)
+ISR(TIMER0_COMPA_vect)
 {
-	OCR1B = 0x00F0;	
-	PORTC ^= 0b1;
-	ICR1 = synth.output;
-	sample_pending = 1;
+	counter++;
+	if (counter > maxcounter){
+	 	counter = 0;
+	};
+ 	
+
+	pulsecounter++;
+	if (pulsecounter > 0x0200){
+		 pulsecounter = 0;
+		 pulsewidth++;
+		 if (pulsewidth > maxcounter){
+			pulsewidth = 0;
+		}
+	}
+
+
+	
+	OCR1B = ((counter > pulsewidth) ? maxcounter : 0x00);
+	
+
+	//OCR1B = counter;	
+	//OCR1B = OCR1B + 4;
+	if (OCR1B > 0x007F) {
+	//	OCR1B = 0x00F;
+	}	
+	PORTC ^= 0b01;
+
+	//ICR1 = synth.output;
+	//sample_pending = 1;
+	
 }
+
+
 
