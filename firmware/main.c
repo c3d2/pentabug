@@ -28,14 +28,6 @@ typedef struct {
 
 static synth_t synth;
 
-//25kHz
-ISR(TIMER0_OVF_vect)
-{
-	PORTC ^= 0b1;
-	OCR1B = (++OCR1B % 0x1000);
-	sample_pending = 1;
-}
-
 static void synth_init(void)
 {
 	// some test values
@@ -75,12 +67,13 @@ static inline void init_pwm(void)
 {
 	//PB2 set to output:
 	DDRB |= (1 << PORTB2);
-	OCR1B = 0x100;		//preselect some default
-	ICR1 = 0x1000;		// TOP-wert
+	OCR1B = 0x001F;		//preselect some default
+	ICR1 = 0x00FF;		// TOP-wert
 
 	TCCR1A = (1 << COM1B1) | (1 << WGM11);	// only b-chan , fastpwm (mode 14)
 	TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS10);	//Fastpwm, no prescale
 
+	TIMSK1 |=  (1 << OCIE1B); //enabke timer 1 Output compare
 	return;
 }
 
@@ -118,7 +111,7 @@ int main(void)
 	init_sampletimer();
 	sample_pending = 0;
 	synth_init();
-
+//OCR1B = 0x00F0;
 	sei();
 
 	while(1);
@@ -131,3 +124,18 @@ int main(void)
 	//never get here
 	return 0;
 }
+
+ISR(TIMER1_COMPB_vect)
+{
+   //OCR1B = 0x00F0;	
+} 
+
+//25kHz
+ISR(TIMER0_OVF_vect)
+{
+	OCR1B = 0x00F0;	
+	PORTC ^= 0b1;
+	ICR1 = synth.output;
+	sample_pending = 1;
+}
+
