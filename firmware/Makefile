@@ -15,6 +15,8 @@ QUARZ = 8MHZ
 #internal RC/8
 #FUSE_SETTINGS = -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0xf9:m 
 
+# default, except internal isn not RC/8 but instead RC = 8MHz
+FUSE_SETTINGS = -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0x01:m 
 
 #FUSE_SETTINGS = -U lfuse:w:0xd6:m -U hfuse:w:0xdf:m
 #-U lfuse:w:0xD6:m -U hfuse:w:0xDF:m -U efuse:w:0x1:m
@@ -130,12 +132,19 @@ LDFLAGS += -lm
 # Type: avrdude -c ?
 # to get a full listing.
 #
-AVRDUDE_PROGRAMMER = avr109 -b 38400
+
+ # serial bootloader via USART
+AVRDUDE_SER_PROGRAMMER = avr109 -b 38400
+
+# USBTINY via ISP
+AVRDUDE_PROGRAMMER = usbtiny 
 #falls Ponyser ausgewählt wird, muss sich unsere avrdude-Configdatei im Bin-Verzeichnis des Compilers befinden
 
 #AVRDUDE_PORT = com1    # programmer connected to serial device
 #AVRDUDE_PORT = lpt1    # programmer connected to parallel port
-AVRDUDE_PORT = /dev/ttyUSB0     # programmer connected to USB
+AVRDUDE_PORT =      # programmer connected to USB
+
+AVRDUDE_PORT_SER = /dev/ttyUSB0     # programmer connected to USB
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex 
 AVRDUDE_WRITE_FUSE = $(FUSE_SETTINGS)
@@ -143,7 +152,8 @@ AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep
 
 #avrdude -c avrispv2 -P usb -p m32 -U flash:w:blink.hex
 #AVRDUDE_FLAGS = -p m168 -F -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER)
-AVRDUDE_FLAGS = -p $(MCU) -F -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER) -v -v 
+AVRDUDE_FLAGS = -p $(MCU) -F -c $(AVRDUDE_PROGRAMMER) -v -v 
+AVRDUDE_FLAGS_SER = -p $(MCU) -F -P $(AVRDUDE_PORT_SER) $(AVRDUDE_PROGRAMMER_SER) -v -v 
 #AVRDUDE_UFLAGS = -p atmega88 -F -P /dev/ttyUSB0 -c avr109 -b 38400  -v -v 
 #AVRDUDE_UFLAGS = -p $(MCU) -P /dev/cu.usbserial-A2002QDi -c avr109 -b 230400  -v -v 
 AVRDUDE_UFLAGS = -p $(MCU) -F -P /dev/cu.usbserial-A4016EMT -c avr109 -b 38400  -v -v 
@@ -281,7 +291,12 @@ extcoff: $(TARGET).elf
 
 
 
-# Program the device.  
+# Program the device. 
+
+serflash: $(TARGET).hex
+	$(AVRDUDE) $(AVRDUDE_FLAGS_SER) $(AVRDUDE_WRITE_FLASH)
+
+ 
 flash: $(TARGET).hex
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH)
 	
