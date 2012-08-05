@@ -8,6 +8,11 @@
 
 volatile uint8_t sample_pending;
 
+uint8_t counter = 0;
+uint8_t pulsewidth = 0;
+uint16_t pulsecounter = 0;
+uint16_t pwmwidth = 0xFF;
+uint16_t maxcounter = 0x90; 
 
 // sample rate is 8M / (5 * 64) = 25000
 
@@ -29,10 +34,7 @@ typedef struct {
 
 static synth_t synth;
 
-uint8_t counter = 0;
-uint8_t pulsewidth = 0;
-uint16_t maxcounter = 0xFF;
-uint16_t pulsecounter = 0;
+
 
 static void synth_init(void)
 {
@@ -74,8 +76,8 @@ static inline void init_pwm(void)
 {
 	//PB2 set to output:
 	DDRB |= (1 << PORTB2);
-	OCR1B = 0x001F;		//preselect some default
-	ICR1 = 0x00FF;		// TOP-wert
+	OCR1B = 0x0001;		//preselect some default
+	ICR1 = pwmwidth;		// TOP-wert
 
 	TCCR1A = (1 << COM1B1) | (1 << WGM11);	// only b-chan , fastpwm (mode 14)
 	TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS10);	//Fastpwm, no prescale
@@ -153,7 +155,7 @@ ISR(TIMER0_COMPA_vect)
  	
 
 	pulsecounter++;
-	if (pulsecounter > 0x0200){
+	if (pulsecounter > 0x0300){
 		 pulsecounter = 0;
 		 pulsewidth++;
 		 if (pulsewidth > maxcounter){
@@ -163,14 +165,9 @@ ISR(TIMER0_COMPA_vect)
 
 
 	
-	OCR1B = ((counter > pulsewidth) ? maxcounter : 0x00);
+	OCR1B = ((counter > pulsewidth) ? pwmwidth : 0);
 	
 
-	//OCR1B = counter;	
-	//OCR1B = OCR1B + 4;
-	if (OCR1B > 0x007F) {
-	//	OCR1B = 0x00F;
-	}	
 	PORTC ^= 0b01;
 
 	//ICR1 = synth.output;
