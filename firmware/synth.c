@@ -1,17 +1,8 @@
 #include <inttypes.h>
-
 // sample rate is 8M / (3 * 64)
 
 
-enum {
-	synth_channel_count = 2,
-};
-
-enum {
-	WAVE_PULSE,
-	WAVE_SAW,
-};
-
+enum { WAVE_PULSE, WAVE_SAW, };
 
 typedef struct {
 	uint8_t	wave;
@@ -26,8 +17,23 @@ typedef struct {
 
 } synth_channel_t;
 
+
+
+enum {
+	synth_channel_count = 2,
+	tick_length = 500,
+	row_length = 6,
+	pattern_length = 16
+};
+
 typedef struct {
 	synth_channel_t channels[synth_channel_count];
+
+	int16_t sample;
+	int8_t tick;
+	int8_t row;
+	int8_t seq;
+
 } synth_t;
 
 static synth_t synth;
@@ -49,8 +55,27 @@ void synth_init(void)
 
 uint16_t synth_mix(void)
 {
-	uint16_t output = 0;
+	if(synth.sample == 0) {
+		// new tick
+		if(synth.tick == 0) {
+			// new row
+			if(synth.row == 0) {
+				// new pattern
+			}
+		}
+	}
+	if(++synth.sample == tick_length) {
+		synth.sample = 0;
+		if(++synth.tick == row_length) {
+			synth.tick = 0;
+			if(++synth.row == pattern_length) {
+				synth.row = 0;
+			}
+		}
+	}
 
+
+	uint16_t output = 0;
 	for(int i = 0; i < synth_channel_count; i++) {
 		synth_channel_t *chan = &synth.channels[i];
 
