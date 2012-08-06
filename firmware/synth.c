@@ -227,7 +227,7 @@ uint16_t synth_mix(void)
 		synth_channel_t* chan = &channels[i];
 		const synth_instrument_t* inst = &instruments[chan->inst_nr];
 
-		chan->phase += freq_table[chan->note + wave_table[chan->pos][0]];
+		chan->phase += freq_table[(uint8_t)(chan->note + wave_table[chan->pos][0])];
 
 		uint8_t amp;
 		switch(wave_table[chan->pos][1]) {
