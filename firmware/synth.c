@@ -34,11 +34,11 @@ typedef struct {
 
 
 static const synth_instrument_t instruments[] = {
-	{ 1<<15, 255, 8 },
-	{ 0, 255, 8 },
-	{ 0, 200, 5 },
+	{ 1<<15, 100, 12 },
+	{ 0, 100, 12 },
+	{ 0, 200, 10 },
 	{ 1<<13, 0, 0, 2 },
-	{ 1<<13, 0, 10, 2 },
+	{ 1<<13, 0, 5, 2 },
 };
 
 static const uint8_t wave_table[][2] = {
@@ -48,6 +48,12 @@ static const uint8_t wave_table[][2] = {
 	{  12, WAVE_PULSE },
 	{  256 - 4, 0xff },
 
+	{  0, WAVE_PULSE },
+	{  2, WAVE_PULSE },
+	{  7, WAVE_PULSE },
+	{  10, WAVE_PULSE },
+	{  256 - 4, 0xff },
+
 	{  0, WAVE_NOISE },
 	{  0, WAVE_PULSE },
 	{  0xff, 0xff },
@@ -55,11 +61,6 @@ static const uint8_t wave_table[][2] = {
 	{  0, WAVE_PULSE },
 	{  0xff, 0xff },
 
-	{  0, WAVE_PULSE },
-	{  2, WAVE_PULSE },
-	{  7, WAVE_PULSE },
-	{  10, WAVE_PULSE },
-	{  256 - 4, 0xff },
 };
 
 
