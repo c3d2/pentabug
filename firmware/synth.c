@@ -2,7 +2,7 @@
 // sample rate is 8M / (3 * 64)
 
 
-enum { WAVE_PULSE, WAVE_SAW, };
+enum { WAVE_PULSE, WAVE_SAW, WAVE_NOISE };
 
 typedef struct {
 	uint8_t	wave;
@@ -43,14 +43,14 @@ static synth_t synth;
 void synth_init(void)
 {
 	// some test values
-	synth.channels[0].wave = WAVE_PULSE;
+	synth.channels[0].wave = WAVE_PULSE + 10;
 	synth.channels[0].speed = 1153;
 	synth.channels[0].pulse_sweep = 0;
 	synth.channels[0].pulse_width = 1 << 31;
 
 	synth.channels[1].wave = WAVE_SAW;
+	synth.channels[1].wave = WAVE_NOISE;
 	synth.channels[1].speed = 1728;
-
 }
 
 uint16_t synth_mix(void)
@@ -90,6 +90,11 @@ uint16_t synth_mix(void)
 			break;
 
 		case WAVE_SAW:
+			amp = (chan->phase >> 8);
+			break;
+
+		case WAVE_NOISE:	 // shitty noise
+			chan->phase = (chan->phase >> 1) ^ (-(chan->phase & 1) & 0xb400);
 			amp = (chan->phase >> 8);
 			break;
 
