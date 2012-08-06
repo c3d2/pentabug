@@ -5,52 +5,8 @@
 #include <stdlib.h>
 
 #include "main.h"
+#include "synth.h"
 
-volatile uint8_t sample_pending;
-
-
-// sample rate is 8M / (5 * 64) = 25000
-
-
-enum {
-	synth_channel_count = 2
-};
-
-typedef struct {
-	uint16_t phase;
-	uint16_t speed;
-
-} synth_channel_t;
-
-typedef struct {
-	synth_channel_t channels[synth_channel_count];
-} synth_t;
-
-static synth_t synth;
-
-
-static void synth_init(void)
-{
-	// some test values
-	synth.channels[0].phase = 0;
-	synth.channels[0].speed = 1153;
-
-	synth.channels[1].phase = 0;
-	synth.channels[1].speed = 1728;
-}
-
-static inline uint16_t synth_mix(void)
-{
-	uint16_t output = 0;
-
-	for (int i = 0; i < synth_channel_count; i++) {
-		synth_channel_t *chan = &synth.channels[i];
-		chan->phase += chan->speed;
-		output += ((chan->phase >> 8) & 0xff) / 2;
-	}
-
-	return output;
-}
 
 static void init_sampletimer(void)
 {
@@ -104,7 +60,6 @@ static void init_motor(void)
 
 
 
-
 int main(void)
 {
 
@@ -154,6 +109,4 @@ ISR(TIMER0_COMPA_vect)
 	OCR1B = synth_mix();
 
 }
-
-
 
