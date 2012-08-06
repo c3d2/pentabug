@@ -7,7 +7,7 @@
 
 
 static void fill_buffer(void* userdata, Uint8* stream, int len) {
-	for(int i = 0; i < len / 2; i++) ((uint16_t*)stream)[i] = synth_mix() * 100;
+	for(int i = 0; i < len / 2; i++) ((uint16_t*)stream)[i] = synth_mix() * 50;
 }
 
 SDL_AudioSpec spec = { 8000000 / (3 * 64), AUDIO_U16SYS, 1, 0, 1024, };
