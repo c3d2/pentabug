@@ -43,13 +43,12 @@ static synth_t synth;
 void synth_init(void)
 {
 	// some test values
-	synth.channels[0].wave = WAVE_PULSE + 10;
+	synth.channels[0].wave = WAVE_PULSE;
 	synth.channels[0].speed = 1153;
 	synth.channels[0].pulse_sweep = 0;
 	synth.channels[0].pulse_width = 1 << 31;
 
 	synth.channels[1].wave = WAVE_SAW;
-	synth.channels[1].wave = WAVE_NOISE;
 	synth.channels[1].speed = 1728;
 }
 
