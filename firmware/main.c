@@ -6,7 +6,7 @@
 
 #include "main.h"
 #include "synth.h"
-
+#include "usart.h"
 
 static void init_sampletimer(void)
 {
@@ -74,6 +74,7 @@ int main(void)
 {
 	/* hardware initialisation: */
 	init_leds();
+	USART0_Init();
 	// init_motor();
 	init_pwm();
 	init_sampletimer();
@@ -94,5 +95,7 @@ ISR(TIMER0_COMPA_vect)
 {
 	/* calculate next analog sample value in synth mixer:*/
 	OCR1B = synth_mix();
+	USART0_put_uint16(0x1234);
+	USART0_crlf();
 }
 
