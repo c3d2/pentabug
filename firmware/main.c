@@ -85,7 +85,13 @@ int main(void)
 	/* here the show begins:*/
 	sei();
 
-	for(;;) /* ever */  ;
+	for(;;) /* ever */  {
+
+		//do something
+
+		USART0_put_uint16(0x2342);
+		USART0_crlf();
+	};
 
 	/* never */ return 0;
 }
@@ -95,7 +101,5 @@ ISR(TIMER0_COMPA_vect)
 {
 	/* calculate next analog sample value in synth mixer:*/
 	OCR1B = synth_mix();
-	USART0_put_uint16(0x1234);
-	USART0_crlf();
 }
 
