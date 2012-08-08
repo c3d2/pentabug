@@ -6,7 +6,7 @@
 
 #include "main.h"
 #include "synth.h"
-
+#include "usart.h"
 
 static void init_sampletimer(void)
 {
@@ -74,6 +74,7 @@ int main(void)
 {
 	/* hardware initialisation: */
 	init_leds();
+	USART0_Init();
 	// init_motor();
 	init_pwm();
 	init_sampletimer();
@@ -84,7 +85,13 @@ int main(void)
 	/* here the show begins:*/
 	sei();
 
-	for(;;) /* ever */  ;
+	for(;;) /* ever */  {
+
+		//do something
+
+		USART0_put_uint16(0x2342);
+		USART0_crlf();
+	};
 
 	/* never */ return 0;
 }
