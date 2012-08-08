@@ -64,7 +64,7 @@ static int parse_tune(const char* filename) {
 				if(strcmp("[INSTRUMENTS]\n", line)) return line_nr;
 				state = 2;
 			}
-			else if(isalpha(line[0])) {
+			else if(!isspace(line[0])) {
 				sscanf(line, "%s", wave_names[wave_counter]);
 			}
 			else if(line[0] == '\t') {
@@ -105,7 +105,7 @@ static int parse_tune(const char* filename) {
 				state = 4;
 			}
 			else {
-				if(!isalpha(line[0])) return line_nr;
+				if(isspace(line[0])) return line_nr;
 				sscanf(line, "%s", pattern_names[pattern_counter]);
 				for(int i = 0; i < pattern_length && fgets(line, 256, file); i++) {
 					line_nr++;
@@ -127,7 +127,7 @@ static int parse_tune(const char* filename) {
 
 					}
 					else if(m == 1) {
-						if(strcmp("-", note) == 0)
+						if(strcmp("---", note) == 0)
 							patterns[pattern_counter][i][0] = 0xff;
 						else if(strcmp(".", note) == 0)
 							patterns[pattern_counter][i][0] = 0;
