@@ -9,12 +9,27 @@ bass01
 	0 2
 	255 255
 
+pad00
+	0 2
+	3 2
+	7 2
+	12 2
+	252 255
 
+pad01
+	0 2
+	4 2
+	7 2
+	12 2
+	252 255
 
 [INSTRUMENTS]
 
 bass00	32768	10	0	bass00
 bass01	32768	10	0	bass01
+
+pad00	32768	10	3	pad00
+pad01	32768	10	3	pad01
 
 
 [PATTERNS]
@@ -38,23 +53,22 @@ empty
 	.
 
 bass
+	c_3	bass00
+	-
+	c_5	pad00
+	c_3	bass00
+	-
+	.
 	c_3
-	---
-	c_4
-	---
+	-
 	c_3
-	---
-	c_4
-	---
-	c_3
-	---
-	c_4
-	---
-	c_3
-	---
-	c_4
-	---
-
+	-
+	.
+	.
+	a#4	pad01
+	.
+	c_3 bass00
+	-
 
 
 [PATTERNTABLE]

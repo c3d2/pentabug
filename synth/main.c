@@ -22,7 +22,6 @@ static void fill_buffer(void* userdata, Uint8* stream, int len) {
 // this parser is a complete hack
 // put i can't care less right now
 static int parse_tune(const char* filename) {
-	char line[256];
 	FILE* file = fopen(filename, "r");
 	if(!file) return -1;
 
@@ -41,9 +40,12 @@ static int parse_tune(const char* filename) {
 	memset(pattern_names, 0, sizeof(pattern_names));
 	int pattern_counter = 0;
 
+	tune_length = 0;
+
 
 	int state = 0;
 	int line_nr = 0;
+	char line[256];
 	while(fgets(line, 256, file)) {
 		line_nr++;
 
@@ -80,18 +82,18 @@ static int parse_tune(const char* filename) {
 				state = 3;
 			}
 			else {
-				char wave_name[256];
+				char wave[256];
 				int pw, ps, d;
 				if(sscanf(line, "%s %u %u %u %s",
 					inst_names[inst_counter], &pw, &ps, &d,
-					wave_name) != 5) return line_nr;
+					wave) != 5) return line_nr;
 
 				instruments[inst_counter].pulse_width = pw;
 				instruments[inst_counter].pulse_sweep = ps;
 				instruments[inst_counter].decay = d;
 				int i;
 				for(i = 0; i < 256; i++)
-					if(strcmp(wave_names[i], wave_name) == 0) break;
+					if(strcmp(wave_names[i], wave) == 0) break;
 				if(i == 256) return line_nr;
 				instruments[inst_counter].wave_table_pos = i;
 				inst_counter++;
@@ -104,18 +106,35 @@ static int parse_tune(const char* filename) {
 			}
 			else {
 				if(!isalpha(line[0])) return line_nr;
-				sscanf(line, "%s", pattern_names[wave_counter]);
+				sscanf(line, "%s", pattern_names[pattern_counter]);
 				for(int i = 0; i < pattern_length && fgets(line, 256, file); i++) {
+					line_nr++;
 					if(line[0] != '\t') return line_nr;
-					char* p = strch("aabccddeffgg" ,line[1]);
-					// TODO
+					char note[256];
+					char inst[256];
+					int m = sscanf(line + 1, "%s %s", note, inst);
+					if(m == 0) return line_nr;
+					char* s = "ccddeffggaab";
+					char* p = strchr(s, line[1]);
 					if(p) {
-						patterns[pattern_counter][i][0] = line - p + (line[2] == '#') + (line[3] - '0') * 12;
-						int a;
-						sscanf(line + 4, "")
+						patterns[pattern_counter][i][0] = (p - s) +
+								(note[1] == '#') + (note[2] - '0') * 12;
+						int j;
+						for(j = 0; j < 256; j++)
+							if(strcmp(inst_names[j], inst) == 0) break;
+						if(j == 256) return line_nr;
+						patterns[pattern_counter][i][1] = j;
 
-						patterns[pattern_counter][i][1] = a;
 					}
+					else if(m == 1) {
+						if(strcmp("-", note) == 0)
+							patterns[pattern_counter][i][0] = 0xff;
+						else if(strcmp(".", note) == 0)
+							patterns[pattern_counter][i][0] = 0;
+						else return line_nr;
+
+					}
+					else return line_nr;
 
 				}
 				pattern_counter++;
@@ -125,7 +144,19 @@ static int parse_tune(const char* filename) {
 
 		}
 		else {
-
+			char* p = line;
+			char pat[256];
+			for(int i = 0; i < channel_count; i ++) {
+				sscanf(p, "%s", pat);
+				int j;
+				for(j = 0; j < 256; j++)
+					if(strcmp(pattern_names[j], pat) == 0) break;
+				if(j == 256) return line_nr;
+				pattern_table[tune_length][i] = j;
+				while(*p && !isspace(*p)) p++;
+				while(*p && isspace(*p)) p++;
+			}
+			tune_length++;
 
 
 		}
