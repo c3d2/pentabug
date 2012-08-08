@@ -77,53 +77,53 @@ empty
 	.
 
 drum00
-	d_3	kick
+	g_3	kick
 	.
-	d_3 hat
-	.
-	d_4	snare
-	.
-	d_3	kick
-	.
-	d_3 hat
-	.
-	d_3 hat
+	g_3 hat
 	.
 	d_4	snare
 	.
-	d_3 kick
+	g_3	kick
+	.
+	g_3 hat
+	.
+	g_3 hat
+	.
+	d_4	snare
+	.
+	g_3 kick
 	.
 
 drum01
-	d_3	kick
+	g_3	kick
 	.
-	d_3 hat
-	.
-	d_4	snare
-	.
-	d_3	kick
-	.
-	d_3 hat
-	.
-	d_3 hat
+	g_3 hat
 	.
 	d_4	snare
 	.
-	d_3 hat
+	g_3	kick
+	.
+	g_3 hat
+	.
+	g_3 hat
+	.
+	d_4	snare
+	.
+	g_3 hat
 	.
 
 drum02
-	d_3	kick
+	g_3	kick
 	.
-	d_3 hat
-	.
-	d_4	snare
-	.
-	d_3	kick
+	g_3 hat
 	.
 	d_4	snare
 	.
-	d_3	kick
+	g_3	kick
+	.
+	d_4	snare
+	.
+	g_3	kick
 	.
 	d_4	snare
 	.
@@ -169,9 +169,9 @@ bass01
 [PATTERNTABLE]
 empty		bass00		empty
 empty		bass00		empty
+empty		bass00		empty
+empty		bass01		empty
 
-drum00		bass00		empty
-drum01		bass01		empty
 drum00		bass00		empty
 drum01		bass00		empty
 drum00		bass00		empty
