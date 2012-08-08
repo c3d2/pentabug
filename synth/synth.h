@@ -25,8 +25,8 @@ uint16_t synth_mix(void);
 
 enum {
 	channel_count = 3,
-	tick_length = 500,
-	row_length = 4,
+	tick_length = 400,
+	row_length = 8,
 	pattern_length = 16
 };
 
