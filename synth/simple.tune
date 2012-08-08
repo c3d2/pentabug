@@ -1,5 +1,5 @@
 [WAVETABLE]
-
+# note offset | wave form
 
 bass
 	250 1
@@ -49,6 +49,7 @@ lead_
 
 
 [INSTRUMENTS]
+# pulse width | pulse sweep | decay | label in wave table
 
 bass	32768	10	4	bass
 
@@ -62,6 +63,7 @@ lead	1000	255	1	lead
 lead_	1000	255	1	lead_
 
 [PATTERNS]
+# note | instrument
 ---
 	.
 	.
