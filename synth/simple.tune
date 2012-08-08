@@ -1,0 +1,64 @@
+[WAVETABLE]
+
+bass00
+	0 3
+	0 1
+	255 255
+
+bass01
+	0 2
+	255 255
+
+
+
+[INSTRUMENTS]
+
+bass00	32768	10	0	bass00
+bass01	32768	10	0	bass01
+
+
+[PATTERNS]
+
+empty
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+
+bass
+	c_3
+	---
+	c_4
+	---
+	c_3
+	---
+	c_4
+	---
+	c_3
+	---
+	c_4
+	---
+	c_3
+	---
+	c_4
+	---
+
+
+
+[PATTERNTABLE]
+
+bass		empty		empty
+bass		empty		empty
+
