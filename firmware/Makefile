@@ -4,8 +4,8 @@
 
 #curl http://seb.exse.net/ledtest.hex > ledtest.hex && avrflash.sh  m168 -F -v -v  -U flash:w:ledtest.hex
 
-#MCU = atmega88
-MCU = atmega328p
+MCU = atmega88p
+#MCU = atmega328p
 
 #MCU = atmega644
 F_CPU = 8000000
@@ -136,6 +136,9 @@ LDFLAGS += -lm
  # serial bootloader via USART
 AVRDUDE_SER_PROGRAMMER = avr109 -b 38400
 
+
+#johns programmer:
+AVRDUDE_JS_PROGRAMMER = stk500v2
 # USBTINY via ISP
 AVRDUDE_PROGRAMMER = usbtiny 
 #falls Ponyser ausgewählt wird, muss sich unsere avrdude-Configdatei im Bin-Verzeichnis des Compilers befinden
@@ -153,6 +156,7 @@ AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep
 #avrdude -c avrispv2 -P usb -p m32 -U flash:w:blink.hex
 #AVRDUDE_FLAGS = -p m168 -F -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER)
 AVRDUDE_FLAGS = -p $(MCU) -F -c $(AVRDUDE_PROGRAMMER) -v -v 
+AVRDUDE_JOFLAGS = -p $(MCU) -F  -P /dev/serial/by-id/usb-FTDI_USB__-__Serial-if00-port0   -c $(AVRDUDE_JS_PROGRAMMER) -v -v 
 AVRDUDE_FLAGS_SER = -p $(MCU) -F -P $(AVRDUDE_PORT_SER) $(AVRDUDE_PROGRAMMER_SER) -v -v 
 #AVRDUDE_UFLAGS = -p atmega88 -F -P /dev/ttyUSB0 -c avr109 -b 38400  -v -v 
 #AVRDUDE_UFLAGS = -p $(MCU) -P /dev/cu.usbserial-A2002QDi -c avr109 -b 230400  -v -v 
@@ -291,22 +295,24 @@ extcoff: $(TARGET).elf
 
 
 
-# Program the device. 
+# Program the device.
 
 serflash: $(TARGET).hex
 	$(AVRDUDE) $(AVRDUDE_FLAGS_SER) $(AVRDUDE_WRITE_FLASH)
 
- 
+
 flash: $(TARGET).hex
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH)
-	
 
 uflash: $(TARGET).hex
 	$(AVRDUDE) $(AVRDUDE_UFLAGS) $(AVRDUDE_WRITE_FLASH)
-	
+
+fljohn: $(TARGET).hex
+	$(AVRDUDE) $(AVRDUDE_JOFLAGS) $(AVRDUDE_WRITE_FLASH)
+
 eeprom: $(TARGET).eep
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_EEPROM)
-	
+
 fuse:
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FUSE)
 
