@@ -163,8 +163,13 @@ static int parse_tune(const char* filename) {
 	}
 	if(state =! 4) return line_nr;
 
-
 	fclose(file);
+	int size = wave_counter * 2 +
+		inst_counter * sizeof(synth_instrument_t) +
+		pattern_counter * pattern_length * 2 +
+		tune_length * channel_count;
+	printf("tune size: %d bytes\n", size);
+
 	return 0;
 }
 
@@ -177,11 +182,13 @@ int main(int argc, char** argv) {
 		return 0;
 	}
 
+	puts("parsing...");
 	int error = parse_tune(argv[1]);
 	if(error != 0) {
 		fprintf(stderr, "%d: parsing error\n", error);
 		return 1;
 	}
+
 
 	spec.callback = &fill_buffer;
 	if(SDL_OpenAudio(&spec, &spec) < 0) {
