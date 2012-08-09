@@ -3,8 +3,8 @@
 #include "freq_table.h"
 
 
-synth_instrument_t instruments[256];
 uint8_t wave_table[256][2];
+synth_instrument_t instruments[256];
 uint8_t patterns[256][pattern_length][2];
 uint8_t pattern_table[256][channel_count];
 uint8_t tune_length;

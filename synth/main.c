@@ -21,26 +21,27 @@ static void fill_buffer(void* userdata, Uint8* stream, int len) {
 
 // this parser is a complete hack
 // put i can't care less right now
+
+static int wave_counter;
+static int inst_counter;
+static int pattern_counter;
+
+
 static int parse_tune(const char* filename) {
 	FILE* file = fopen(filename, "r");
 	if(!file) return -1;
 
+	wave_counter = 0;
+	inst_counter = 0;
+	pattern_counter = 0;
+	tune_length = 0;
 
 	char wave_names[256][256];
-	memset(wave_names, 0, sizeof(wave_names));
-	int wave_counter = 0;
-
-
 	char inst_names[256][256];
-	memset(inst_names, 0, sizeof(inst_names));
-	int inst_counter = 0;
-
-
 	char pattern_names[256][256];
+	memset(wave_names, 0, sizeof(wave_names));
+	memset(inst_names, 0, sizeof(inst_names));
 	memset(pattern_names, 0, sizeof(pattern_names));
-	int pattern_counter = 0;
-
-	tune_length = 0;
 
 
 	int state = 0;
@@ -164,6 +165,53 @@ static int parse_tune(const char* filename) {
 	if(state =! 4) return line_nr;
 
 	fclose(file);
+
+	return 0;
+}
+
+
+static int export_tune(const char* filename) {
+	FILE* file = fopen(filename, "w");
+	if(!file) return -1;
+
+	fprintf(file, "uint8_t wave_table[][2] = {\n");
+	for(int i = 0; i < wave_counter; i++) {
+		fprintf(file, "\t{ %d, %d },\n", wave_table[i][0], wave_table[i][1]);
+	}
+	fprintf(file, "};\n\n");
+
+	fprintf(file, "synth_instrument_t instruments[] = {\n");
+	for(int i = 0; i < inst_counter; i++) {
+		fprintf(file, "\t{ %d, %d, %d, %d },\n",
+			instruments[i].pulse_width,
+			instruments[i].pulse_sweep,
+			instruments[i].decay,
+			instruments[i].wave_table_pos);
+	}
+	fprintf(file, "};\n\n");
+
+	fprintf(file, "uint8_t patterns[][pattern_length][2] = {\n");
+	for(int i = 0; i < pattern_counter; i++) {
+		fprintf(file, "\t{\n");
+		for(int j = 0; j < pattern_length; j++) {
+			fprintf(file, "\t\t{ %d, %d },\n", patterns[i][j][0], patterns[i][j][1]);
+		}
+		fprintf(file, "\t},\n");
+	}
+	fprintf(file, "};\n\n");
+
+	fprintf(file, "uint8_t pattern_table[][channel_count] = {\n");
+	for(int i = 0; i < tune_length; i++) {
+		fprintf(file, "\t{ ");
+		for(int j = 0; j < channel_count; j++) {
+			fprintf(file, "%d ", pattern_table[i][j]);
+		}
+		fprintf(file, "},\n");
+	}
+	fprintf(file, "};\n\n");
+	fprintf(file, "enum { pattern_table_length = %d };\n", tune_length);
+	fclose(file);
+
 	int size = wave_counter * 2 +
 		inst_counter * sizeof(synth_instrument_t) +
 		pattern_counter * pattern_length * 2 +
@@ -172,8 +220,6 @@ static int parse_tune(const char* filename) {
 
 	return 0;
 }
-
-
 
 
 int main(int argc, char** argv) {
@@ -188,6 +234,8 @@ int main(int argc, char** argv) {
 		fprintf(stderr, "%d: parsing error\n", error);
 		return 1;
 	}
+	puts("exporting...");
+	export_tune("tune.h");
 
 
 	spec.callback = &fill_buffer;
