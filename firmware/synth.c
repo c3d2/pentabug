@@ -1,36 +1,15 @@
 #include <inttypes.h>
+#include "synth.h"
 #include "freq_table.h"
 // sample rate is 8M / (3 * 64)
 
-
-enum {  WAVE_OFF, WAVE_PULSE, WAVE_SAW, WAVE_NOISE };
 enum {
 	channel_count = 3,
-	tick_length = 800,
+	tick_length = 400,
 	row_length = 4,
 	pattern_length = 16
 };
 
-typedef struct {
-	uint8_t	note;
-	uint8_t	inst_nr;
-	uint8_t pos;
-
-	uint16_t phase;
-	uint16_t pulse_width;
-
-	uint8_t	level;			// envelop level
-
-} synth_channel_t;
-
-
-typedef struct {
-	uint16_t	pulse_width;
-	uint8_t		pulse_sweep;
-	uint8_t		wave_table_pos;
-	uint8_t		decay;
-
-} synth_instrument_t;
 
 
 static const synth_instrument_t instruments[] = {
@@ -68,9 +47,9 @@ static const uint8_t patterns[][pattern_length][2] = {
 	{},
 	{
 		{   33 - 12, 0 },
+		{ 0, 0 },
 		{ 0xff, 1 },
-		{   33 - 12, 1 },
-		{ 0xff, 1 },
+		{ 0, 0 },
 		{   33, 1 },
 		{ 0xff, 1 },
 		{   33, 1 },
@@ -86,9 +65,9 @@ static const uint8_t patterns[][pattern_length][2] = {
 	},
 	{
 		{   28 - 12, 0 },
+		{ 0, 0 },
 		{ 0xff, 1 },
-		{   28 - 12, 1 },
-		{ 0xff, 1 },
+		{ 0, 0 },
 		{   28, 1 },
 		{ 0xff, 1 },
 		{   28, 1 },
@@ -202,14 +181,6 @@ void synth_init(void)
 	tick = 0;
 	row = 0;
 	seq = 0;
-
-/*
-	// some test values
-	channels[0].wave = WAVE_PULSE;
-	channels[0].pulse_width = 1 << 15;
-
-	channels[1].wave = WAVE_SAW;
-*/
 }
 
 uint16_t synth_mix(void)
@@ -239,7 +210,7 @@ uint16_t synth_mix(void)
 					if(note == 0xff) {
 						chan->level = 0;
 					} else {
-						chan->level = 100;
+						chan->level = 80; // TODO: less?
 						chan->note = note;
 						chan->inst_nr = patterns[pattern_nr][row][1];
 						inst = &instruments[chan->inst_nr];

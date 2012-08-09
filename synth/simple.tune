@@ -1,0 +1,255 @@
+[WAVETABLE]
+# note offset | wave form
+
+bass
+	250 1
+	0 1
+	255 255
+
+pad00
+	0 2
+	3 2
+	7 2
+	12 2
+	252 255
+
+pad01
+	0 2
+	4 2
+	7 2
+	12 2
+	252 255
+
+
+kick
+	255 1
+	251 1
+	246 1
+	242 1
+	0 255
+	255 255
+
+snare
+	0 3
+	0 1
+	254 1
+	248 1
+	244 1
+	0 3
+	255 255
+
+lead
+	0 2
+	255 255
+
+lead_
+	255 2
+	0 2
+	255 255
+
+
+[INSTRUMENTS]
+# pulse width | pulse sweep | decay | label in wave table
+
+bass	32768	10	4	bass
+
+pad00	32768	10	3	pad00
+pad01	32768	10	3	pad01
+
+kick	32768	0	3	kick
+snare	30000	0	10	snare
+
+lead	1000	255	1	lead
+lead_	1000	255	1	lead_
+
+[PATTERNS]
+# note | instrument
+---
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+
+drum00
+	g_3	kick
+	.
+	.
+	g_3	kick
+	d_4	snare
+	.
+	g_3	kick
+	.
+	.
+	.
+	.
+	.
+	d_4	snare
+	.
+	g_3 kick
+	.
+
+drum01
+	g_3	kick
+	.
+	.
+	g_3	kick
+	d_4	snare
+	.
+	g_3	kick
+	.
+	.
+	.
+	.
+	.
+	d_4	snare
+	.
+	.
+	.
+
+drum02
+	g_3	kick
+	.
+	.
+	g_3	kick
+	d_4	snare
+	.
+	g_3	kick
+	.
+	.
+	.
+	g_3	kick
+	.
+	d_4	snare
+	.
+	d_4	snare
+	d_4	snare
+
+bass00
+	c_3	bass
+	---
+	c_5	pad00
+	c_3	bass
+	---
+	.
+	c_3 bass
+	d#5	pad01
+	c_3 bass
+	---
+	.
+	.
+	a#4	pad01
+	.
+	c_4 bass
+	c_4 bass
+
+bass01
+	c_3	bass
+	---
+	c_5	pad00
+	c_3	bass
+	---
+	.
+	c_3
+	---
+	c_3
+	---
+	.
+	.
+	a#4	pad01
+	.
+	.
+	.
+
+
+lead00
+	.
+	.
+	g_5 lead
+	---
+	g_5 lead_
+	.
+	.
+	.
+	---
+	.
+	f_5 lead
+	d#5
+	f_5
+	d#5
+	f_5
+	g_5
+
+lead01
+	f_5 lead
+	c_5
+	---
+	c_5
+	.
+	.
+	---
+	c_5
+	d#5
+	c_5
+	f_5
+	c_5
+	g_5
+	d#5
+	a#5
+	c_6 lead_
+
+lead02
+	.
+	.
+	g_5 lead
+	---
+	g_5 lead_
+	.
+	.
+	.
+	---
+	.
+	f_5 lead
+	d#5
+	f_5 lead_
+	d#5 lead
+	a#4
+	c_5
+
+
+[PATTERNTABLE]
+
+
+---			bass00		---
+---			bass01		---
+---			bass00		---
+---			bass01		---
+
+---			bass00		lead00
+---			bass01		lead01
+---			bass00		lead02
+---			bass01		---
+
+drum00		bass00		lead00
+drum01		bass01		lead01
+drum00		bass00		lead02
+drum02		bass01		---
+
+drum00		bass00		lead00
+drum01		bass01		lead01
+drum00		bass00		lead02
+drum02		bass01		---
+
+
+

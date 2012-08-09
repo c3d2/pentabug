@@ -6,7 +6,7 @@
 
 #include "main.h"
 #include "synth.h"
-
+#include "usart.h"
 
 static void init_sampletimer(void)
 {
@@ -18,7 +18,7 @@ static void init_sampletimer(void)
 	TCCR0A = (1 << WGM01);
 	TCCR0B = (1 << CS00) | (1 << CS01);
 
-	OCR0A = 3; /* TOP */
+	OCR0A = 6; /* TOP */
 	TCNT0 = 0;
 	/*enable interrupt*/
 	TIMSK0 |=  (1<<OCIE0A);
@@ -36,7 +36,7 @@ static inline void init_pwm(void)
 	ICR1   =  0x00FF;
 
 	/* only b-chan , fastpwm (mode 14), no prescale */
-	TCCR1A = (1 << COM1B1) | (1 << WGM11);	
+	TCCR1A = (1 << COM1B1) | (1 << WGM11);
 	TCCR1B = (1 << WGM13 ) | (1 << WGM12) | (1 << CS10);
 
 	return;
@@ -74,6 +74,7 @@ int main(void)
 {
 	/* hardware initialisation: */
 	init_leds();
+	USART0_Init();
 	// init_motor();
 	init_pwm();
 	init_sampletimer();
@@ -84,7 +85,13 @@ int main(void)
 	/* here the show begins:*/
 	sei();
 
-	for(;;) /* ever */  ;
+	for(;;) /* ever */  {
+
+		//do something
+
+		USART0_put_uint16(0x2342);
+		USART0_crlf();
+	};
 
 	/* never */ return 0;
 }
