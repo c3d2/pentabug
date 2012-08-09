@@ -7,19 +7,18 @@ bass
 	255 255
 
 pad00
-	0 2
-	3 2
-	7 2
-	12 2
+	0 1
+	3 1
+	7 1
+	12 1
 	252 255
 
 pad01
-	0 2
-	4 2
-	7 2
-	12 2
+	0 1
+	4 1
+	7 1
+	12 1
 	252 255
-
 
 kick
 	255 1
@@ -51,16 +50,18 @@ lead_
 [INSTRUMENTS]
 # pulse width | pulse sweep | decay | label in wave table
 
-bass	32768	10	4	bass
+bass_	1000	100	4	bass
+bass	0		255	4	bass
 
-pad00	32768	10	3	pad00
-pad01	32768	10	3	pad01
+pad00	0		255	3	pad00
+pad01	0		255	3	pad01
 
 kick	32768	0	3	kick
 snare	30000	0	10	snare
 
 lead	1000	255	1	lead
 lead_	1000	255	1	lead_
+
 
 [PATTERNS]
 # note | instrument
@@ -137,7 +138,7 @@ drum02
 	d_4	snare
 
 bass00
-	c_3	bass
+	c_3	bass_
 	---
 	c_5	pad00
 	c_3	bass
