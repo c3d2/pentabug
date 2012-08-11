@@ -8,6 +8,13 @@
 #include "synth.h"
 #include "usart.h"
 
+
+uint16_t sw_v = 0;
+uint16_t darkness = 0;
+uint16_t darkval  = 0;
+uint16_t last_darkval  = 0;
+
+
 static void init_sampletimer(void)
 {
 	/* 
@@ -54,11 +61,11 @@ static void init_leds(void)
 	 * Timer 2
 	 */
 
-	/* set timer0 to CTC & prescaler 64 → 125kHz increment */
+	/* set timer2 to CTC & prescaler 64 →  ???125kHz increment */
 	TCCR2A = (1 << WGM21);
-	TCCR2B = (1 << CS20) | (1 << CS21);
+	TCCR2B = (1 << CS20)|(1 << CS21);
 
-	OCR2A = 6; /* TOP */
+	OCR2A = 255; /* TOP */
 	TCNT2 = 0;
 	/*enable interrupt*/
 	TIMSK2 |=  (1<<OCIE2A);
@@ -104,9 +111,14 @@ int main(void)
 	for(;;) /* ever */  {
 
 		//do something
-
-		USART0_put_uint16(0x2342);
-		USART0_crlf();
+		if (10 == 1){
+			uint16_t out = darkval;
+			USART0_put_uint16(out);
+			USART0_crlf();
+			//last_darkval=darkval;
+		};
+		//USART0_put_uint16(0xA09F);
+		//USART0_crlf();
 	};
 
 	/* never */ return 0;
@@ -118,8 +130,43 @@ ISR(TIMER0_COMPA_vect)
 	/* calculate next analog sample value in synth mixer:*/
 	OCR1B = synth_mix();
 }
+
 ISR(TIMER2_COMPA_vect)
 {
-	//PORTC = 0b0000000;
+darkval++;
+	switch(sw_v){
+
+	case 0 :	// Set PC0 to 1 and PC1 to 0 - charge LED
+			
+			DDRC  = 0b00000011;
+			PORTC = 0b00000010;
+			
+			darkness = 0;
+			sw_v++;
+			
+			break;
+
+	case 10 : 	// set PC0 to 0 and PC1 as input
+			
+			DDRC  = 0b00000001;
+		 	PORTC = 0b00000000;
+			
+			sw_v++;
+			break;
+	case 5000 :	sw_v = 0;
+			//darkval = darkness;
+			//darkval = 1234;
+			break;
+	default :	//measure if PC1 falls to LOW
+			if ((darkness==0) && ((PINC && 0b00000010)==0)){
+				darkness = sw_v;
+			};
+			sw_v++;
+	
+			
+	}; //end switch
+	
+	//PORTC ^= 0b00001111; //toggle C0, C1, C2,C3
+	//PORTC = 0;
 	
 }

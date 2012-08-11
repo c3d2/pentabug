@@ -121,8 +121,12 @@ void USART0_crlf(){
 };
 
 void USART0_put_uint8(uint8_t x){
-	USART0_putc(((x & 0b11110000)>>4)+0x30);
-	USART0_putc((x & 0b00001111)+0x30);
+	uint8_t highchar=((x & 0b11110000)>>4)+0x30;
+	uint8_t lowchar = (x & 0b00001111)+0x30;
+	highchar = highchar>0x39 ? highchar + 0x07 : highchar; //chars A to F start with 0x41 not 0x3A
+	lowchar = lowchar>0x39 ? lowchar + 0x07 : lowchar;
+	USART0_putc(highchar);
+	USART0_putc(lowchar);
 
 }
 void USART0_put_uint16(uint16_t x){
