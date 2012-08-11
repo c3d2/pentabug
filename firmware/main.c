@@ -48,7 +48,23 @@ static void init_leds(void)
 	DDRC |= (1 << PORTC0) | (1 << PORTC2) |
 		(1 << PORTC3) | (1 << PORTC1) ;
 	/* initially one led is on */
-	PORTC = 1;
+	PORTC = 0b00000101;
+
+	/* 
+	 * Timer 2
+	 */
+
+	/* set timer0 to CTC & prescaler 64 → 125kHz increment */
+	TCCR2A = (1 << WGM21);
+	TCCR2B = (1 << CS20) | (1 << CS21);
+
+	OCR2A = 6; /* TOP */
+	TCNT2 = 0;
+	/*enable interrupt*/
+	TIMSK2 |=  (1<<OCIE2A);
+
+
+
 	return;
 }
 
@@ -102,4 +118,8 @@ ISR(TIMER0_COMPA_vect)
 	/* calculate next analog sample value in synth mixer:*/
 	OCR1B = synth_mix();
 }
-
+ISR(TIMER2_COMPA_vect)
+{
+	//PORTC = 0b0000000;
+	
+}
