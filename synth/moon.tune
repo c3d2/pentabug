@@ -1,0 +1,205 @@
+# Duck Tales - The Moon
+#=======================#
+# what it's supposed to become:
+# http://www.youtube.com/watch?v=G_80PQ543rM
+
+
+[WAVETABLE]
+# note offset | wave form
+
+bass
+	0 1
+	255 255
+
+
+lead
+	12 1
+	0 1
+	255 255
+
+
+[INSTRUMENTS]
+# pulse width | pulse sweep | decay | label in wave table
+
+bass	32000	0	10	bass
+
+lead	10000	255	1	lead
+
+
+[PATTERNS]
+# note | instrument
+---
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+
+bass00
+	d#3	bass
+	d#4
+	d#3
+	d#4
+	d#3
+	d#4
+	d#3
+	d#4
+	d_3
+	d_4
+	d_3
+	d_4
+	d_3
+	d_4
+	d_3
+	d_4
+
+bass01
+	c_3 bass
+	c_4
+	c_3
+	c_4
+	c_3
+	c_4
+	c_3
+	c_4
+	a#2
+	a#3
+	a#2
+	a#3
+	a#2
+	a#3
+	a#2
+	a#3
+
+bass02
+	g#2 bass
+	g#3
+	g#2
+	g#3
+	g#2
+	g#3
+	g#2
+	g#3
+	a_2
+	a_3
+	a_2
+	a_3
+	a_2
+	a_3
+	a_2
+	a_3
+
+bass03
+	a#2 bass
+	a#3
+	a#2
+	a#3
+	a#2
+	a#3
+	a#2
+	a#3
+	a#2
+	a#3
+	a#2
+	a#3
+	a#2
+	a#3
+	a#2
+	a#3
+
+
+lead00
+	.
+	.
+	.
+	.
+	g_5 lead
+	g#5
+	a#5
+	a#5
+	.
+	.
+	d#6
+	.
+	d_6
+	.
+	d#6
+	.
+
+lead01
+	f_6 lead
+	.
+	g_6
+	d#6
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	d_6
+	d#6
+
+lead02
+	a#6 lead
+	.
+	.
+	d#6
+	d#6
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	d#6
+	d#6
+
+lead03
+	d#6
+	.
+	.
+	.
+	.
+	f_6 lead
+	d#6
+	d_6
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+	.
+
+
+[PATTERNTABLE]
+
+
+
+bass00	---		lead00
+bass01	---		lead01
+bass02	---		lead02
+bass03	---		lead03
+
+
+
