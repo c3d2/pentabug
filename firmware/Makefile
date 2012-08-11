@@ -4,7 +4,7 @@
 
 #curl http://seb.exse.net/ledtest.hex > ledtest.hex && avrflash.sh  m168 -F -v -v  -U flash:w:ledtest.hex
 
-MCU = atmega88p
+#MCU = atmega88p
 #MCU = atmega328p
 
 #MCU = atmega644
