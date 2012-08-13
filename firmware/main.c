@@ -111,6 +111,7 @@ int main(void)
 	for(;;) /* ever */  {
 
 		//do something
+		synth_poll();
 		if (10 == 1){
 			uint16_t out = darkval;
 			USART0_put_uint16(out);
@@ -125,11 +126,6 @@ int main(void)
 }
 
 
-ISR(TIMER0_COMPA_vect)
-{
-	/* calculate next analog sample value in synth mixer:*/
-	OCR1B = synth_mix();
-}
 
 ISR(TIMER2_COMPA_vect)
 {

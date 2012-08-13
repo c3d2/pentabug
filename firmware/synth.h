@@ -1,3 +1,8 @@
+#ifndef SYNTH_H
+#define SYNTH_H
+
+#define SYNTH_BUFSIZE 2
+
 enum {  WAVE_OFF, WAVE_PULSE, WAVE_SAW, WAVE_NOISE };
 
 typedef struct {
@@ -23,5 +28,6 @@ typedef struct {
 
 
 void synth_init(void);
-uint16_t synth_mix(void);
+void synth_poll(void);
 
+#endif

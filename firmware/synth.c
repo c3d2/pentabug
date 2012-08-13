@@ -2,6 +2,7 @@
 #include "synth.h"
 #include "freq_table.h"
 #include <avr/pgmspace.h>
+#include <avr/interrupt.h>
 
 // sample rate is 8M / (3 * 64)
 
@@ -177,12 +178,27 @@ static int8_t row;
 static int8_t seq;
 
 
+/* PROTOTYPES */
+uint16_t synth_mix(void);
+
+static uint16_t timeslots[SYNTH_BUFSIZE];
+static uint8_t timeslots_write; // current write head 
+static uint8_t timeslots_read; // current read head 
+
+void enqueue_timeslot(uint16_t synthval);
+uint16_t dequeue_timeslot(void);
+uint8_t timeslots_fill(void);
+
+
 void synth_init(void)
 {
 	sample = 0;
 	tick = 0;
 	row = 0;
 	seq = 0;
+	//prefill timeslot buffer
+	enqueue_timeslot(synth_mix());
+	enqueue_timeslot(synth_mix());
 }
 
 uint16_t synth_mix(void)
@@ -269,4 +285,42 @@ uint16_t synth_mix(void)
 
 	return output;
 }
+
+
+/* fill all the timeslots */
+void synth_poll(void) {
+	/* refill timeslots queue */
+	while (timeslots_fill() < (SYNTH_BUFSIZE-1))
+		enqueue_timeslot(synth_mix());
+}
+
+/* timeslot queue handling */
+void enqueue_timeslot(uint16_t synthval) {
+	timeslots[timeslots_write] = synthval;
+	timeslots_write++;
+	if (timeslots_write >= SYNTH_BUFSIZE)
+		timeslots_write = 0;
+}
+
+uint16_t dequeue_timeslot() {
+	uint16_t t = timeslots[timeslots_read];
+	timeslots_read++;
+	if (timeslots_read >= SYNTH_BUFSIZE) timeslots_read =0;
+	return t;
+}
+
+uint8_t timeslots_fill() {
+	if (timeslots_write >= timeslots_read)
+		return timeslots_write - timeslots_read;
+	else
+		return SYNTH_BUFSIZE - (timeslots_read - timeslots_write);
+}
+
+
+ISR(TIMER0_COMPA_vect)
+{
+	/* calculate next analog sample value in synth mixer:*/
+	OCR1B = dequeue_timeslot();
+}
+
 
