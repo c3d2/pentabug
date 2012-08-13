@@ -1,6 +1,8 @@
 #include <inttypes.h>
 #include "synth.h"
 #include "freq_table.h"
+#include <avr/pgmspace.h>
+
 // sample rate is 8M / (3 * 64)
 
 enum {
@@ -43,7 +45,7 @@ static const uint8_t wave_table[][2] = {
 };
 
 
-static const uint8_t patterns[][pattern_length][2] = {
+static const uint8_t patterns[][pattern_length][2] PROGMEM = {
 	{},
 	{
 		{   33 - 12, 0 },
@@ -204,7 +206,7 @@ uint16_t synth_mix(void)
 			// enter new row
 			if(tick == 0) {
 				uint8_t pattern_nr = pattern_table[seq][i];
-				uint8_t note = patterns[pattern_nr][row][0];
+				uint8_t note = pgm_read_byte(&patterns[pattern_nr][row][0]);
 
 				if(note) { // new note, maybe?
 					if(note == 0xff) {
@@ -212,7 +214,7 @@ uint16_t synth_mix(void)
 					} else {
 						chan->level = 80; // TODO: less?
 						chan->note = note;
-						chan->inst_nr = patterns[pattern_nr][row][1];
+						chan->inst_nr = pgm_read_byte(&patterns[pattern_nr][row][1]);
 						inst = &instruments[chan->inst_nr];
 						chan->pos = inst->wave_table_pos;
 						if(inst->pulse_width) chan->pulse_width = inst->pulse_width;
@@ -240,7 +242,7 @@ uint16_t synth_mix(void)
 		synth_channel_t* chan = &channels[i];
 		const synth_instrument_t* inst = &instruments[chan->inst_nr];
 
-		chan->phase += freq_table[(uint8_t)(chan->note + wave_table[chan->pos][0])];
+		chan->phase += pgm_read_word(&freq_table[(uint8_t)(chan->note + wave_table[chan->pos][0])]);
 
 		uint8_t amp;
 		switch(wave_table[chan->pos][1]) {
