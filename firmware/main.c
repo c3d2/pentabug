@@ -70,8 +70,6 @@ static void init_leds(void)
 	/*enable interrupt*/
 	TIMSK2 |=  (1<<OCIE2A);
 
-
-
 	return;
 }
 
@@ -88,12 +86,13 @@ static void init_motor(void)
 	/* vibration motor on B1, initially off: */
 	DDRB  |= (1 << PORTB1);
 	PORTB &= ~( 1<<PORTB1);
-
+	return;
 }
 
 
 
-int main(void)
+void __attribute__((noreturn)) 
+main(void)
 {
 	/* hardware initialisation: */
 	//init_leds();
@@ -120,12 +119,11 @@ int main(void)
 			USART0_crlf();
 			//last_darkval=darkval;
 		};
-	synth_poll();
 		//USART0_put_uint16(0xA09F);
 		//USART0_crlf();
-	};
+	}
 
-	/* never */ return 0;
+	/* never  return 0; */
 }
 
 
