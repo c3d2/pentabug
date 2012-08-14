@@ -179,16 +179,16 @@ static int8_t seq;
 
 
 /* PROTOTYPES */
-uint16_t synth_mix(void);
+uint8_t synth_mix(void);
 
 static uint16_t timeslots[SYNTH_BUFSIZE];
 static uint8_t timeslots_write; // current write head 
 static uint8_t timeslots_read; // current read head 
+uint8_t timeslots_fill;
 
-void enqueue_timeslot(uint16_t synthval);
-uint16_t dequeue_timeslot(void);
-uint8_t timeslots_fill(void);
 
+static void enqueue_timeslot(uint8_t synthval);
+static uint8_t dequeue_timeslot(void);
 
 void synth_init(void)
 {
@@ -196,12 +196,13 @@ void synth_init(void)
 	tick = 0;
 	row = 0;
 	seq = 0;
+	timeslots_fill = 0;
 	//prefill timeslot buffer
 	enqueue_timeslot(synth_mix());
 	enqueue_timeslot(synth_mix());
 }
 
-uint16_t synth_mix(void)
+uint8_t synth_mix(void)
 {
 	if(sample == 0) { // new tick
 		for(int i = 0; i < channel_count; i++) {
@@ -253,7 +254,7 @@ uint16_t synth_mix(void)
 	}
 
 
-	uint16_t output = 0;
+	uint8_t output = 0;
 	for(int i = 0; i < channel_count; i++) {
 		synth_channel_t* chan = &channels[i];
 		const synth_instrument_t* inst = &instruments[chan->inst_nr];
@@ -288,34 +289,35 @@ uint16_t synth_mix(void)
 
 
 /* fill all the timeslots */
-void synth_poll(void) {
+inline void synth_poll(void) {
 	/* refill timeslots queue */
-	while (timeslots_fill() < (SYNTH_BUFSIZE-1))
+	while (timeslots_fill < (SYNTH_BUFSIZE-1))
 		enqueue_timeslot(synth_mix());
 }
 
 /* timeslot queue handling */
-void enqueue_timeslot(uint16_t synthval) {
-	timeslots[timeslots_write] = synthval;
+static inline void enqueue_timeslot(uint8_t synthval) {
+	timeslots[timeslots_write & SYNTH_BUFMASK] = synthval;
+	timeslots_fill++;
 	timeslots_write++;
-	timeslots_write &= SYNTH_BUFMASK;
-
 }
 
-uint16_t dequeue_timeslot() {
-	uint16_t t = timeslots[timeslots_read];
-	PORTC = (timeslots_read != timeslots_write) ? 0b00000001 : 0b00000000;
-	timeslots_read++;
-	if (timeslots_read >= SYNTH_BUFSIZE) timeslots_read =0;
+static inline uint8_t dequeue_timeslot() {
+	uint8_t t = timeslots[timeslots_read & SYNTH_BUFMASK];
+	if(timeslots_fill){
+		/* buffer not underrun... move forward in readbuffer */
 
+#if 1 /*debug */
+		PORTC = 0;
+#endif
+		timeslots_fill --;
+		timeslots_read ++;	
+	} else { /*buffer underrun. not moving forward*/
+#if 1
+		PORTC = 0b00000001 ;
+#endif
+	}
 	return t;
-}
-
-uint8_t timeslots_fill() {
-	if (timeslots_write >= timeslots_read)
-		return timeslots_write - timeslots_read;
-	else
-		return SYNTH_BUFSIZE - (timeslots_read - timeslots_write);
 }
 
 
