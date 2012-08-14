@@ -96,7 +96,7 @@ static void init_motor(void)
 int main(void)
 {
 	/* hardware initialisation: */
-	init_leds();
+	//init_leds();
 	USART0_Init();
 	// init_motor();
 	init_pwm();
@@ -107,7 +107,9 @@ int main(void)
 
 	/* here the show begins:*/
 	sei();
-
+			DDRC  = 0b00000011;
+			PORTC = 0b00000001;
+			PORTC = 0b00000000;
 	for(;;) /* ever */  {
 
 		//do something
@@ -118,6 +120,7 @@ int main(void)
 			USART0_crlf();
 			//last_darkval=darkval;
 		};
+	synth_poll();
 		//USART0_put_uint16(0xA09F);
 		//USART0_crlf();
 	};

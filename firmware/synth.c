@@ -298,14 +298,16 @@ void synth_poll(void) {
 void enqueue_timeslot(uint16_t synthval) {
 	timeslots[timeslots_write] = synthval;
 	timeslots_write++;
-	if (timeslots_write >= SYNTH_BUFSIZE)
-		timeslots_write = 0;
+	timeslots_write &= SYNTH_BUFMASK;
+
 }
 
 uint16_t dequeue_timeslot() {
 	uint16_t t = timeslots[timeslots_read];
+	PORTC = (timeslots_read != timeslots_write) ? 0b00000001 : 0b00000000;
 	timeslots_read++;
 	if (timeslots_read >= SYNTH_BUFSIZE) timeslots_read =0;
+
 	return t;
 }
 

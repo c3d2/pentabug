@@ -1,7 +1,8 @@
 #ifndef SYNTH_H
 #define SYNTH_H
 
-#define SYNTH_BUFSIZE 2
+#define SYNTH_BUFSIZE (16)
+#define SYNTH_BUFMASK (0b00001111)
 
 enum {  WAVE_OFF, WAVE_PULSE, WAVE_SAW, WAVE_NOISE };
 
