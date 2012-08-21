@@ -5774,6 +5774,19 @@ DIN A4, landscape with location and doc. field</description>
 <wire x1="-3.81" y1="0" x2="-2.3" y2="2.3" width="1.27" layer="1"/>
 <wire x1="2.3" y1="-2.3" x2="3.81" y2="0" width="1.27" layer="1"/>
 </package>
+<package name="BUZZRTDK">
+<description>&lt;b&gt;BUZZER&lt;/b&gt;</description>
+<wire x1="8.636" y1="0.127" x2="10.414" y2="0.127" width="0.1524" layer="21"/>
+<wire x1="9.525" y1="1.016" x2="9.525" y2="-0.762" width="0.1524" layer="21"/>
+<circle x="0" y="0" radius="8.5" width="0.1524" layer="21"/>
+<circle x="0" y="0" radius="8" width="0.1524" layer="21"/>
+<circle x="0" y="0" radius="1" width="0.1524" layer="21"/>
+<circle x="9.525" y="0.127" radius="1" width="0.1524" layer="21"/>
+<pad name="-" x="-5" y="0" drill="0.8" diameter="1.8" shape="octagon"/>
+<pad name="+" x="5" y="0" drill="0.8" diameter="1.8" shape="octagon"/>
+<text x="-5.08" y="6.35" size="1.778" layer="25" ratio="10">&gt;NAME</text>
+<text x="-5.08" y="-7.62" size="1.778" layer="27" ratio="10">&gt;VALUE</text>
+</package>
 </packages>
 <symbols>
 <symbol name="VIBRAMOTOR">
@@ -5816,7 +5829,10 @@ DIN A4, landscape with location and doc. field</description>
 </devices>
 </deviceset>
 <deviceset name="MULTIBUZZR" prefix="SG">
-<description>&lt;b&gt;BUZZER&lt;/b&gt;&lt;p&gt; Source: Buerklin</description>
+<description>&lt;b&gt;BUZZER TDK&lt;/b&gt;&lt;p&gt;
+PS1720P02 
+
+http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQLwQogEgrqwqrrNaKDmjrMwApyDRCA%3d%3d</description>
 <gates>
 <gate name="G$1" symbol="B" x="0" y="0"/>
 </gates>
@@ -5833,6 +5849,15 @@ DIN A4, landscape with location and doc. field</description>
 <attribute name="OC_FARNELL" value="unknown" constant="no"/>
 <attribute name="OC_NEWARK" value="unknown" constant="no"/>
 </technology>
+</technologies>
+</device>
+<device name="TDKBUZZR" package="BUZZRTDK">
+<connects>
+<connect gate="G$1" pin="+" pad="+"/>
+<connect gate="G$1" pin="-" pad="-"/>
+</connects>
+<technologies>
+<technology name=""/>
 </technologies>
 </device>
 </devices>
@@ -5876,7 +5901,7 @@ DIN A4, landscape with location and doc. field</description>
 <part name="P+3" library="supply1" deviceset="VCC" device=""/>
 <part name="JP2" library="pinhead" deviceset="PINHD-2X3" device=""/>
 <part name="U$1" library="buglbr" deviceset="VIBRAMOTOR" device=""/>
-<part name="SG1" library="buglbr" deviceset="MULTIBUZZR" device=""/>
+<part name="SG1" library="buglbr" deviceset="MULTIBUZZR" device="TDKBUZZR"/>
 <part name="GND10" library="supply1" deviceset="GND" device=""/>
 <part name="GND12" library="supply1" deviceset="GND" device=""/>
 <part name="P+5" library="supply1" deviceset="VCC" device=""/>
