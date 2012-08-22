@@ -13,15 +13,17 @@ head1x3 	100 		reichelt? 		7 			7
 head2x3 	100 		reichelt? 		15 			15
 ledSLH 56 	200 		reichelt 		7 			14
 platine 	100 		mkpcb? 			150? 			~150
-lötzinn 	1 		pollin 			795 			8 
-flyerA5 	100 		diekopie?  		3 			3 
+stahl.8mm 	25 		conrad 			50 			12.5
+lötzinn 	1 		pollin 			795 			8
+flyerA5 	100 		diekopie?  		3 			3
 tüte 		100 		todo 			5 			5
 verbrauchsm     4  		dealer 			250 			10
 aterial 	4 		dealer2 		250 			10
 buzz variante   100 		reichelt 		10 			10
-										summe: 
+										summe:
 									------------------------
-										586
+										598.5
+										
 ------------------------------------------------------------------------------------------------
 
 
