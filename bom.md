@@ -4,7 +4,7 @@ name 		ben.Anzahl 	quelle/bestnr. 		einzelpreis(cent) 	summe(Euro)
 --------- 	----------- 	--------------  	----------------- 	--------------
 ATMEGA88PA 	100 		mouser 			144 			144
 Batteriefach 	50 		hbc 			74 			~40
-motor(blau) 	100 		pollin 			85 			85
+motor(schwarz) 	100 		pollin 			125 			125
 buzzr 		100 		mouser 			49			49
 widerst. 	400 		reichelt 		2.5 			10
 2n7000 		100 		reichelt 		5 			5
@@ -22,7 +22,7 @@ aterial 	4 		dealer2 		250 			10
 buzz variante   100 		reichelt 		10 			10
 										summe:
 									------------------------
-										598.5
+										638.5
 										
 ------------------------------------------------------------------------------------------------
 
