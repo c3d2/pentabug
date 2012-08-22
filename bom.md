@@ -17,12 +17,14 @@ stahl.8mm 	25 		conrad 			50 			12.5
 lötzinn 	1 		pollin 			795 			8
 flyerA5 	100 		diekopie?  		3 			3
 tüte 		100 		todo 			5 			5
+glitzer 	100 		todo 			20 			20
+glitter 	100 		todo 			20 			20
 verbrauchsm     4  		dealer 			250 			10
 aterial 	4 		dealer2 		250 			10
 buzz variante   100 		reichelt 		10 			10
 										summe:
 									------------------------
-										638.5
+										678.5
 										
 ------------------------------------------------------------------------------------------------
 
