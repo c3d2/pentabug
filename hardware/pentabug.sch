@@ -5863,10 +5863,10 @@ DIN A4, landscape with location and doc. field</description>
 <library name="buglbr">
 <packages>
 <package name="LA4-432">
-<wire x1="-6.985" y1="2.58" x2="9.015" y2="2.58" width="0.127" layer="20"/>
-<wire x1="9.015" y1="2.58" x2="9.015" y2="-2.37" width="0.127" layer="20"/>
-<wire x1="9.015" y1="-2.37" x2="-6.985" y2="-2.37" width="0.127" layer="20"/>
-<wire x1="-6.985" y1="-2.37" x2="-6.985" y2="2.58" width="0.127" layer="20"/>
+<wire x1="-6.985" y1="2.58" x2="9.015" y2="2.58" width="0.127" layer="21"/>
+<wire x1="9.015" y1="2.58" x2="9.015" y2="-2.37" width="0.127" layer="21"/>
+<wire x1="9.015" y1="-2.37" x2="-6.985" y2="-2.37" width="0.127" layer="21"/>
+<wire x1="-6.985" y1="-2.37" x2="-6.985" y2="2.58" width="0.127" layer="21"/>
 <circle x="6.165" y="-0.07" radius="2" width="0.127" layer="21"/>
 <circle x="6.215" y="-0.12" radius="0.1802" width="0.127" layer="21"/>
 <pad name="P$1" x="-6.985" y="1.35" drill="0.7" diameter="1.778" shape="square"/>
