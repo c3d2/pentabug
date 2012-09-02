@@ -1,4 +1,5 @@
 #include <inttypes.h>
+#include <avr/io.h>
 #include "bughal.h"
 
 /* Hardware abstraction layer for Pentabug hardware */
@@ -21,15 +22,19 @@ void init_leds(void){
 	  //	TIMSK2 |=  (1<<OCIE2A);
 
 
-  return;
+  	return;
 };
 
-void init_buzzr(int mode);
+void init_buzzr(int mode){
+ 	return;
+};
 
 
-void init_switch();
+void init_switch(){
+	return;
+};
 
-static void init_motor(void)
+void init_motor(void)
 {
 	/* vibration motor on B1, initially off: */
 	DDRB  |= (1 << PORTB1);

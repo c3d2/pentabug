@@ -7,6 +7,7 @@
 #include "main.h"
 #include "lib/synth.h"
 #include "lib/usart.h"
+#include "lib/bughal.h"
 
 
 uint16_t sw_v = 0;
@@ -65,30 +66,21 @@ void __attribute__((noreturn))
 main(void)
 {
 	/* hardware initialisation: */
-	//init_leds();
-	USART0_Init();
+	init_leds();
+	//USART0_Init();
 	// init_motor();
-	init_pwm();
-	init_sampletimer();
+	//init_pwm();
+	//init_sampletimer();
 	
 	/* syntesizer initialisation */
-	synth_init();
+	//synth_init();
 
 	/* here the show begins:*/
-	sei();
-			DDRC  = 0b00000011;
-			PORTC = 0b00000001;
-			PORTC = 0b00000000;
+	//sei();
 	for(;;) /* ever */  {
 
 		//do something
-		synth_poll();
-		if (10 == 1){
-			uint16_t out = darkval;
-			USART0_put_uint16(out);
-			USART0_crlf();
-			//last_darkval=darkval;
-		};
+		//synth_poll();
 		//USART0_put_uint16(0xA09F);
 		//USART0_crlf();
 	}
