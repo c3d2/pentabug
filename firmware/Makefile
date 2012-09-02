@@ -4,12 +4,13 @@
 
 #curl http://seb.exse.net/ledtest.hex > ledtest.hex && avrflash.sh  m168 -F -v -v  -U flash:w:ledtest.hex
 
-#MCU = atmega88p
 #MCU = atmega328p
-
 #MCU = atmega644
-F_CPU = 8000000
+MCU = atmega88p
+
 #F_CPU = 20000000
+F_CPU = 8000000
+
 QUARZ = 8MHZ
 
 #internal RC/8
@@ -35,7 +36,7 @@ OPT = s
 
 ##########################################################################################################
 # List C source files here. (C dependencies are automatically generated.)
-SRC	= main.c lib/synth.c lib/usart.c
+SRC	= main.c lib/synth.c lib/usart.c lib/bughal.c
 ##########################################################################################################
 
 

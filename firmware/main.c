@@ -49,29 +49,6 @@ static inline void init_pwm(void)
 	return;
 }
 
-static void init_leds(void)
-{
-	/* enable LED channels as output */
-	DDRC |= (1 << PORTC0) | (1 << PORTC2) |
-		(1 << PORTC3) | (1 << PORTC1) ;
-	/* initially one led is on */
-	PORTC = 0b00000101;
-
-	/* 
-	 * Timer 2
-	 */
-
-	/* set timer2 to CTC & prescaler 64 →  ???125kHz increment */
-	TCCR2A = (1 << WGM21);
-	TCCR2B = (1 << CS20)|(1 << CS21);
-
-	OCR2A = 255; /* TOP */
-	TCNT2 = 0;
-	/*enable interrupt*/
-	TIMSK2 |=  (1<<OCIE2A);
-
-	return;
-}
 
 inline void setleds(uint8_t state)
 {
@@ -81,13 +58,6 @@ inline void setleds(uint8_t state)
 	return;
 }
 
-static void init_motor(void)
-{
-	/* vibration motor on B1, initially off: */
-	DDRB  |= (1 << PORTB1);
-	PORTB &= ~( 1<<PORTB1);
-	return;
-}
 
 
 
