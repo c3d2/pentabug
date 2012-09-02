@@ -819,13 +819,12 @@ design rules under a new name.</description>
 <element name="U$1" library="buglbr" package="LA4-432" value="VIBRAMOTOR" x="3.81" y="16.51" smashed="yes" rot="R180"/>
 <element name="SG1" library="buglbr" package="BUZZRTDK" value="MULTIBUZZRTDKBUZZR" x="68.58" y="16.51" smashed="yes" rot="R90">
 <attribute name="NAME" x="60.96" y="18.415" size="1.27" layer="25" font="vector" ratio="10" rot="R270"/>
-<attribute name="VALUE" x="76.2" y="11.43" size="1.778" layer="27" ratio="10" rot="R90"/>
 </element>
 <element name="R1" library="rcl" package="0207/10" value="100K" x="20.32" y="16.51" smashed="yes" rot="R90">
 <attribute name="NAME" x="19.558" y="13.716" size="1.27" layer="25" font="vector" ratio="10" rot="R180"/>
 <attribute name="VALUE" x="20.955" y="14.2494" size="1.27" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="R2" library="rcl" package="0207/10" value="18K" x="16.51" y="27.94" smashed="yes" rot="R180">
+<element name="R2" library="rcl" package="0207/10" value="22K" x="16.51" y="27.94" smashed="yes" rot="R180">
 <attribute name="NAME" x="18.288" y="26.416" size="1.27" layer="25" font="vector" ratio="10" rot="R180"/>
 <attribute name="VALUE" x="18.7706" y="28.575" size="1.27" layer="27" ratio="10" rot="R180"/>
 </element>
@@ -1313,11 +1312,6 @@ design rules under a new name.</description>
 <via x="2.54" y="13.97" extent="1-16" drill="0.8" diameter="1.6764" alwaysstop="yes"/>
 </signal>
 </signals>
-<errors>
-<approved hash="19,1,745b54f6428adb83"/>
-<approved hash="19,1,722f5724f9b263e3"/>
-<approved hash="19,1,3188434058a66639"/>
-</errors>
 </board>
 </drawing>
 </eagle>
