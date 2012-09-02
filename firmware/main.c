@@ -5,8 +5,8 @@
 #include <stdlib.h>
 
 #include "main.h"
-#include "synth.h"
-#include "usart.h"
+#include "lib/synth.h"
+#include "lib/usart.h"
 
 
 uint16_t sw_v = 0;

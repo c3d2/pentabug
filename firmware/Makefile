@@ -35,7 +35,7 @@ OPT = s
 
 ##########################################################################################################
 # List C source files here. (C dependencies are automatically generated.)
-SRC	= main.c synth.c usart.c
+SRC	= main.c lib/synth.c lib/usart.c
 ##########################################################################################################
 
 
