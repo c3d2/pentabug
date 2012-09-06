@@ -51,15 +51,34 @@ static inline void init_pwm(void)
 }
 
 
-inline void setleds(uint8_t state)
-{
-	/* set leds according to */
-	PORTC |= (state | 0b00001111);
-	PORTC &= ~(state | 0b11110000);
+
+void click(){
+	buzzr_up();
+	_delay_ms(1);
+	buzzr_inv();
+	_delay_ms(1);
+	buzzr_off();
+};
+
+void waitr(int min, int max){
+	int waitms = (rand() % (max-min)) + min;
+	for(int i=0; i <= waitms; i++){
+		_delay_ms(1);
+	};
 	return;
+
+};
+
+void ledr(){
+	int i = (rand() % 3);
+	switch(i) {
+		case 0  : led_on(LED_L); break;
+		case 1  : led_on(LED_R); break;
+		default : led_on(LED_L|LED_R);
+	};
+	_delay_ms(10);
+	led_off(LED_L|LED_R);	
 }
-
-
 
 
 void __attribute__((noreturn)) 
@@ -67,6 +86,7 @@ main(void)
 {
 	/* hardware initialisation: */
 	init_leds();
+	init_buzzr();
 	//USART0_Init();
 	// init_motor();
 	//init_pwm();
@@ -77,9 +97,14 @@ main(void)
 
 	/* here the show begins:*/
 	//sei();
-	for(;;) /* ever */  {
+	//set_motor(MOTOR_ON);
 
-		//do something
+	for(;;) /* ever */  {
+	//do something
+	waitr(50,5000);
+	click();
+	ledr();
+
 		//synth_poll();
 		//USART0_put_uint16(0xA09F);
 		//USART0_crlf();
