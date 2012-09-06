@@ -320,6 +320,9 @@ fuse:
 reset:
 	$(AVRDUDE) $(AVRDUDE_FLAGS)
 
+test:
+	$(AVRDUDE) $(AVRDUDE_FLAGS)
+
 
 # Create final output files (.hex, .eep) from ELF output file.
 %.hex: %.elf
