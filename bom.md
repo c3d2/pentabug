@@ -22,9 +22,11 @@ glitter 	100 		todo 			20 			20
 verbrauchsm     4  		dealer 			250 			10
 aterial 	4 		dealer2 		250 			10
 buzz variante   100 		reichelt 		10 			10
+schmelzkleber 	1 		? 			1000 			10
+sonstiges 	1 		dealer3 		115 			11.5
 										summe:
 									------------------------
-										678.5
+										700
 										
 ------------------------------------------------------------------------------------------------
 
