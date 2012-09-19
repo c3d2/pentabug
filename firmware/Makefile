@@ -36,7 +36,7 @@ OPT = s
 
 ##########################################################################################################
 # List C source files here. (C dependencies are automatically generated.)
-SRC	= main.c lib/synth.c lib/usart.c lib/bughal.c
+SRC	= main.c lib/synth.c lib/usart.c lib/bughal.c lib/util.h 
 ##########################################################################################################
 
 
