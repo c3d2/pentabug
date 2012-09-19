@@ -1,7 +1,7 @@
 # Parts List
 
 <table>
-<th><td>Bezeichnung	</td><td>Bauteil</td><td>Hinweis</td></th>
+<tr><th>Bezeichnung	</th><th>Bauteil</th><th>Hinweis</th></tr>
 <tr><td>n/a		</td><td>Leiterplatte V1.0		</td><td></td><tr>
 <tr><td>IC1		</td><td>Mikrocontroller ATMEGA88PA	</td><td>Einbaulage beachten</td><tr>
 <tr><td>R1		</td><td>Widerstand 100K		</td><td>braun-schwarz-schwarz-gelb-braun</td><tr>
