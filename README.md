@@ -15,3 +15,5 @@ Img. 2: The top layer view of the Version 1.0 production board (two layer pcb).
 ![Version 1.0 Schematics (Thumbnail)](https://github.com/c3d2/pentabug/raw/master/img/schematics_v1_0_thumb.png)  
 Img. 3: Version 1.0 schematics ([high resolution image](https://github.com/c3d2/pentabug/raw/master/img/schematics_v1_0.png "high resolution image of schematics")).
 
+[Bill of Materials for Version 1.0](https://github.com/c3d2/pentabug/blob/master/bom.md "bill of materials")
+
