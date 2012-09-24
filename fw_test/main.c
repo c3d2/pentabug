@@ -75,11 +75,11 @@ void set_motor(int val){
 };
 
 
-void init_switch(){
+void init_switch(void){
 	return;
 };
 
-void blinkrattlebeep(){
+void blinkrattlebeep(void){
 	led_off(LED_L|LED_R);
 	_delay_ms(100);	
 	led_on(LED_L);
@@ -99,6 +99,28 @@ void blinkrattlebeep(){
 	buzzr_off();
 };
 
+void mode_motortest(void)
+{
+	set_motor(MOTOR_ON);
+	_delay_ms(400);
+	set_motor(MOTOR_OFF);
+	_delay_ms(500);
+	return;
+}
+
+
+void mode_blinktest(void)
+{
+	led_off(LED_L|LED_R);
+	_delay_ms(100);	
+	led_on(LED_L);
+	_delay_ms(100);	
+	led_off(LED_L);
+	led_on(LED_R);
+	_delay_ms(100);
+	led_off(LED_R);	
+	return
+}
 
 
 void __attribute__((noreturn)) 
