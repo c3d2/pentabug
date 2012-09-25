@@ -63,15 +63,15 @@ void USART0_Init (void)
 	// set baudrate
 		#undef BAUD
 		#define BAUD 115200
-		#include <util/setbaud.h><util/setbaud.h>
+		#include <util/setbaud.h>
 		UBRR0H = UBRRH_VALUE;
 		UBRR0L = UBRRL_VALUE;
 
-	//#if USE_2X
-	UCSR0A |= (1 << U2X0);	// enable double speed operation
-	//#else
-	//	UCSR0A &= ~(1 << U2X0);	// disable double speed operation
-	//#endif
+	#if USE_2X
+		UCSR0A |= (1 << U2X0);	// enable double speed operation
+	#else
+		UCSR0A &= ~(1 << U2X0);	// disable double speed operation
+	#endif
 
 
 	// flush receive buffer
