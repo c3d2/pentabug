@@ -29,7 +29,7 @@ static void inline led_off(int leds){
 	return;
 }
 
-static void inline buzzr_off(){
+static void inline buzzr_off(void){
 	PORTC &= ~(1 << PORTC5);
 	PORTB &= ~(1 << PORTB2);
 }
@@ -49,14 +49,14 @@ static void buzzr_up(void){
 	return;
 }
 
-static void buzzr_down(){
+static void buzzr_down(void){
 	PORTC |= (1 << PORTC5);
 	PORTB &= ~(1 << PORTB2);
 }
 
 
 
-static void buzzr_inv(){
+static void buzzr_inv(void){
 	PORTC ^= (1 << PORTC5);
 	PORTB ^= (1 << PORTB2);
 }
@@ -78,7 +78,7 @@ static void set_motor(int val){
 
 
 static void init_switch(void){
-	DDRD &= ~( (1 << PORTD1) | (1<<PORTD0))
+	DDRD &= ~( (1 << PORTD1) | (1<<PORTD0));
 	return;
 }
 
@@ -136,8 +136,7 @@ static void mode_beeptest(void)
 	return;
 }
 
-void __attribute__((noreturn)) 
-main(void)
+int main(void)
 {
 
 	/* hardware initialisation: */
@@ -161,7 +160,7 @@ main(void)
 				break;
 			case 3: 
 				mode_beeptest();
-				break();
+				break;
 			case 4:
 			default:
 				mode=0;
@@ -172,17 +171,19 @@ main(void)
 		
 		switch( PIND & 3){
 			case 1:
-				mode++
+				mode++;
 				break;
 			case 2:
 				mode --;
 				break;
 			case 3:
 			default:
+				;
 		}
 
 	}
 	/* never  return 0; */
+	return 0;
 }
 
 
