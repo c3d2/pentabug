@@ -78,7 +78,6 @@ void init_motor(void)
 
 void set_motor(int val){
 	PORTB = ~(val);
-	PORTB = PORTB;
 	return;
 };
 

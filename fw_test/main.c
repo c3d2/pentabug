@@ -136,6 +136,20 @@ static void mode_beeptest(void)
 	return;
 }
 
+static void flashleds(int leds)
+{
+	led_off(LED_L|LED_R);
+	for (int i=0; i<10; i++){
+		led_on(leds);
+		_delay_ms(10);	
+		led_off(LED_L|LED_R);
+		_delay_ms(90);	
+	};
+	return;
+}
+
+
+
 int main(void)
 {
 
@@ -149,7 +163,7 @@ int main(void)
 	for(;;) /* ever */  {
 		//do something
 
-		//TODO: check switches and change mode
+
 
 		switch(mode){
 			case 1: 
@@ -161,24 +175,23 @@ int main(void)
 			case 3: 
 				mode_beeptest();
 				break;
-			case 4:
-			default:
-				mode=0;
-			case 0:
+			case 4: break;
+			default: //mode=0;
 				blinkrattlebeep();
 
 		}
-		
-		switch( PIND & 3){
-			case 1:
-				mode++;
+		//check switches and change mode		
+		switch( PIND & 0b00000011){
+			case 2: //left switch pressed
+				mode = (mode+1) % 4;
+				flashleds(LED_L);
 				break;
-			case 2:
-				mode --;
+			case 1: //right switch pressed
+				mode = (mode-1) % 4;
+				flashleds(LED_R);
 				break;
-			case 3:
-			default:
-				;
+
+
 		}
 
 	}
