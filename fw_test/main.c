@@ -79,6 +79,7 @@ static void set_motor(int val){
 
 static void init_switch(void){
 	DDRD &= ~( (1 << PORTD1) | (1<<PORTD0));
+	PORTD |= (1 << PORTD1) | (1<<PORTD0); //Pullups FTW
 	return;
 }
 
@@ -175,20 +176,25 @@ int main(void)
 			case 3: 
 				mode_beeptest();
 				break;
-			case 4: break;
 			default: //mode=0;
 				blinkrattlebeep();
 
 		}
+
 		//check switches and change mode		
 		switch( PIND & 0b00000011){
-			case 2: //left switch pressed
-				mode = (mode+1) % 4;
+			case 0b00000010: //left switch pressed
+				mode--;
+				if (mode > 3) mode =3;
 				flashleds(LED_L);
 				break;
-			case 1: //right switch pressed
-				mode = (mode-1) % 4;
+			case 0b00000001: //right switch pressed
+				mode++;
+				if (mode > 3) mode = 0;
 				flashleds(LED_R);
+				break;
+			case 0b00000000: //both switches pressed
+				flashleds(LED_R|LED_L);
 				break;
 
 
