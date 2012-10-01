@@ -65,6 +65,8 @@ void buzzr_inv(void){
 }
 
 void init_switch(void){
+	DDRD &= ~( (1 << PORTD1) | (1<<PORTD0));
+	PORTD |= (1 << PORTD1) | (1<<PORTD0); //Pullups FTW
 	return;
 }
 

@@ -48,11 +48,7 @@ ISR (USART_RX_vect)
 		*rxhead0 = c;
 		++rxhead0;
 		if (rxhead0 == (rxbuf0 + UART_RXBUFSIZE)) rxhead0 = rxbuf0;
-//		if((diff > 100)&&(xon==0))
-//		{
-//			xon=1;
-//			//set the CTS pin
-//		}
+
 	}
 	UCSR0B |= (1 << RXCIE0);
 }
@@ -62,8 +58,8 @@ void USART0_Init (void)
 {
 	// set baudrate
 		#define 	BAUD_TOL   4
-		#undef BAUD
-		#define BAUD 115200
+		#undef 		BAUD
+		#define 	BAUD 115200
 		#include <util/setbaud.h>
 		UBRR0H = UBRRH_VALUE;
 		UBRR0L = UBRRL_VALUE;
@@ -94,7 +90,6 @@ void USART0_Init (void)
 
 void USART0_putc (char c)
 {
-
 	loop_until_bit_is_set(UCSR0A, UDRE0);
 	UDR0 = c;
 }
@@ -105,14 +100,6 @@ uint8_t USART0_Getc_nb(uint8_t *c)
 	if (rxhead0==rxtail0) return 0;
 	*c = *rxtail0;
 	if (++rxtail0 == (rxbuf0 + UART_RXBUFSIZE)) rxtail0 = rxbuf0;
-
-//	uint8_t diff = rxhead0 - rxtail0;
-//	if((diff < 10)&&(xon==1))
-//	{
-//		xon=0;
-//		//set the CTS pin
-//	}
-
 	return 1;
 }
 
