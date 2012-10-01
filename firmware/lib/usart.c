@@ -61,6 +61,7 @@ ISR (USART_RX_vect)
 void USART0_Init (void)
 {
 	// set baudrate
+		#define 	BAUD_TOL   4
 		#undef BAUD
 		#define BAUD 115200
 		#include <util/setbaud.h>
