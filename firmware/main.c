@@ -32,7 +32,6 @@ main(void)
 	uint8_t ledmode =0;
 	uint16_t ct =0;
 	led_on(LED_R);
-
 	timer_set(&t, 100);
 	for(;;) /* ever */  {
 	//do something
@@ -48,9 +47,36 @@ main(void)
 				led_off(LED_L);
 
 			};
-			timer_set(&t, 1);
+
 			USART0_crlf();
-			USART0_put_uint16(ct);
+			if (0==ct%3){
+			  if (0==ct%5){
+			    //fizzbug
+		            USART0_putc('f');					
+			    USART0_putc('i');
+			    USART0_putc('z');
+			    USART0_putc('z');
+			    USART0_putc('b');
+			    USART0_putc('u');
+			    USART0_putc('g');
+			  } else {
+			    //fizz
+		            USART0_putc('f');					
+			    USART0_putc('i');
+			    USART0_putc('z');
+			    USART0_putc('z');
+			  }
+                        } else {
+			  if (0==ct%5){
+			    //bug
+			    USART0_putc('b');
+			    USART0_putc('u');
+			    USART0_putc('g');
+			  } else {
+			    USART0_put_uint16(ct);
+			  };
+                        };
+			timer_set(&t, 50);
 			ct++;
 		}; //end if timer expired
 

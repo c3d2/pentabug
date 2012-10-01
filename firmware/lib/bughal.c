@@ -70,6 +70,15 @@ void init_switch(void){
 	return;
 }
 
+bool switch_l(void){
+	return PIND & 0b00000010;
+};
+
+bool switch_r(void){
+	return PIND & 0b00000001;
+};
+
+
 void init_motor(void)
 {
 	/* vibration motor on B1, initially off: */

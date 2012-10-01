@@ -1,6 +1,8 @@
 #ifndef BUGHAL_H
 #define BUGHAL_H
 
+#include <stdbool.h>
+
 /* Hardware abstraction layer for Pentabug hardware */
 
 enum {  BUZZR_OUT,  //initialize buzzer for OUTPUT mode (emmiting soundwaves)
@@ -23,8 +25,12 @@ void buzzr_off(void);
 void buzzr_inv(void);
 
 void init_switch(void);
+bool switch_l(void); //switch pressed?
+bool switch_r(void); //switch pressed?
+
 void init_motor(void);
 void set_motor(int);
+
 
 
 
