@@ -1,7 +1,7 @@
 PROJECT=pentabug
 
 OPTIMIZATION = -Os
-MCU = atmega88a
+MCU = atmega88pa
 F_CPU = 8000000
 QUARZ = 8MHZ
 FUSES = lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0x01:m
@@ -24,7 +24,7 @@ GCFLAGS += -Wa,-adhlns=$(<:.c=.lst),-gstabs -g
 
 GCFLAGS += -DF_CPU=$(F_CPU) -DQUARZ=$(QUARZ)
 
-LDFLAGS = -mmcu=$(MCU) $(OPTIMIZATION) -nostartfiles -gc-sections
+LDFLAGS = -mmcu=$(MCU) $(OPTIMIZATION) -gc-sections
 
 
 #  Paths
@@ -63,13 +63,13 @@ clean:
 #########################################################################
 
 fuse: 
-	$(AVRDUDE) -p $(MCU) -F -c usbtiny  -v -v  -U $(FUSES)
+	$(AVRDUDE) -p m88 -F -c usbtiny  -v -v  -U $(FUSES)
 
 flash: $(PROJECT).hex Makefile
-	$(AVRDUDE) -p $(MCU) -F -c usbtiny  -v -v  -U flash:w:$(PROJECT).hex
+	$(AVRDUDE) -p m88 -F -c usbtiny  -v -v  -U flash:w:$(PROJECT).hex
 
 fljohn: $(PROJECT).hex Makefile
-	$(AVRDUDE) -p $(MCU) -F  -P /dev/serial/by-id/usb-FTDI_USB__-__Serial-if00-port0   -c stk500v2 -v -v  -U flash:w:$(PROJECT).hex
+	$(AVRDUDE) -p m88 -F  -P /dev/serial/by-id/usb-FTDI_USB__-__Serial-if00-port0   -c stk500v2 -v -v  -U flash:w:$(PROJECT).hex
 
 .PHONY : clean all fuse flash fljohn 
 
