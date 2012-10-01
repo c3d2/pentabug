@@ -39,11 +39,9 @@ main(void)
 		if (timer_expired(&t)){
 			if (switch_l()) {led_on(LED_L);} else {led_off(LED_L);};
 			if (switch_r()) {led_on(LED_R);} else {led_off(LED_R);};
-
-			timer_set(&t, 50);
-
+			if (switch_l()&&switch_r()) {set_motor(MOTOR_ON);} else {set_motor(MOTOR_OFF);};			
+			timer_set(&t, 5);
 		}; //end if timer expired
-
 		//USART0_put_uint16(0xA09F);
 		//USART0_crlf();
 
