@@ -42,10 +42,11 @@ all: $(PROJECT).hex Makefile
 	@$(SIZE) --mcu=$(MCU) --format=avr $(PROJECT).elf
 
 $(PROJECT).hex: $(PROJECT).elf Makefile
+	@echo "  \033[1;34mOBJCOPY\033[0m $(PROJECT).elf -> $(PROJECT).hex"
 	@$(OBJCOPY) -O ihex -R .eeprom $(PROJECT).elf $(PROJECT).hex
 
 $(PROJECT).elf: $(OBJECTS) Makefile
-	@echo "  \033[1;34mLD \033[0m (\033[1;33m $(OBJECTS)\033[0m) -> $(PROJECT).elf"
+	@echo "  \033[1;34mLink   \033[0m (\033[1;33m $(OBJECTS)\033[0m) -> $(PROJECT).elf"
 	@$(GCC) $(OBJECTS) $(LDFLAGS)  -o $(PROJECT).elf
 
 clean:
@@ -57,8 +58,8 @@ clean:
 #########################################################################
 
 %.o: %.c Makefile $(HEADERS)
-	@echo "  \033[1;34mGCC\033[0m $<"
-	$(GCC) $(GCFLAGS) -o $@ -c $<
+	@echo "  \033[1;34mCompile\033[0m $<"
+	@$(GCC) $(GCFLAGS) -o $@ -c $<
 
 
 #########################################################################
