@@ -28,8 +28,8 @@
 
 #define UART_RXBUFSIZE 32
 
-volatile static uint8_t rxbuf0[UART_RXBUFSIZE];
-volatile static uint8_t *volatile rxhead0, *volatile rxtail0;
+static volatile uint8_t rxbuf0[UART_RXBUFSIZE];
+static volatile uint8_t *volatile rxhead0, *volatile rxtail0;
 //volatile uint8_t xon = 0;
 
 
@@ -115,7 +115,7 @@ uint8_t USART0_Getc_nb(uint8_t *c)
 	return 1;
 }
 
-void USART0_crlf(){
+void USART0_crlf(void){
 	USART0_putc(0x0A); //newline
 	USART0_putc(0x0D); //carriage return
 };

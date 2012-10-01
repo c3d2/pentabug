@@ -16,11 +16,11 @@ void init_leds(void);
 void led_on(int);
 void led_off(int);
 
-void init_buzzr();
-void buzzr_up();
-void buzzr_down();
-void buzzr_off();
-void buzzr_inv();
+void init_buzzr(void);
+void buzzr_up(void);
+void buzzr_down(void);
+void buzzr_off(void);
+void buzzr_inv(void);
 
 void init_switch(void);
 void init_motor(void);

@@ -25,11 +25,11 @@ void init_leds(void){
   	return;
 };
 
-void inline led_on(int leds){
+inline void led_on(int leds){
  	PORTC |= leds;
 };
 
-void inline led_off(int leds){
+inline void led_off(int leds){
 	PORTC &= ~leds;
 };
 
@@ -55,7 +55,7 @@ void buzzr_down(){
 	PORTB &= ~(1 << PORTB2);
 };
 
-void inline buzzr_off(){
+inline void buzzr_off(){
 	PORTC &= ~(1 << PORTC5);
 	PORTB &= ~(1 << PORTB2);
 };

@@ -27,7 +27,7 @@ void USART0_Init (void);
 void USART0_putc (char c);
 uint8_t USART0_Getc_nb(uint8_t*);
 void USART0_put_uint8(uint8_t);
-void USART0_crlf();
+void USART0_crlf(void);
 void USART0_put_uint16(uint16_t);
 
 #endif

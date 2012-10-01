@@ -52,7 +52,7 @@ static inline void init_pwm(void)
 
 
 
-void click(){
+void click(void){
 	buzzr_up();
 	_delay_ms(1);
 	buzzr_inv();
@@ -69,7 +69,7 @@ void waitr(int min, int max){
 
 };
 
-void ledr(){
+void ledr(void){
 	int i = (rand() % 3);
 	switch(i) {
 		case 0  : led_on(LED_L); break;
