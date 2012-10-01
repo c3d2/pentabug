@@ -23,50 +23,50 @@ void init_leds(void){
 
 
   	return;
-};
+}
 
 inline void led_on(int leds){
  	PORTC |= leds;
-};
+}
 
 inline void led_off(int leds){
 	PORTC &= ~leds;
-};
+}
 
 
 
-void init_buzzr(){
+void init_buzzr(void){
 	//its on B2 and C5, for reasons
 	DDRC |= (1 << PORTC5);
 	DDRB |= (1 << PORTB2);
 	//switch it off
 	buzzr_off();
 	return;
-};
+}
 
-void buzzr_up(){
+void buzzr_up(void){
 	PORTC &= ~(1 << PORTC5);
 	PORTB |= (1 << PORTB2);
 	return;
-};
+}
 
-void buzzr_down(){
+void buzzr_down(void){
 	PORTC |= (1 << PORTC5);
 	PORTB &= ~(1 << PORTB2);
-};
+}
 
-inline void buzzr_off(){
+inline void buzzr_off(void){
 	PORTC &= ~(1 << PORTC5);
 	PORTB &= ~(1 << PORTB2);
-};
-void buzzr_inv(){
+}
+void buzzr_inv(void){
 	PORTC ^= (1 << PORTC5);
 	PORTB ^= (1 << PORTB2);
-};
+}
 
-void init_switch(){
+void init_switch(void){
 	return;
-};
+}
 
 void init_motor(void)
 {
@@ -79,5 +79,5 @@ void init_motor(void)
 void set_motor(int val){
 	PORTB = ~(val);
 	return;
-};
+}
 
