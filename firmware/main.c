@@ -37,47 +37,11 @@ main(void)
 	//do something
 	//main polling loop;
 		if (timer_expired(&t)){
-			if (0==ledmode){
-				ledmode =1;
-				led_on(LED_L);
-	
-			} else {
-			
-				ledmode=0;
-				led_off(LED_L);
+			if (switch_l()) {led_on(LED_L);} else {led_off(LED_L);};
+			if (switch_r()) {led_on(LED_R);} else {led_off(LED_R);};
 
-			};
-
-			USART0_crlf();
-			if (0==ct%3){
-			  if (0==ct%5){
-			    //fizzbug
-		            USART0_putc('f');					
-			    USART0_putc('i');
-			    USART0_putc('z');
-			    USART0_putc('z');
-			    USART0_putc('b');
-			    USART0_putc('u');
-			    USART0_putc('g');
-			  } else {
-			    //fizz
-		            USART0_putc('f');					
-			    USART0_putc('i');
-			    USART0_putc('z');
-			    USART0_putc('z');
-			  }
-                        } else {
-			  if (0==ct%5){
-			    //bug
-			    USART0_putc('b');
-			    USART0_putc('u');
-			    USART0_putc('g');
-			  } else {
-			    USART0_put_uint16(ct);
-			  };
-                        };
 			timer_set(&t, 50);
-			ct++;
+
 		}; //end if timer expired
 
 		//USART0_put_uint16(0xA09F);

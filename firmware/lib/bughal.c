@@ -71,11 +71,11 @@ void init_switch(void){
 }
 
 bool switch_l(void){
-	return PIND & 0b00000010;
+	return !(PIND & 0b00000001);
 };
 
 bool switch_r(void){
-	return PIND & 0b00000001;
+	return !(PIND & 0b00000010);
 };
 
 
