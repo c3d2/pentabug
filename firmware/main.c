@@ -21,7 +21,7 @@
 
 
 
-uint8_t OpMode = 0; //Operation mode
+uint8_t OpMode = MODE0; //Operation mode
 bool 	ModeChanged = true;
 
 void modeswitch_poll(void){
@@ -42,7 +42,7 @@ void modeswitch_poll(void){
 
 
 void do_mode0(void){
- uint8_t max = 255;
+ uint8_t max = 200;
  uint8_t min = 10;
 
  static timer_t mytimer;
@@ -62,12 +62,14 @@ void do_mode0(void){
 		case 1  : led_on(LED_R); break;
 		default : led_on(LED_L|LED_R);
 	};
+	if (rand()%10>8) set_motor(MOTOR_ON);
        music_setNote(NOTE_C,5);
        timer_set(&mytimer, 2);
        blink=true;
      } else {
        //stop blink
        led_off(LED_L|LED_R);
+	set_motor(MOTOR_OFF);
        music_setNote(NOTE_PAUSE,0);
        timer_set(&mytimer, (rand() % (max-min)) + min);
 
@@ -103,20 +105,85 @@ void do_mode1(void){
 };
 
 void do_mode2(void){
+ static timer_t mytimer;
+ uint8_t max = 50;
+ uint8_t min = 5;
+ uint8_t maxfreq = 6000;
+ uint8_t minfreq = 2000;
+
   if (ModeChanged){
     ModeChanged = false;
-    music_setNote(NOTE_C,3); //mute
-    led_off(LED_L); 
-    led_on(LED_R);
-  };
+    music_setNote(NOTE_PAUSE,4); //mute
+    timer_set(&mytimer, 10);
+    led_off(LED_L|LED_R);
+    set_motor(MOTOR_OFF);
+  }
+
+   if(timer_expired(&mytimer)){
+      set_motor(MOTOR_OFF);
+      music_setNote(NOTE_PAUSE,0); //mute
+     // set random led
+	switch(rand() % 4) {
+		case 0  : led_on(LED_L); break;
+		case 1  : led_on(LED_R); break;
+		case 2  : led_on(LED_L|LED_R); break;
+		default : led_off(LED_L|LED_R);
+	};
+     // decide if to switch motor on (40% chance)
+	if (rand()%5>2) set_motor(MOTOR_ON);
+
+     //decide if to play sound (70% chance)
+	if (rand()%10>2) {
+         music_setNote((rand() % (maxfreq-minfreq)) + minfreq,0);
+      
+   }
+
+	timer_set(&mytimer, (rand() % (max-min)) + min);
+   }; //end if timer_expired
+
+    
+
+
 };
 
 void do_mode3(void){
+ static timer_t mytimer;
+ static bool blink;
   if (ModeChanged){
     ModeChanged = false;
-    music_setNote(NOTE_C,4); //mute
-    led_on(LED_L|LED_R); 
+    music_setNote(NOTE_PAUSE,4); //mute
+    set_motor(MOTOR_OFF);
+    timer_set(&mytimer, 10);
+    blink = false;
   };
+  
+   if(timer_expired(&mytimer)){
+     if (!blink) {
+       //lets blink
+	led_on(LED_L|LED_R);
+       timer_set(&mytimer, 1);
+       blink=true;
+     } else {
+       //stop blink
+       led_off(LED_L|LED_R);
+       timer_set(&mytimer, 123);
+	blink=false;
+     }
+
+
+   } //end if timer_expired
+
+  if (btn_state(BTNST_SUP,BTN_LEFT))  {
+    button_clear(BTN_LEFT);
+    set_motor(MOTOR_OFF);
+
+  };
+  if (btn_state(BTNST_SUP,BTN_RIGHT))  {
+    button_clear(BTN_RIGHT);
+    set_motor(MOTOR_ON);  };
+
+
+
 };
 
 
