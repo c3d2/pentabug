@@ -42,20 +42,63 @@ void modeswitch_poll(void){
 
 
 void do_mode0(void){
-  if (ModeChanged){
+ uint8_t max = 255;
+ uint8_t min = 10;
+
+ static timer_t mytimer;
+ static bool blink;
+   if (ModeChanged){
+    music_setNote(NOTE_PAUSE,0);
     ModeChanged = false;
-    music_setNote(NOTE_PAUSE,0); //mute
-    led_off(LED_L|LED_R);  
-  };
+    timer_set(&mytimer, 10);
+    blink = false;
+   };
+   if(timer_expired(&mytimer)){
+     if (!blink) {
+       //lets blink
+	int i = (rand() % 3);
+	switch(i) {
+		case 0  : led_on(LED_L); break;
+		case 1  : led_on(LED_R); break;
+		default : led_on(LED_L|LED_R);
+	};
+       music_setNote(NOTE_C,5);
+       timer_set(&mytimer, 2);
+       blink=true;
+     } else {
+       //stop blink
+       led_off(LED_L|LED_R);
+       music_setNote(NOTE_PAUSE,0);
+       timer_set(&mytimer, (rand() % (max-min)) + min);
+
+	blink=false;
+     }
+
+   } //end if timer_expired
+
+
+
+
 };
 
 
 void do_mode1(void){
+  static uint16_t tone;
   if (ModeChanged){
     ModeChanged = false;
-    music_setNote(NOTE_C,2); //mute
-    led_off(LED_R); 
-    led_on(LED_L); 
+    tone = 1000;
+    music_setNote(tone,0);
+    led_off(LED_L|LED_R);  
+  };
+  if (btn_state(BTNST_SUP,BTN_LEFT))  {
+    button_clear(BTN_LEFT);
+    tone += 10;
+    music_setNote(tone,0);
+  };
+  if (btn_state(BTNST_SUP,BTN_RIGHT))  {
+    button_clear(BTN_RIGHT);
+    tone -= 10;
+    music_setNote(tone,0);
   };
 };
 
