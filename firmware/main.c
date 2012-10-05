@@ -69,8 +69,7 @@ void do_mode0(void){
    }; //end if timer_expired  
 
   // single measurement
-  ADMUX = (ADMUX & ~(0x1F)) | 5; // select channel 5
-  ADCSRA |= (1<<ADSC);            // start single conversion
+
   curval =ADCW;                   // read result
   maxval = (curval>maxval) ? curval : maxval;
 
