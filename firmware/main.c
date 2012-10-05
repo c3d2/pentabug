@@ -44,6 +44,7 @@ void modeswitch_poll(void){
 void do_mode0(void){
  static timer_t mytimer;
  static uint16_t maxval;
+ static uint16_t lastmaxval;
  uint16_t curval;
 
    if (ModeChanged){
@@ -54,10 +55,14 @@ void do_mode0(void){
      maxval=0;
    };
    if(timer_expired(&mytimer)){
-     USART0_put_uint16(maxval);
-     USART0_crlf();
+     if(maxval>lastmaxval){
+       USART0_put_uint16(maxval);
+       USART0_crlf();
+     };
      timer_set(&mytimer, 1);
-     if (maxval>0) {led_on(LED_R|LED_L);} else {led_off(LED_R|LED_L);};
+     if (maxval>lastmaxval) {led_on(LED_R|LED_L);} else {led_off(LED_R|LED_L);};
+
+     lastmaxval=maxval;
      maxval=0;
 
 
