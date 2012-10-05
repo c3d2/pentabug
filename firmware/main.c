@@ -46,12 +46,17 @@ void do_mode0(void){
   static uint16_t maxval;
   static uint16_t lastmaxval;
   uint16_t curval;
-  static uint16_t soundon;
+  static bool signaling;
+  static bool sound_on;
+  static bool motor_on;
+
   if (ModeChanged){
      timer_set(&mytimer, 10);
      maxval=0;
      ModeChanged = false;
-     soundon = false;
+     signaling = false;
+     sound_on = true;
+     motor_on = true;
      init_mic();
      maxval=0;
    };
@@ -60,8 +65,18 @@ void do_mode0(void){
   curval =ADCW;                   // read result
   maxval = (curval>maxval) ? curval : maxval;
 
+
+ //check for Buttons
+  if (btn_state(BTNST_SUP,BTN_LEFT))  {
+    button_clear(BTN_LEFT);
+    sound_on = !sound_on;
+  };
+  if (btn_state(BTNST_SUP,BTN_RIGHT))  {
+    button_clear(BTN_RIGHT);
+    motor_on = !motor_on;
+  };
   if(timer_expired(&mytimer)){
-     if (soundon) {
+     if (signaling) {
 	//turn off sound
         music_setNote(NOTE_PAUSE,0); //mute
         set_motor(MOTOR_OFF);
@@ -69,7 +84,7 @@ void do_mode0(void){
         init_mic();
 	led_off(LED_R|LED_L);
 	timer_set(&mytimer, 1);
-        soundon = false;
+        signaling = false;
 	lastmaxval= 10000;
      } else { //sound was off wer're in measuring mode
        if(maxval>lastmaxval){
@@ -77,9 +92,9 @@ void do_mode0(void){
          USART0_crlf();
 	 led_on(LED_R|LED_L);
 	 init_buzzr(); //buzzr to output
- 	 music_setNote(NOTE_C,5);
-         set_motor(MOTOR_ON);
-         soundon = true;
+ 	 if (sound_on) music_setNote(NOTE_C,5);
+         if (motor_on) set_motor(MOTOR_ON);
+         signaling = true;
          timer_set(&mytimer, 5); //sound duration
        } else {
          timer_set(&mytimer, 1);
