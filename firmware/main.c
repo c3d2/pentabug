@@ -17,7 +17,8 @@
 #define MODE1 1
 #define MODE2 2
 #define MODE3 3
-#define NUM_MODES 4
+#define MODE3 4
+#define NUM_MODES 5
 
 
 
@@ -40,8 +41,13 @@ void modeswitch_poll(void){
    return;
 };
 
-
 void do_mode0(void){
+
+
+return;
+}
+
+void do_mode4(void){
  uint8_t max = 200;
  uint8_t min = 10;
 
@@ -216,6 +222,7 @@ main(void)
   	     case MODE1 : do_mode1(); break; 
 	     case MODE2 : do_mode2(); break;
 	     case MODE3 : do_mode3(); break;
+	     case MODE4 : do_mode4(); break;
 	     default : do_mode0();
 	  }
 /*
