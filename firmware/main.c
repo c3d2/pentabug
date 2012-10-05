@@ -44,24 +44,49 @@ void modeswitch_poll(void){
 void do_mode0(void){
  static timer_t mytimer;
  static uint16_t maxval;
+ uint16_t curval;
+
    if (ModeChanged){
      timer_set(&mytimer, 10);
      maxval=0;
-    ModeChanged = false;
-     buzzr_up();
+     ModeChanged = false;
+     init_mic();
+     maxval=0;
    };
    if(timer_expired(&mytimer)){
-     //USART0_put_uint16(maxval);
-     //USART0_crlf();
-     timer_set(&mytimer, 10);
+     USART0_put_uint16(maxval);
+     USART0_crlf();
+     timer_set(&mytimer, 1);
+     if (maxval>0) {led_on(LED_R|LED_L);} else {led_off(LED_R|LED_L);};
      maxval=0;
-     buzzr_inv();
-   }; //end if timer_expired  
-    maxval++;
 
-   
+
+   }; //end if timer_expired  
+
+  // single measurement
+  ADMUX = (ADMUX & ~(0x1F)) | 5; // select channel 5
+  ADCSRA |= (1<<ADSC);            // start single conversion
+  while (ADCSRA & (1<<ADSC) ) {}; // wait for conversion to end
+  curval =ADCW;                   // read result
+  maxval = (curval>maxval) ? curval : maxval;
+
 
 }; //end do_mode0
+
+
+
+
+
+
+  
+ 
+
+
+
+
+
+
+
 
 
 void do_mode1(void){

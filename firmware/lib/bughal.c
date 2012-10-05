@@ -58,12 +58,18 @@ void init_buzzr(void){
 
 
 void init_mic(void){
-	//its on B2 and C5, for reasons
-	// 
-	DDRC |= (1 << PORTC5);
-	DDRB |= (1 << PORTB2);
-	//switch it off
-	buzzr_off();
+	//buzzer is on B2 and C5, for reasons
+	// we use it as a mic
+  	DDRC &= ~(1 << PORTC5); //switch C5 to input
+	DDRB |= (1 << PORTB2);  //B2 as output
+	PORTB &= ~(1 << PORTB2);//and to GND	
+	ADMUX = (1<<REFS1) | (1<<REFS0); //use internal 1.1V as reference
+  	ADCSRA = (1<<ADPS1) | (1<<ADPS0);// prescaler F_CPU/8
+        ADCSRA |= (1<<ADEN);             // ADC enable - turn it on
+        // do one conversion
+        ADCSRA |= (1<<ADSC);  
+  	while (ADCSRA & (1<<ADSC) ) {} //wait for conversion to end
+	uint16_t dummy = ADCW; //read once 
 	return;
 }
 
