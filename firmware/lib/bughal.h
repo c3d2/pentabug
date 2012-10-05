@@ -11,8 +11,8 @@ enum {  BUZZR_OUT,  //initialize buzzer for OUTPUT mode (emmiting soundwaves)
 
 #define LED_L (1 << PORTC0)
 #define LED_R (1 << PORTC2)
-#define MOTOR_ON (0<<PORTB1)
-#define MOTOR_OFF (1<<PORTB1)
+#define MOTOR_ON 1
+#define MOTOR_OFF 0
 
 #define BTN_RIGHT		1
 #define BTN_LEFT		0

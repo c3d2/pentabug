@@ -42,36 +42,54 @@ void modeswitch_poll(void){
 };
 
 void do_mode0(void){
- static timer_t mytimer;
- static uint16_t maxval;
- static uint16_t lastmaxval;
- uint16_t curval;
-
-   if (ModeChanged){
+  static timer_t mytimer;
+  static uint16_t maxval;
+  static uint16_t lastmaxval;
+  uint16_t curval;
+  static uint16_t soundon;
+  if (ModeChanged){
      timer_set(&mytimer, 10);
      maxval=0;
      ModeChanged = false;
+     soundon = false;
      init_mic();
      maxval=0;
    };
-   if(timer_expired(&mytimer)){
-     if(maxval>lastmaxval){
-       USART0_put_uint16(maxval);
-       USART0_crlf();
-     };
-     timer_set(&mytimer, 1);
-     if (maxval>lastmaxval) {led_on(LED_R|LED_L);} else {led_off(LED_R|LED_L);};
-
-     lastmaxval=maxval;
-     maxval=0;
-
-
-   }; //end if timer_expired  
 
   // single measurement
-
   curval =ADCW;                   // read result
   maxval = (curval>maxval) ? curval : maxval;
+
+  if(timer_expired(&mytimer)){
+     if (soundon) {
+	//turn off sound
+        music_setNote(NOTE_PAUSE,0); //mute
+        set_motor(MOTOR_OFF);
+        //re-init mic
+        init_mic();
+	led_off(LED_R|LED_L);
+	timer_set(&mytimer, 1);
+        soundon = false;
+	lastmaxval= 10000;
+     } else { //sound was off wer're in measuring mode
+       if(maxval>lastmaxval){
+         USART0_put_uint16(maxval);
+         USART0_crlf();
+	 led_on(LED_R|LED_L);
+	 init_buzzr(); //buzzr to output
+ 	 music_setNote(NOTE_C,5);
+         set_motor(MOTOR_ON);
+         soundon = true;
+         timer_set(&mytimer, 5); //sound duration
+       } else {
+         timer_set(&mytimer, 1);
+       };
+       lastmaxval=maxval;
+       maxval=0;
+     }; //end if soundon
+     
+   }; //end if timer_expired  
+
 
 
 }; //end do_mode0

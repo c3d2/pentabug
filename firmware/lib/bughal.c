@@ -128,7 +128,11 @@ void init_motor(void)
 }
 
 void set_motor(int val){
-	PORTB = ~(val);
+	if (val==MOTOR_ON) {
+  	  PORTB |= 0x02; 
+ 	} else {
+	  PORTB &= ~(0x02);
+	}
 	return;
 }
 
