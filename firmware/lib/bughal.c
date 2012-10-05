@@ -65,10 +65,10 @@ void init_mic(void){
 	PORTB &= ~(1 << PORTB2);//and to GND	
 	ADMUX = (1<<REFS1) | (1<<REFS0); //use internal 1.1V as reference
   	ADCSRA = (1<<ADPS1) | (1<<ADPS0);// prescaler F_CPU/8
-        ADCSRA |= (1<<ADEN);             // ADC enable - turn it on
-        // do one conversion
-        ADCSRA |= (1<<ADSC);  
-  	while (ADCSRA & (1<<ADSC) ) {} //wait for conversion to end
+        ADCSRA |= (1<<ADEN) | (1<<ADATE);// ADC enable - turn it on in free running mode
+        ADCSRB &= (1<<ACME); //leave only ACME as it is (others zerp for free running)
+  	ADMUX = (ADMUX & ~(0x1F)) | 5; // select channel 5
+  	ADCSRA |= (1<<ADSC);            // start conversion
 	uint16_t dummy = ADCW; //read once 
 	return;
 }
