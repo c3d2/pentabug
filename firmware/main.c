@@ -17,7 +17,7 @@
 #define MODE1 1
 #define MODE2 2
 #define MODE3 3
-#define MODE3 4
+#define MODE4 4
 #define NUM_MODES 5
 
 
@@ -42,52 +42,26 @@ void modeswitch_poll(void){
 };
 
 void do_mode0(void){
-
-
-return;
-}
-
-void do_mode4(void){
- uint8_t max = 200;
- uint8_t min = 10;
-
  static timer_t mytimer;
- static bool blink;
+ static uint16_t maxval;
    if (ModeChanged){
-    music_setNote(NOTE_PAUSE,0);
+     timer_set(&mytimer, 10);
+     maxval=0;
     ModeChanged = false;
-    timer_set(&mytimer, 10);
-    blink = false;
+     buzzr_up();
    };
    if(timer_expired(&mytimer)){
-     if (!blink) {
-       //lets blink
-	int i = (rand() % 3);
-	switch(i) {
-		case 0  : led_on(LED_L); break;
-		case 1  : led_on(LED_R); break;
-		default : led_on(LED_L|LED_R);
-	};
-	if (rand()%10>8) set_motor(MOTOR_ON);
-       music_setNote(NOTE_C,5);
-       timer_set(&mytimer, 2);
-       blink=true;
-     } else {
-       //stop blink
-       led_off(LED_L|LED_R);
-	set_motor(MOTOR_OFF);
-       music_setNote(NOTE_PAUSE,0);
-       timer_set(&mytimer, (rand() % (max-min)) + min);
+     //USART0_put_uint16(maxval);
+     //USART0_crlf();
+     timer_set(&mytimer, 10);
+     maxval=0;
+     buzzr_inv();
+   }; //end if timer_expired  
+    maxval++;
 
-	blink=false;
-     }
+   
 
-   } //end if timer_expired
-
-
-
-
-};
+}; //end do_mode0
 
 
 void do_mode1(void){
@@ -187,6 +161,48 @@ void do_mode3(void){
   if (btn_state(BTNST_SUP,BTN_RIGHT))  {
     button_clear(BTN_RIGHT);
     set_motor(MOTOR_ON);  };
+
+
+
+};
+
+void do_mode4(void){
+ uint8_t max = 200;
+ uint8_t min = 10;
+
+ static timer_t mytimer;
+ static bool blink;
+   if (ModeChanged){
+    music_setNote(NOTE_PAUSE,0);
+    ModeChanged = false;
+    timer_set(&mytimer, 10);
+    blink = false;
+   };
+   if(timer_expired(&mytimer)){
+     if (!blink) {
+       //lets blink
+	int i = (rand() % 3);
+	switch(i) {
+		case 0  : led_on(LED_L); break;
+		case 1  : led_on(LED_R); break;
+		default : led_on(LED_L|LED_R);
+	};
+	if (rand()%10>8) set_motor(MOTOR_ON);
+       music_setNote(NOTE_C,5);
+       timer_set(&mytimer, 2);
+       blink=true;
+     } else {
+       //stop blink
+       led_off(LED_L|LED_R);
+	set_motor(MOTOR_OFF);
+       music_setNote(NOTE_PAUSE,0);
+       timer_set(&mytimer, (rand() % (max-min)) + min);
+
+	blink=false;
+     }
+
+   } //end if timer_expired
+
 
 
 

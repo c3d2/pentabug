@@ -56,6 +56,19 @@ void init_buzzr(void){
 	return;
 }
 
+
+void init_mic(void){
+	//its on B2 and C5, for reasons
+	// 
+	DDRC |= (1 << PORTC5);
+	DDRB |= (1 << PORTB2);
+	//switch it off
+	buzzr_off();
+	return;
+}
+
+
+
 void buzzr_up(void){
 	PORTC &= ~(1 << PORTC5);
 	PORTB |= (1 << PORTB2);

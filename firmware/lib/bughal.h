@@ -45,6 +45,7 @@ void led_on(int);
 void led_off(int);
 
 void init_buzzr(void);
+void init_mic(void);
 void buzzr_up(void);
 void buzzr_down(void);
 void buzzr_off(void);
