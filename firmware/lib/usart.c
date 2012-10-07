@@ -94,6 +94,12 @@ void USART0_putc (char c)
 	UDR0 = c;
 }
 
+void USART0_puts (char *s)
+{
+  for(char *p = s; *p; p++)
+    USART0_putc(*p);
+}
+
 
 uint8_t USART0_Getc_nb(uint8_t *c)
 {
