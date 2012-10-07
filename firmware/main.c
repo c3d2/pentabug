@@ -41,15 +41,20 @@ void modeswitch_poll(void) {
 }
 ;
 
-// MODE0 sound detection
+/* sound detection mode
+ * beeps,blinks and moves when sound is detected
+ * - beep on/off left switch (short)
+ * - motor on/off right switch (short)
+ */
+
 void do_mode0(void) {
 	static timer_t mytimer;
 	static uint16_t maxval; //maximum of ADC values read during the las timer interval
 	static uint16_t lastmaxval; //maximum of values during last timer interval
 	uint16_t curval; //current value on D5 (one pin of the piezo,the other is on GND)
 	static bool signaling; //are we currently signaling (beeping, blinking etc...)
-	static bool sound_on;  //should sound be on when signaling
-	static bool motor_on;  //should motor be on when signaling
+	static bool sound_on; //should sound be on when signaling
+	static bool motor_on; //should motor be on when signaling
 
 	if (ModeChanged) { //init after mode change
 		maxval = 0;
@@ -111,6 +116,11 @@ void do_mode0(void) {
 ;
 //end do_mode0
 
+/* soundtest mode, just play single tone
+ * - left buttn: lower frequency
+ * - right buttn: increase frequency
+ */
+
 void do_mode1(void) {
 	static uint16_t tone;
 	if (ModeChanged) {
@@ -131,6 +141,10 @@ void do_mode1(void) {
 	};
 }
 ;
+
+/* crazymoves mode
+ * - play random sounds and move in random fashion
+ */
 
 void do_mode2(void) {
 	static timer_t mytimer;
@@ -181,6 +195,10 @@ void do_mode2(void) {
 }
 ;
 
+/* just blink mode
+ * - left/right button switch motor off/on
+ */
+
 void do_mode3(void) {
 	static timer_t mytimer;
 	static bool blink;
@@ -219,6 +237,11 @@ void do_mode3(void) {
 
 }
 ;
+
+
+/* ggrbug mode
+ * - simulate geiger counter sounds
+ */
 
 void do_mode4(void) {
 	uint8_t max = 200;
@@ -266,6 +289,11 @@ void do_mode4(void) {
 
 }
 ;
+
+
+/* our main method
+ * things happen right here
+ */
 
 void __attribute__((noreturn))
 main(void) {
