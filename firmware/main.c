@@ -20,9 +20,10 @@
 #define MODE4 4
 #define NUM_MODES 5
 
-uint8_t OpMode = MODE0; //Operation mode
+uint8_t OpMode = MODE2; //Operation mode
 bool ModeChanged = true;
 
+// check if mode should be changed (one of the buttons long pressed)
 void modeswitch_poll(void) {
 	if (btn_state(BTNST_LUP, BTN_LEFT)) {
 		//opmode -
@@ -40,27 +41,28 @@ void modeswitch_poll(void) {
 }
 ;
 
+// MODE0 sound detection
 void do_mode0(void) {
 	static timer_t mytimer;
-	static uint16_t maxval;
-	static uint16_t lastmaxval;
-	uint16_t curval;
-	static bool signaling;
-	static bool sound_on;
-	static bool motor_on;
+	static uint16_t maxval; //maximum of ADC values read during the las timer interval
+	static uint16_t lastmaxval; //maximum of values during last timer interval
+	uint16_t curval; //current value on D5 (one pin of the piezo,the other is on GND)
+	static bool signaling; //are we currently signaling (beeping, blinking etc...)
+	static bool sound_on;  //should sound be on when signaling
+	static bool motor_on;  //should motor be on when signaling
 
-	if (ModeChanged) {
-		timer_set(&mytimer, 10);
+	if (ModeChanged) { //init after mode change
 		maxval = 0;
+		lastmaxval = 000;
 		ModeChanged = false;
 		signaling = false;
 		sound_on = true;
 		motor_on = true;
 		init_mic();
-		maxval = 0;
+		timer_set(&mytimer, 10);
 	};
 
-	// single measurement
+	// single ADC measurement
 	curval = ADCW; // read result
 	maxval = (curval > maxval) ? curval : maxval;
 
@@ -134,8 +136,8 @@ void do_mode2(void) {
 	static timer_t mytimer;
 	uint8_t max = 50;
 	uint8_t min = 5;
-	uint16_t maxfreq = 6000;
-	uint16_t minfreq = 2000;
+	uint16_t maxfreq = 5000;
+	uint16_t minfreq = 1000;
 
 	if (ModeChanged) {
 		ModeChanged = false;
