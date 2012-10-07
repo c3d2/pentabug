@@ -8,15 +8,14 @@
 
 /* structures */
 typedef struct {
-    uint8_t current;
-    uint8_t timeout;
+	uint8_t current;
+	uint8_t timeout;
 } timer_t;
 
 typedef struct {
-    uint16_t current;
-    uint16_t timeout;
+	uint16_t current;
+	uint16_t timeout;
 } timerL_t;
-
 
 /* functions */
 void timer_init(void);

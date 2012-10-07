@@ -7,7 +7,8 @@
 
 enum {
 	BUZZR_OUT, //initialize buzzer for OUTPUT mode (emmiting soundwaves)
-	BUZZR_IN   //initialize buzzer for INPUT mode (registering soundwaves)
+	BUZZR_IN
+//initialize buzzer for INPUT mode (registering soundwaves)
 };
 
 #define LED_L (1 << PORTC0)
