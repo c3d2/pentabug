@@ -12,344 +12,158 @@
 #include "lib/util.h"
 #include "lib/music.h"
 
-//operartion modes
-#define MODE0 0
-#define MODE1 1
-#define MODE2 2
-#define MODE3 3
-#define MODE4 4
-#define NUM_MODES 5
+
+typedef struct {
+  timer_t timer;
+  uint16_t interval;
+  void (*callback)();
+} alarm_t;
+#define NEW_ALARM(name, i, cb) \
+  alarm_t name = { .interval = i, .callback = cb }; \
+  timer_set(&name.timer, i)
+
+void check_alarm(alarm_t *alarm) {
+  if (timer_expired(&alarm->timer)) {
+    timer_set(&alarm->timer, alarm->interval);
+    alarm->callback();
+  }
+}
 
 
+#define HIST_LEN 32
+static uint16_t hist[HIST_LEN];
+static uint8_t hist_now = 0;
 
-uint8_t OpMode = MODE0; //Operation mode
-bool 	ModeChanged = true;
+bool noise_motor = 1;
+static uint8_t noise_now = 0;
+static uint8_t noise_interval = 0;
+static uint16_t volume_threshold = 1;
 
-void modeswitch_poll(void){
-   if (btn_state(BTNST_LUP,BTN_LEFT)){
-     //opmode -
-     OpMode = (0 == OpMode) ? (NUM_MODES-1) : (OpMode-1);
-     ModeChanged = true;
-     button_clear(BTN_LEFT);
-   };
-   if (btn_state(BTNST_LUP,BTN_RIGHT)){
-     //opmode +
-     ModeChanged = true;
-     OpMode = ((NUM_MODES-1) == OpMode) ? 0 : (OpMode+1);
-     button_clear(BTN_RIGHT);
-   };
-   return;
-};
+static void do_sample() {
+  USART0_puts("Sampled ");
+  USART0_put_uint16(hist[hist_now]);
+  USART0_puts(" threshold=");
+  USART0_put_uint16(volume_threshold);
+  USART0_crlf();
 
-void do_mode0(void){
-  static timer_t mytimer;
-  static uint16_t maxval;
-  static uint16_t lastmaxval;
-  uint16_t curval;
-  static bool signaling;
-  static bool sound_on;
-  static bool motor_on;
+  /* Search maxs */
+  uint8_t max1 = 0, max2 = 0;
+  for(uint8_t i = 0; i < HIST_LEN; i++) {
+    if (hist[i] >= hist[max1]) {
+      max2 = max1;
+      max1 = i;
+    } else if (hist[i] >= hist[max2]) {
+      max2 = i;
+    }
+  }
+  /* Found new rhythm? */
+  if (max1 != max2 &&
+      hist[max2] >= volume_threshold &&
+      hist[max2] >= hist[max1] / 2) {
+    USART0_puts("max1=");
+    USART0_put_uint16(max1);
+    USART0_putc(':');
+    USART0_put_uint16(hist[max1]);
+    USART0_puts(" max2=");
+    USART0_put_uint16(max2);
+    USART0_putc(':');
+    USART0_put_uint16(hist[max2]);
+    USART0_crlf();
+    uint16_t new_threshold = hist[max1] / 2;
 
-  if (ModeChanged){
-     timer_set(&mytimer, 10);
-     maxval=0;
-     ModeChanged = false;
-     signaling = false;
-     sound_on = true;
-     motor_on = true;
-     init_mic();
-     maxval=0;
-   };
+    /* hist[] is a ring buffer, fix ranges: */
+    if (max1 <= hist_now)
+      max1 += HIST_LEN;
+    if (max2 <= hist_now)
+      max2 += HIST_LEN;
+    uint8_t new_interval = max1 > max2 ?
+      max1 - max2 :
+      max2 - max1;
 
-  // single measurement
-  curval =ADCW;                   // read result
-  maxval = (curval>maxval) ? curval : maxval;
+    if (new_interval > 1 &&
+        new_interval != noise_interval) {
+      volume_threshold = new_threshold;
+      noise_interval = new_interval;
+      noise_now = 0;
 
-
- //check for Buttons
-  if (btn_state(BTNST_SUP,BTN_LEFT))  {
-    button_clear(BTN_LEFT);
-    sound_on = !sound_on;
-  };
-  if (btn_state(BTNST_SUP,BTN_RIGHT))  {
-    button_clear(BTN_RIGHT);
-    motor_on = !motor_on;
-  };
-  if(timer_expired(&mytimer)){
-     if (signaling) {
-	//turn off sound
-        music_setNote(NOTE_PAUSE,0); //mute
-        set_motor(MOTOR_OFF);
-        //re-init mic
-        init_mic();
-	led_off(LED_R|LED_L);
-	timer_set(&mytimer, 1);
-        signaling = false;
-	lastmaxval= 10000;
-     } else { //sound was off wer're in measuring mode
-       if(maxval>lastmaxval){
-         USART0_put_uint16(maxval);
-         USART0_crlf();
-	 led_on(LED_R|LED_L);
-	 init_buzzr(); //buzzr to output
- 	 if (sound_on) music_setNote(NOTE_C,5);
-         if (motor_on) set_motor(MOTOR_ON);
-         signaling = true;
-         timer_set(&mytimer, 5); //sound duration
-       } else {
-         timer_set(&mytimer, 1);
-       };
-       lastmaxval=maxval;
-       maxval=0;
-     }; //end if soundon
-     
-   }; //end if timer_expired  
-
-
-
-}; //end do_mode0
-
-
-
-
-
-
-  
- 
-
-
-
-
-
-
-
-
-
-void do_mode1(void){
-  static uint16_t tone;
-  if (ModeChanged){
-    ModeChanged = false;
-    tone = 1000;
-    music_setNote(tone,0);
-    led_off(LED_L|LED_R);  
-  };
-  if (btn_state(BTNST_SUP,BTN_LEFT))  {
-    button_clear(BTN_LEFT);
-    tone += 10;
-    music_setNote(tone,0);
-  };
-  if (btn_state(BTNST_SUP,BTN_RIGHT))  {
-    button_clear(BTN_RIGHT);
-    tone -= 10;
-    music_setNote(tone,0);
-  };
-};
-
-void do_mode2(void){
- static timer_t mytimer;
- uint8_t max = 50;
- uint8_t min = 5;
- uint8_t maxfreq = 6000;
- uint8_t minfreq = 2000;
-
-  if (ModeChanged){
-    ModeChanged = false;
-    music_setNote(NOTE_PAUSE,4); //mute
-    timer_set(&mytimer, 10);
-    led_off(LED_L|LED_R);
-    set_motor(MOTOR_OFF);
+      USART0_puts("New interval: ");
+      USART0_put_uint16(noise_interval);
+      USART0_crlf();
+    }
   }
 
-   if(timer_expired(&mytimer)){
-      set_motor(MOTOR_OFF);
-      music_setNote(NOTE_PAUSE,0); //mute
-     // set random led
-	switch(rand() % 4) {
-		case 0  : led_on(LED_L); break;
-		case 1  : led_on(LED_R); break;
-		case 2  : led_on(LED_L|LED_R); break;
-		default : led_off(LED_L|LED_R);
-	};
-     // decide if to switch motor on (40% chance)
-	if (rand()%5>2) set_motor(MOTOR_ON);
+  /* Generate noise */
+  led_off(LED_L);
+  set_motor(MOTOR_OFF);
+  if (noise_interval > 1) {
+    noise_now++;
+    if (noise_now >= noise_interval) {
+      noise_now = 0;
+      led_on(LED_L);
+      if (noise_motor)
+        set_motor(MOTOR_ON);
+    }
+  }
 
-     //decide if to play sound (70% chance)
-	if (rand()%10>2) {
-         music_setNote((rand() % (maxfreq-minfreq)) + minfreq,0);
-      
-   }
+  /* Progress in histogram */
+  led_off(LED_R);
+  hist_now++;
+  if (hist_now >= HIST_LEN) {
+    hist_now = 0;
+    /* Visually indicate ring buffer length */
+    led_on(LED_R);
+  }
 
-	timer_set(&mytimer, (rand() % (max-min)) + min);
-   }; //end if timer_expired
+  /* Clear current volume before recording in do_record */
+  hist[hist_now] = 0;
+}
 
-    
+static void do_record() {
+    uint16_t volume = ADCW;
 
+    if (volume > hist[hist_now])
+      hist[hist_now] = volume;
+}
 
-};
-
-void do_mode3(void){
- static timer_t mytimer;
- static bool blink;
-  if (ModeChanged){
-    ModeChanged = false;
-    music_setNote(NOTE_PAUSE,4); //mute
-    set_motor(MOTOR_OFF);
-    timer_set(&mytimer, 10);
-    blink = false;
-  };
-  
-   if(timer_expired(&mytimer)){
-     if (!blink) {
-       //lets blink
-	led_on(LED_L|LED_R);
-       timer_set(&mytimer, 1);
-       blink=true;
-     } else {
-       //stop blink
-       led_off(LED_L|LED_R);
-       timer_set(&mytimer, 123);
-	blink=false;
-     }
-
-
-   } //end if timer_expired
-
-  if (btn_state(BTNST_SUP,BTN_LEFT))  {
-    button_clear(BTN_LEFT);
-    set_motor(MOTOR_OFF);
-
-  };
-  if (btn_state(BTNST_SUP,BTN_RIGHT))  {
-    button_clear(BTN_RIGHT);
-    set_motor(MOTOR_ON);  };
-
-
-
-};
-
-void do_mode4(void){
- uint8_t max = 200;
- uint8_t min = 10;
-
- static timer_t mytimer;
- static bool blink;
-   if (ModeChanged){
-    music_setNote(NOTE_PAUSE,0);
-    ModeChanged = false;
-    timer_set(&mytimer, 10);
-    blink = false;
-   };
-   if(timer_expired(&mytimer)){
-     if (!blink) {
-       //lets blink
-	int i = (rand() % 3);
-	switch(i) {
-		case 0  : led_on(LED_L); break;
-		case 1  : led_on(LED_R); break;
-		default : led_on(LED_L|LED_R);
-	};
-	if (rand()%10>8) set_motor(MOTOR_ON);
-       music_setNote(NOTE_C,5);
-       timer_set(&mytimer, 2);
-       blink=true;
-     } else {
-       //stop blink
-       led_off(LED_L|LED_R);
-	set_motor(MOTOR_OFF);
-       music_setNote(NOTE_PAUSE,0);
-       timer_set(&mytimer, (rand() % (max-min)) + min);
-
-	blink=false;
-     }
-
-   } //end if timer_expired
-
-
-
-
-};
 
 
 void __attribute__((noreturn)) 
 main(void)
 {
-	/* hardware initialisation: */
-	init_leds();
-	init_buzzr();
-	init_switch();
-	USART0_Init();
-	init_motor();
-	/* software initialisation */
-	timer_init();
-	music_init();
+  /* hardware initialisation: */
+  init_leds();
+  init_buzzr();
+  init_switch();
+  USART0_Init();
+  init_motor();
+  /* software initialisation */
+  timer_init();
+  music_init();
+  init_mic();
 	
-	/* here the show begins:*/
-	sei();
-	timer_t t;
-	uint8_t ledstate_l =0;
-	uint8_t ledstate_r =0;
-	uint8_t motorstate =0;
-	timer_set(&t, 100);
-	for(;;) /* ever */  {
-	//do something
-	//main polling loop;
-	  button_poll();
-	  modeswitch_poll();
-	  switch(OpMode){
-  	     case MODE1 : do_mode1(); break; 
-	     case MODE2 : do_mode2(); break;
-	     case MODE3 : do_mode3(); break;
-	     case MODE4 : do_mode4(); break;
-	     default : do_mode0();
-	  }
-/*
+  /* here the show begins:*/
+  sei();
+    
+  NEW_ALARM(sample_alarm, 4, &do_sample);
 
-		if (timer_expired(&t)){
-			//while left button is pressed switch left led on
-			if (btn_state(BTNST_SDN,BTN_LEFT)|btn_state(BTNST_LDN,BTN_LEFT)){
-			   led_on(LED_L);
-                        } else {
-                           led_off(LED_L);
-                        };
-			if (btn_state(BTNST_SUP,BTN_LEFT)){
-			   music_setNote(NOTE_PAUSE,0); //mute
-			   button_clear(BTN_LEFT);
-		        };
+  for(;;) /* ever */  {
+    //main polling loop;
+    /*button_poll();
+    if (btn_state(BTNST_SUP, BTN_LEFT)) {
+      button_clear(BTN_LEFT);
+      noise_interval = 0;
+    }
+    if (btn_state(BTNST_SUP, BTN_RIGHT)) {
+      button_clear(BTN_RIGHT);
+      noise_motor = !noise_motor;
+      USART0_putc('m');
+      USART0_put_uint8(noise_motor);
+      USART0_crlf();
+    }*/
 
-			//when right button has been pressed short, toggle right led
-			if (btn_state(BTNST_SUP,BTN_RIGHT)){
-			   if (ledstate_r ==0){
-				ledstate_r = 1;
-				led_on(LED_R);
-			   } else {
-				ledstate_r = 0;
-				led_off(LED_R);
-			   };
-			   music_setNote(500,0); //50Hz sound
-		           button_clear(BTN_RIGHT); //this is important, to show the event has been processed
-			};	
-			//when right button has been pressed long, toggle motor
-			if (btn_state(BTNST_LUP,BTN_RIGHT)){
-			   if (motorstate ==0){
-				motorstate = 1;
-				set_motor(MOTOR_ON);
-			   } else {
-				motorstate = 0;
-				set_motor(MOTOR_OFF);
-			   };
-			music_setNote(NOTE_B,5); //1000Hz sound
-		           button_clear(BTN_RIGHT); //this is important, to show the event has been processed
-			};				
-			
-			timer_set(&t, 5);
-		}; //end if timer expired
-		//USART0_put_uint16(0xA09F);
-		//USART0_crlf();
-*/
-
-	}
-
-	/* never  return 0; */
+    check_alarm(&sample_alarm);
+    do_record();
+  }
 }
 
 
