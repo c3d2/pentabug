@@ -335,9 +335,9 @@ void do_mode5(void) {
 			DDRC &= ~( (1 << PORTC1) | (1 << PORTC3));
 			//pull ups off
 			PORTC &= ~( (1 << PORTC1) | (1 << PORTC3));
-
+			sample= true;
 		};
-		sample= true;
+
 		timer_set(&mytimer, 1);
 	}; //end if timer_expired
 
