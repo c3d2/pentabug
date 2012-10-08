@@ -292,7 +292,7 @@ void do_mode4(void) {
 ;
 void do_mode5(void) {
 
-	static bool sample;
+	static bool discharge;
 	static timer_t mytimer;
     uint16_t led1;
     uint16_t led2;
@@ -300,7 +300,7 @@ void do_mode5(void) {
 
 	if (ModeChanged) { //init after mode change
 		ModeChanged = false;
-		ADMUX = (1<<REFS1) | (1<<REFS0); //use internal 1.1V as reference
+		ADMUX = (1<<REFS0); //use VCC reference
 		ADCSRA = (1<<ADPS1) | (1<<ADPS0);// prescaler F_CPU/8
 		ADCSRA |= (1<<ADEN); // ADC enable - turn it on
 		// do one conversion
@@ -308,35 +308,40 @@ void do_mode5(void) {
 		while (ADCSRA & (1<<ADSC) ) {} //wait for conversion to end
 		uint16_t __attribute__((unused)) dummy = ADCW; //read once
 		timer_set(&mytimer, 10);
-		sample = false;
+		discharge = true;
 	};
 	if (timer_expired(&mytimer)) {
-		if (sample){
-			//make a measurement
+         if (discharge){
+			//discharge LED
+			//enable LED channels as output
+			DDRC |= (1 << PORTC0) | (1 << PORTC1) | (1 << PORTC2) | (1 << PORTC3);
+			// discharge
+			PORTC = (PORTC & 0b11110000);
+			//set C0 and C2 to input (disable pullups)
+			DDRC &= ~( (1 << PORTC0) | (1 << PORTC2));
+			//pull ups off
+			PORTC &= ~( (1 << PORTC0) | (1 << PORTC2));
+			discharge = false;
+         } else {
+
+		//make a measurement
 			  // single measurement
-			  ADMUX = (ADMUX & ~(0x1F)) | 1; // select channel 1
+			  ADMUX = (ADMUX & ~(0x1F)) | 0; // select channel 0
 			  ADCSRA |= (1<<ADSC); // start single conversion
 			  while (ADCSRA & (1<<ADSC) ) {}; // wait for conversion to end
 			  led1 =ADCW; // read result
-			  ADMUX = (ADMUX & ~(0x1F)) | 3; // select channel 3
+			  ADMUX = (ADMUX & ~(0x1F)) | 2; // select channel 2
 			  ADCSRA |= (1<<ADSC); // start single conversion
 			  while (ADCSRA & (1<<ADSC) ) {}; // wait for conversion to end
 			  led2 =ADCW; // read result
- 			USART0_putc('1');USART0_putc(':');USART0_put_uint16(led1);USART0_crlf();
-		     USART0_putc('2');USART0_putc(':');USART0_put_uint16(led2);USART0_crlf();
-		     sample = false;
-		} else {
-			//charge LED
-			//enable LED channels as output
-			DDRC |= (1 << PORTC0) | (1 << PORTC1) | (1 << PORTC2) | (1 << PORTC3);
-			// charge with reverse polarity (C0, C2 = low  C1, C3 = high)
-			PORTC = (PORTC & 0b11110000) | (1 << PORTC1) | (1 << PORTC3);
-			//set C1 and C3 to input (disable pullups)
-			DDRC &= ~( (1 << PORTC1) | (1 << PORTC3));
-			//pull ups off
-			PORTC &= ~( (1 << PORTC1) | (1 << PORTC3));
-			sample= true;
-		};
+ 			// USART0_putc('1');USART0_putc(':');USART0_put_uint16(led1);USART0_crlf();
+		    // USART0_putc('2');USART0_putc(':');USART0_put_uint16(led2);USART0_crlf();
+		     music_setNote(500+(0x1ff-led1)*10,0);
+		     discharge = true;
+         }
+
+
+
 
 		timer_set(&mytimer, 1);
 	}; //end if timer_expired
