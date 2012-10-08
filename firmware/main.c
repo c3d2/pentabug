@@ -65,6 +65,7 @@ void do_mode0(void) {
 		sound_on = true;
 		motor_on = true;
 		init_mic();
+		init_leds();
 		timer_set(&mytimer, 10);
 	};
 
@@ -128,6 +129,7 @@ void do_mode1(void) {
 		ModeChanged = false;
 		tone = 1000;
 		music_setNote(tone, 0);
+		init_leds();
 		led_off(LED_L | LED_R);
 	};
 	if (btn_state(BTNST_SUP, BTN_LEFT)) {
@@ -158,6 +160,7 @@ void do_mode2(void) {
 		ModeChanged = false;
 		music_setNote(NOTE_PAUSE, 4); //mute
 		timer_set(&mytimer, 10);
+		init_leds();
 		led_off(LED_L | LED_R);
 		set_motor(MOTOR_OFF);
 	}
@@ -204,6 +207,7 @@ void do_mode3(void) {
 	static timer_t mytimer;
 	static bool blink;
 	if (ModeChanged) {
+		init_leds();
 		ModeChanged = false;
 		music_setNote(NOTE_PAUSE, 4); //mute
 		set_motor(MOTOR_OFF);
@@ -251,6 +255,7 @@ void do_mode4(void) {
 	static timer_t mytimer;
 	static bool blink;
 	if (ModeChanged) {
+		init_leds();
 		music_setNote(NOTE_PAUSE, 0);
 		ModeChanged = false;
 		timer_set(&mytimer, 10);
@@ -300,6 +305,7 @@ void do_mode5(void) {
 
 	if (ModeChanged) { //init after mode change
 		ModeChanged = false;
+		set_motor(MOTOR_OFF);
 		ADMUX = (1<<REFS0); //use VCC reference
 		ADCSRA = (1<<ADPS1) | (1<<ADPS0);// prescaler F_CPU/8
 		ADCSRA |= (1<<ADEN); // ADC enable - turn it on
@@ -336,14 +342,14 @@ void do_mode5(void) {
 			  led2 =ADCW; // read result
  			// USART0_putc('1');USART0_putc(':');USART0_put_uint16(led1);USART0_crlf();
 		    // USART0_putc('2');USART0_putc(':');USART0_put_uint16(led2);USART0_crlf();
-		     music_setNote(500+(0x1ff-led1)*10,0);
+		     music_setNote(400+((0x1ff-led1)+(0x1ff-led2))*5,0);
 		     discharge = true;
          }
 
 
 
 
-		timer_set(&mytimer, 1);
+		timer_set(&mytimer, 2);
 	}; //end if timer_expired
 
 }
@@ -371,8 +377,8 @@ main(void) {
 	for (;;) /* ever */{
 		//do something
 		//main polling loop;
-		//button_poll();
-		//modeswitch_poll();
+		button_poll();
+		modeswitch_poll();
 		switch (OpMode) {
 		case MODE1:
 			do_mode1();
