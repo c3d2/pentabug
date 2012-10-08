@@ -18,9 +18,10 @@
 #define MODE2 2
 #define MODE3 3
 #define MODE4 4
-#define NUM_MODES 5
+#define MODE5 5 //lightsensortest
+#define NUM_MODES 6
 
-uint8_t OpMode = MODE2; //Operation mode
+uint8_t OpMode = MODE5; //Operation mode
 bool ModeChanged = true;
 
 // check if mode should be changed (one of the buttons long pressed)
@@ -289,7 +290,63 @@ void do_mode4(void) {
 
 }
 ;
+void do_mode5(void) {
 
+	static timer_t mytimer;
+    uint16_t led1;
+    uint16_t led2;
+
+
+	if (ModeChanged) { //init after mode change
+		ModeChanged = false;
+		timer_set(&mytimer, 10);
+	};
+
+
+	//check for Buttons
+	if (btn_state(BTNST_SUP, BTN_LEFT)) {
+
+	};
+	if (btn_state(BTNST_SUP, BTN_RIGHT)) {
+	};
+	//if (timer_expired(&mytimer)) {
+	  //charge LEDs...
+	  //enable LED channels as output
+	  DDRC |= (1 << PORTC0) | (1 << PORTC1) | (1 << PORTC2) | (1 << PORTC3);
+
+	  //init variables
+	  led1 =0;
+	  led2 =0;
+
+	  //discharge completely for test purposes
+	  //PORTC = (PORTC & 0b11110000);
+      //wait a while until fully dischcharged ....
+      //for (int i=0; i<100; i++){};
+
+	  // charge with reverse polarity (C0, C2 = low  C1, C3 = high)
+      PORTC = (PORTC & 0b11110000) | (1 << PORTC1) | (1 << PORTC3);
+      //wait a while until fully charged ....
+      //for (int i=0; i<10; i++){};
+
+      //set C1 and C3 to input (disable pullups)
+	  DDRC &= ~( (1 << PORTC1) | (1 << PORTC3));
+	  //pull ups off
+
+	  PORTC &= ~( (1 << PORTC1) | (1 << PORTC3));
+
+	  while ((PINC & 0b00001000)!=0){
+		  if (PINC & 0b00000010) led1++;
+		  //if (PINC & 0b00001000) led2++;
+	  };
+      USART0_putc('1');USART0_putc(':');USART0_put_uint16(led1);USART0_crlf();
+      USART0_putc('2');USART0_putc(':');USART0_put_uint16(led2);USART0_crlf();
+            //music_setNote(led1+1000,0);
+		//timer_set(&mytimer, 1);
+	//}; //end if timer_expired
+
+}
+;
+//end do_mode5
 
 /* our main method
  * things happen right here
@@ -312,8 +369,8 @@ main(void) {
 	for (;;) /* ever */{
 		//do something
 		//main polling loop;
-		button_poll();
-		modeswitch_poll();
+		//button_poll();
+		//modeswitch_poll();
 		switch (OpMode) {
 		case MODE1:
 			do_mode1();
@@ -327,6 +384,9 @@ main(void) {
 		case MODE4:
 			do_mode4();
 			break;
+		case MODE5:
+				do_mode5();
+				break;
 		default:
 			do_mode0();
 			break;
