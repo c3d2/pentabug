@@ -18,7 +18,7 @@ static void init_sampletimer(void)
 	TCCR0B = (1 << CS00) | (1 << CS01);
 
 //	OCR0A = 6;		/* TOP */
-	OCR0A = 2;		/* TOP */
+	OCR0A = 8;		/* TOP */
 	TCNT0 = 0;
 	/*enable interrupt */
 	TIMSK0 |= (1 << OCIE0A);
@@ -28,6 +28,9 @@ static inline void init_pwm(void)
 {
 	/* set PB2 as output (buzzer pwm port): */
 	DDRB |= (1 << PORTB2);
+        DDRC |= (1 << PORTC5);
+        PORTB &= ~(1 << PORTB2);
+        PORTC |= (1 << PORTC5);
 
 	/* analog value preselection : */
 	OCR1B = 0x007F;
@@ -36,11 +39,18 @@ static inline void init_pwm(void)
 	ICR1 = 0x00FF;
 
 	/* only b-chan , fastpwm (mode 14), no prescale */
-	TCCR1A = (1 << COM1B1) | (1 << WGM11);
+	TCCR1A = (1 << WGM11);
 	TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS10);
-
+	
+	TIMSK1 |= (OCIE1B);
 	return;
 }
+
+ISR(TIMER1_COMPB_vect) {
+	PORTC ^= (1 << PORTC5);
+        PORTB ^= (1 << PORTB2);
+}
+
 
 void synth_init(void){
 	cli();
@@ -98,7 +108,7 @@ static uint8_t synth_mix()
 	if (music_data[0][row])	osc0 += freq_table[music_data[0][row]];
 	if (music_data[1][row]) osc1 += freq_table[music_data[1][row]];
 
-	if (++sample == 4000) {
+	if (++sample == 2000) {
 		sample = 0;
 		if (++row == SONG_LENGTH) row = 0;
 	}
@@ -111,6 +121,8 @@ ISR(TIMER0_COMPA_vect)
 	/* calculate next analog sample value in synth mixer: */
 	OCR1B = synth_mix();
 }
+
+
 
 
 
