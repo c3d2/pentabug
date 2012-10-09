@@ -196,6 +196,10 @@ main(void)
 	init_switch();
 	USART0_Init();
 	init_motor();
+
+	synth_init(); /* synth debug */
+	for(;;);
+
 	/* software initialisation */
 	timer_init();
 	music_init();
