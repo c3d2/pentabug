@@ -70,7 +70,7 @@ void synth_deinit(void) {
 
 enum {
 	SONG_LENGTH = 128,
-	end = 0,
+	xxx = 0,
 	c_0 = 0, cs0 = 1, d_0 = 2, ds0 = 3, e_0 = 4, f_0 = 5, fs0 = 6, g_0 = 7, gs0 = 8, a_0 = 9, as0 = 10, b_0 = 11,
 	c_1 = 12, cs1 = 13, d_1 = 14, ds1 = 15, e_1 = 16, f_1 = 17, fs1 = 18, g_1 = 19, gs1 = 20, a_1 = 21, as1 = 22, b_1 = 23,
 	c_2 = 24, cs2 = 25, d_2 = 26, ds2 = 27, e_2 = 28, f_2 = 29, fs2 = 30, g_2 = 31, gs2 = 32, a_2 = 33, as2 = 34, b_2 = 35,
@@ -78,23 +78,23 @@ enum {
 };
 
 const char music_data[2][SONG_LENGTH] = {	{
-		e_1, end, e_2, end, e_1, end, e_2, end, e_1, end, e_2, end, e_1, end, e_2, end,
-		a_0, end, a_1, end, a_0, end, a_1, end, a_0, end, a_1, end, a_0, end, a_1, end,
-		gs0, end, gs1, end, gs0, end, gs1, end, gs0, end, gs1, end, gs0, end, gs1, end,
-		a_0, end, a_1, end, a_0, end, a_1, end, a_0, end, a_0, end, b_0, end, c_1, end,
-		d_1, end, d_2, end, d_1, end, d_2, end, d_1, end, d_2, end, d_1, end, d_2, end,
-		c_1, end, c_2, end, c_1, end, c_2, end, c_1, end, c_2, end, c_1, end, c_2, end,
-		b_0, end, b_1, end, b_0, end, b_1, end, b_0, end, b_1, end, b_0, end, b_1, end,
-		a_0, end, a_1, end, a_0, end, a_1, end, a_0, end, end, end, end, end, end, end,
+		e_1, xxx, e_2, xxx, e_1, xxx, e_2, xxx, e_1, xxx, e_2, xxx, e_1, xxx, e_2, xxx,
+		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx,
+		gs0, xxx, gs1, xxx, gs0, xxx, gs1, xxx, gs0, xxx, gs1, xxx, gs0, xxx, gs1, xxx,
+		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx, a_0, xxx, a_0, xxx, b_0, xxx, c_1, xxx,
+		d_1, xxx, d_2, xxx, d_1, xxx, d_2, xxx, d_1, xxx, d_2, xxx, d_1, xxx, d_2, xxx,
+		c_1, xxx, c_2, xxx, c_1, xxx, c_2, xxx, c_1, xxx, c_2, xxx, c_1, xxx, c_2, xxx,
+		b_0, xxx, b_1, xxx, b_0, xxx, b_1, xxx, b_0, xxx, b_1, xxx, b_0, xxx, b_1, xxx,
+		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx, a_0, xxx, xxx, xxx, xxx, xxx, xxx, xxx,
 	}, {
 		e_3, e_3, e_3, e_3, b_2, b_2, c_3, c_3, d_3, d_3, e_3, d_3, c_3, c_3, b_2, b_2,
 		a_2, a_2, a_2, a_2, a_2, a_2, c_3, c_3, e_3, e_3, e_3, e_3, d_3, d_3, c_3, c_3,
 		b_2, b_2, b_2, b_2, b_2, b_2, c_3, c_3, d_3, d_3, d_3, d_3, e_3, e_3, e_3, e_3,
 		c_3, c_3, c_3, c_3, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2,
-		end, end, d_3, d_3, d_3, d_3, f_3, f_3, a_3, a_3, a_3, a_3, g_3, g_3, f_3, f_3,
+		xxx, xxx, d_3, d_3, d_3, d_3, f_3, f_3, a_3, a_3, a_3, a_3, g_3, g_3, f_3, f_3,
 		e_3, e_3, e_3, e_3, e_3, e_3, c_3, c_3, e_3, e_3, e_3, e_3, d_3, d_3, c_3, c_3,
 		b_2, b_2, b_2, b_2, b_2, b_2, c_3, c_3, d_3, d_3, d_3, d_3, e_3, e_3, e_3, e_3,
-		c_3, c_3, c_3, c_3, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, end, end, end, end,
+		c_3, c_3, c_3, c_3, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, xxx, xxx, xxx, xxx,
 }	};
 
 
@@ -105,9 +105,8 @@ uint8_t		row = 0;
 
 static uint8_t synth_mix()
 {
-	if (music_data[0][row])	osc0 += freq_table[music_data[0][row]];
-	if (music_data[1][row]) osc1 += freq_table[music_data[1][row]];
-
+	osc0 += freq_table[music_data[0][row]];
+	osc1 += freq_table[music_data[1][row]];
 	if (++sample == 2000) {
 		sample = 0;
 		if (++row == SONG_LENGTH) row = 0;
