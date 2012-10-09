@@ -11,6 +11,7 @@
 #include "lib/bughal.h"
 #include "lib/util.h"
 #include "lib/music.h"
+#include "lib/synth.h"
 
 //operartion modes
 #define MODE0 0
@@ -187,8 +188,7 @@ void do_mode3(void){
 };
 
 
-void __attribute__((noreturn)) 
-main(void)
+int main(void)
 {
 	/* hardware initialisation: */
 	init_leds();
@@ -269,7 +269,7 @@ main(void)
 
 	}
 
-	/* never  return 0; */
+	return 0;
 }
 
 
