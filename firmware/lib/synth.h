@@ -1,5 +1,5 @@
 
-inline void synth_init();
-inline void synth_deinit();
+void synth_init();
+void synth_deinit();
 
 
