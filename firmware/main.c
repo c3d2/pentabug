@@ -35,12 +35,12 @@ void modeswitch_poll(void)
 	if (btn_state(BTNST_LUP, BTN_LEFT)) {
 		//opmode -
 		NextMode = (0 == OpMode) ? (NUM_MODES - 1) : (OpMode - 1);
-		mode_uninitialized = true;
+		//mode_uninitialized = true;
 		button_clear(BTN_LEFT);
 	};
 	if (btn_state(BTNST_LUP, BTN_RIGHT)) {
 		//opmode +
-		mode_uninitialized = true;
+		//mode_uninitialized = true;
 		NextMode = ((NUM_MODES - 1) == OpMode) ? 0 : (OpMode + 1);
 		button_clear(BTN_RIGHT);
 	};
@@ -194,6 +194,12 @@ void do_mode2(void)
 
 		timer_set(&mytimer, (rand() % (max - min)) + min);
 	}//end if timer_expired
+
+	/*deinialisation required*/
+	if(OpMode != NextMode){
+		set_motor(MOTOR_OFF);
+		music_setNote(NOTE_PAUSE, 0);	//mute
+	}
 }
 
 
@@ -377,6 +383,7 @@ void __attribute__ ((noreturn)) main(void)
 		case MODE5: do_mode5() ; break ;
 		default: do_mode0()    ; break ;
 		}
+		if (OpMode!=NextMode) mode_uninitialized = true;
 		OpMode = NextMode;
 	}
 }
