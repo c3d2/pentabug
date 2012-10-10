@@ -131,8 +131,6 @@ void do_mode1(void)
 	if (mode_uninitialized) {
 		mode_uninitialized = false;
 		synth_init();
-
-		timer_set(&mytimer,10);
 	}
 
 	/*deinialisation required*/
