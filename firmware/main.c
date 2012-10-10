@@ -24,6 +24,9 @@
 #define MODE5 5		
 #define NUM_MODES 6
 
+//special modes, not in normal mode loop
+#define MODE_PWDN 42 //go to sleep
+
 uint8_t OpMode   = MODE1;	
 uint8_t NextMode = MODE1;
 
@@ -43,6 +46,9 @@ void modeswitch_poll(void)
 		//mode_uninitialized = true;
 		NextMode = ((NUM_MODES - 1) == OpMode) ? 0 : (OpMode + 1);
 		button_clear(BTN_RIGHT);
+	};
+	if (btn_state(BTNST_LDN,BTN_RIGHT) && btn_state(BTNST_LDN,BTN_LEFT)){
+		NextMode = MODE_PWDN;
 	};
 	return;
 }
@@ -195,7 +201,7 @@ void do_mode2(void)
 		timer_set(&mytimer, (rand() % (max - min)) + min);
 	}//end if timer_expired
 
-	/*deinialisation required*/
+	/*deinialisation */
 	if(OpMode != NextMode){
 		set_motor(MOTOR_OFF);
 		music_setNote(NOTE_PAUSE, 0);	//mute
@@ -355,6 +361,58 @@ void do_mode5(void)
 }//end mode5
 
 
+void do_powerDown(void)
+{
+	static timer_t mytimer;
+	static uint8_t pwdn_state;
+	static bool ledRon;
+	if (mode_uninitialized) {
+		mode_uninitialized = false;
+		pwdn_state = 0;
+		timer_set(&mytimer,5);
+		ledRon = true;
+	};
+	if(timer_expired(&mytimer)){
+		switch(pwdn_state){
+			case 0:
+				if (ledRon){
+					led_on(LED_L);led_off(LED_R);
+				} else {
+					led_off(LED_L);led_on(LED_R);
+				};
+				ledRon = !ledRon;
+				timer_set(&mytimer,6);
+				if ((btn_state(BTNST_SUP, BTN_RIGHT)||btn_state(BTNST_LUP, BTN_RIGHT))&&(btn_state(BTNST_SUP, BTN_LEFT)||btn_state(BTNST_LUP, BTN_LEFT))){
+					//both buttons released
+					led_off(LED_L|LED_R);
+					pwdn_state = 1;
+					timer_set(&mytimer,10);
+				}
+				break;
+			case 1: music_setNote(NOTE_A, 4);timer_set(&mytimer,10);pwdn_state++;break;
+			case 2: music_setNote(NOTE_F, 4);timer_set(&mytimer,5);pwdn_state++;break;
+			case 3: music_setNote(NOTE_D, 3);timer_set(&mytimer,15);pwdn_state++;break;
+			case 4: music_setNote(NOTE_PAUSE, 4);timer_set(&mytimer,1);pwdn_state++;break;
+			case 5: //now we can really power down
+				// lets switch everything off
+				//TODO: find out how to do this
+
+
+				//meanwhile: switch back to normal operation (silent mode 2)
+				NextMode=MODE2;
+				break;
+			default: break;
+
+
+
+	} //end switch
+
+
+
+	}  //end timer expired
+} // end do_powerDown
+
+
 void __attribute__ ((noreturn)) main(void)
 {
 	/* hardware initialisation: */
@@ -374,13 +432,14 @@ void __attribute__ ((noreturn)) main(void)
 	for ever {
 		//main polling loop;
 		button_poll();
-		modeswitch_poll();
+		if (OpMode != MODE_PWDN) modeswitch_poll(); //there is no way out of PWND
 		switch (OpMode) {
 		case MODE1: do_mode1() ; break ;
 		case MODE2: do_mode2() ; break ;
 		case MODE3: do_mode3() ; break ;
 		case MODE4: do_mode4() ; break ;
 		case MODE5: do_mode5() ; break ;
+		case MODE_PWDN: do_powerDown() ; break ;
 		default: do_mode0()    ; break ;
 		}
 		if (OpMode!=NextMode) mode_uninitialized = true;
