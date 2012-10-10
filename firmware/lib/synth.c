@@ -7,6 +7,8 @@
 #include "freq_table.h"
 
 
+static void  synth_mix();
+
 static void init_sampletimer(void)
 {
 	/* 
@@ -18,44 +20,21 @@ static void init_sampletimer(void)
 	TCCR0B = (1 << CS00) | (1 << CS01);
 
 //	OCR0A = 6;		/* TOP */
-	OCR0A = 8;		/* TOP */
+	OCR0A = 4;		/* TOP */
 	TCNT0 = 0;
 	/*enable interrupt */
 	TIMSK0 |= (1 << OCIE0A);
 }
 
-static inline void init_pwm(void)
+ISR(TIMER0_COMPA_vect,ISR_NOBLOCK)
 {
-	/* set PB2 as output (buzzer pwm port): */
-	DDRB |= (1 << PORTB2);
-        DDRC |= (1 << PORTC5);
-        PORTB &= ~(1 << PORTB2);
-        PORTC |= (1 << PORTC5);
-
-	/* analog value preselection : */
-	OCR1B = 0x007F;
-
-	/* Top value. Timer overflows here. Thus we have a resulting 8bit pwm */
-	ICR1 = 0x00FF;
-
-	/* only b-chan , fastpwm (mode 14), no prescale */
-	TCCR1A = (1 << WGM11);
-	TCCR1B = (1 << WGM13) | (1 << WGM12) | (1 << CS10);
-	
-	TIMSK1 |= (OCIE1B);
-	return;
+	synth_mix();
 }
-
-ISR(TIMER1_COMPB_vect) {
-	PORTC ^= (1 << PORTC5);
-        PORTB ^= (1 << PORTB2);
-}
-
 
 void synth_init(void){
 	cli();
 	init_sampletimer();
-	init_pwm();
+//	init_pwm();
 	sei();
 	return;
 }
@@ -103,25 +82,29 @@ uint16_t	osc1 = 0;
 uint16_t	sample = 0;
 uint8_t		row = 0;
 
-static uint8_t synth_mix()
+static void  synth_mix()
 {
 	osc0 += freq_table[music_data[0][row]];
 	osc1 += freq_table[music_data[1][row]];
-	if (++sample == 2000) {
+	static uint16_t  speedtime=3000;
+	if (++sample == (speedtime) ) {
 		sample = 0;
+		speedtime = (speedtime) ? (speedtime - 2):3000;
 		if (++row == SONG_LENGTH) row = 0;
 	}
+	
+	if (osc0 & 0x8000) {
+		PORTB |= (1 << PORTB2);
+	} else {
+		PORTB &= ~(1<< PORTB2);
+	}
 
-	return (osc1 >> 9) + ((osc0 >> 15) ? 0 : 120);
-}
-
-ISR(TIMER0_COMPA_vect)
-{
-	/* calculate next analog sample value in synth mixer: */
-	OCR1B = synth_mix();
-}
-
-
-
+	if (osc1 & 0x8000) {
+		PORTC |= (1 << PORTC5);
+	} else {
+		PORTC &= ~(1<< PORTC5);
+	}
+	return;
+}	
 
 
