@@ -24,8 +24,8 @@
 #define MODE5 5		
 #define NUM_MODES 6
 
-uint8_t OpMode   = MODE5;	
-uint8_t NextMode = MODE5;
+uint8_t OpMode   = MODE1;	
+uint8_t NextMode = MODE1;
 
 bool mode_uninitialized = true;
 
@@ -56,12 +56,12 @@ void modeswitch_poll(void)
 void do_mode0(void)
 {
 	static timer_t mytimer;
-	static uint16_t maxval;	//maximum of ADC values read during the las timer interval
+	static uint16_t maxval;		//maximum of ADC values read during the las timer interval
 	static uint16_t lastmaxval;	//maximum of values during last timer interval
-	uint16_t curval;	//current value on D5 (one pin of the piezo,the other is on GND)
-	static bool signaling;	//are we currently signaling (beeping, blinking etc...)
-	static bool sound_on;	//should sound be on when signaling
-	static bool motor_on;	//should motor be on when signaling
+	uint16_t curval;		//current value on D5 (one pin of the piezo,the other is on GND)
+	static bool signaling;		//are we currently signaling (beeping, blinking etc...)
+	static bool sound_on;		//should sound be on when signaling
+	static bool motor_on;		//should motor be on when signaling
 
 	if (mode_uninitialized) {	//init after mode change
 		maxval = 0;
@@ -83,11 +83,11 @@ void do_mode0(void)
 	if (btn_state(BTNST_SUP, BTN_LEFT)) {
 		button_clear(BTN_LEFT);
 		sound_on = !sound_on;
-	};
+	}
 	if (btn_state(BTNST_SUP, BTN_RIGHT)) {
 		button_clear(BTN_RIGHT);
 		motor_on = !motor_on;
-	};
+	}
 	if (timer_expired(&mytimer)) {
 		if (signaling) {
 			//turn off sound
@@ -115,15 +115,15 @@ void do_mode0(void)
 				timer_set(&mytimer, 1);
 			}
 			lastmaxval = maxval;
-			maxval = 0;
-		}		//end if soundon
+			maxval     = 0;
+		}//end if soundon
 
-	}			//end if timer_expired
+	}//end if timer_expired
 
 } /* end mode0 */
 
 /**
- * do crazy sytesizer mode
+ * do crazy synthesizer mode
  *
  */
 void do_mode1(void)
@@ -131,12 +131,15 @@ void do_mode1(void)
 	if (mode_uninitialized) {
 		mode_uninitialized = false;
 		synth_init();
-		}
+
+		timer_set(&mytimer,10);
+	}
 
 	/*deinialisation required*/
 	if(OpMode != NextMode){
 		synth_deinit();
 	}
+
 	return;
 }
 
@@ -316,14 +319,12 @@ void do_mode5(void)
 	}
 	if (timer_expired(&mytimer)) {
 		if (discharge) {
-			//discharge LED
-			//enable LED channels as output
-			DDRC |= (1 << PORTC0) | (1 << PORTC1) |
+			DDRC |= (1 << PORTC0) | (1 << PORTC1) | //set LED Ports  to output:
 			        (1 << PORTC2) | (1 << PORTC3)  ;
 			// discharge
 			PORTC = (PORTC & 0b11110000);
 			//set C0 and C2 to input (disable pullups)
-			DDRC &= ~((1 << PORTC0) | (1 << PORTC2));
+			DDRC &= ~((1 << PORTC0) | (1 << PORTC2)); //set Led Ports to input
 			//pull ups off
 			PORTC &= ~((1 << PORTC0) | (1 << PORTC2));
 			discharge = false;
@@ -333,6 +334,7 @@ void do_mode5(void)
 			ADCSRA |= (1 << ADSC);			// start single conversion
 			while     (ADCSRA & (1 << ADSC)) ;	// wait for conversion to end
 			led1    = ADCW;				// read result
+
 			ADMUX   = (ADMUX & ~(0x1F)) | 2;	// select channel 2
 			ADCSRA |= (1 << ADSC);			// start single conversion
 			while     (ADCSRA & (1 << ADSC)) ;	// wait for conversion to end
@@ -344,16 +346,12 @@ void do_mode5(void)
 			music_setNote(400 +((0x1ff - led1) + (0x1ff - led2)) * 5, 0);
 			discharge = true;
 		}
-
 		timer_set(&mytimer, 2); //relaunch timer
 	}//end if timer_expired
-
 }//end mode5
 
 
-
-void __attribute__ ((noreturn))
-    main(void)
+void __attribute__ ((noreturn)) main(void)
 {
 	/* hardware initialisation: */
 	init_leds();
@@ -365,6 +363,7 @@ void __attribute__ ((noreturn))
 	timer_init();
 	music_init();
 
+
 	/* here the show begins: */
 	sei();
 
@@ -373,24 +372,12 @@ void __attribute__ ((noreturn))
 		button_poll();
 		modeswitch_poll();
 		switch (OpMode) {
-		case MODE1:
-			do_mode1();
-			break;
-		case MODE2:
-			do_mode2();
-			break;
-		case MODE3:
-			do_mode3();
-			break;
-		case MODE4:
-			do_mode4();
-			break;
-		case MODE5:
-			do_mode5();
-			break;
-		default:
-			do_mode0();
-			break;
+		case MODE1: do_mode1() ; break ;
+		case MODE2: do_mode2() ; break ;
+		case MODE3: do_mode3() ; break ;
+		case MODE4: do_mode4() ; break ;
+		case MODE5: do_mode5() ; break ;
+		default: do_mode0()    ; break ;
 		}
 		OpMode = NextMode;
 	}

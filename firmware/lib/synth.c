@@ -6,20 +6,29 @@
 #include <stdlib.h>
 #include <avr/pgmspace.h>
 #include "freq_table.h"
+#include <lib/bughal.h> 
+
+
+
+static uint16_t	osc0     ;
+static uint16_t	osc1     ;
+static uint16_t	sample   ;
+static uint8_t	row      ;
+static uint16_t	speedtime;
 
 
 void synth_init(void){
 	cli();
-	/* 
-	 * Timer 0
-	 */
+	osc0 = osc1 = sample = row = 0;
+	speedtime = 3000;
 
 	/* set timer0 to CTC & prescaler 64 → 125kHz increment */
 	TCCR0A = (1 << WGM01);
 	TCCR0B = (1 << CS00) | (1 << CS01);
 
-	OCR0A = 4;		/* TOP */
+	OCR0A = 4;  /* TOP */
 	TCNT0 = 0;
+
 	/*enable interrupt */
 	TIMSK0 |= (1 << OCIE0A);
 
@@ -34,9 +43,6 @@ void synth_deinit(void) {
 	sei();
 	return;
 }
-
-
-
 
 enum {
 	SONG_LENGTH = 128,
@@ -53,32 +59,43 @@ enum {
 
 const char music_data[2][SONG_LENGTH] PROGMEM = {
 	{
-		e_1, xxx, e_2, xxx, e_1, xxx, e_2, xxx, e_1, xxx, e_2, xxx, e_1, xxx, e_2, xxx,
-		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx,
-		gs0, xxx, gs1, xxx, gs0, xxx, gs1, xxx, gs0, xxx, gs1, xxx, gs0, xxx, gs1, xxx,
-		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx, a_0, xxx, a_0, xxx, b_0, xxx, c_1, xxx,
-		d_1, xxx, d_2, xxx, d_1, xxx, d_2, xxx, d_1, xxx, d_2, xxx, d_1, xxx, d_2, xxx,
-		c_1, xxx, c_2, xxx, c_1, xxx, c_2, xxx, c_1, xxx, c_2, xxx, c_1, xxx, c_2, xxx,
-		b_0, xxx, b_1, xxx, b_0, xxx, b_1, xxx, b_0, xxx, b_1, xxx, b_0, xxx, b_1, xxx,
-		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx, a_0, xxx, xxx, xxx, xxx, xxx, xxx, xxx,
+		e_1, xxx, e_2, xxx, e_1, xxx, e_2, xxx,
+		e_1, xxx, e_2, xxx, e_1, xxx, e_2, xxx,
+		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx,
+		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx,
+		gs0, xxx, gs1, xxx, gs0, xxx, gs1, xxx,
+		gs0, xxx, gs1, xxx, gs0, xxx, gs1, xxx,
+		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx,
+		a_0, xxx, a_0, xxx, b_0, xxx, c_1, xxx,
+		d_1, xxx, d_2, xxx, d_1, xxx, d_2, xxx,
+		d_1, xxx, d_2, xxx, d_1, xxx, d_2, xxx,
+		c_1, xxx, c_2, xxx, c_1, xxx, c_2, xxx,
+		c_1, xxx, c_2, xxx, c_1, xxx, c_2, xxx,
+		b_0, xxx, b_1, xxx, b_0, xxx, b_1, xxx,
+		b_0, xxx, b_1, xxx, b_0, xxx, b_1, xxx,
+		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx,
+		a_0, xxx, xxx, xxx, xxx, xxx, xxx, xxx,
 	}, {
-		e_3, e_3, e_3, e_3, b_2, b_2, c_3, c_3, d_3, d_3, e_3, d_3, c_3, c_3, b_2, b_2,
-		a_2, a_2, a_2, a_2, a_2, a_2, c_3, c_3, e_3, e_3, e_3, e_3, d_3, d_3, c_3, c_3,
-		b_2, b_2, b_2, b_2, b_2, b_2, c_3, c_3, d_3, d_3, d_3, d_3, e_3, e_3, e_3, e_3,
-		c_3, c_3, c_3, c_3, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2,
-		xxx, xxx, d_3, d_3, d_3, d_3, f_3, f_3, a_3, a_3, a_3, a_3, g_3, g_3, f_3, f_3,
-		e_3, e_3, e_3, e_3, e_3, e_3, c_3, c_3, e_3, e_3, e_3, e_3, d_3, d_3, c_3, c_3,
-		b_2, b_2, b_2, b_2, b_2, b_2, c_3, c_3, d_3, d_3, d_3, d_3, e_3, e_3, e_3, e_3,
-		c_3, c_3, c_3, c_3, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, xxx, xxx, xxx, xxx,
+		e_3, e_3, e_3, e_3, b_2, b_2, c_3, c_3,
+		d_3, d_3, e_3, d_3, c_3, c_3, b_2, b_2,
+		a_2, a_2, a_2, a_2, a_2, a_2, c_3, c_3,
+		e_3, e_3, e_3, e_3, d_3, d_3, c_3, c_3,
+		b_2, b_2, b_2, b_2, b_2, b_2, c_3, c_3,
+		d_3, d_3, d_3, d_3, e_3, e_3, e_3, e_3,
+		c_3, c_3, c_3, c_3, a_2, a_2, a_2, a_2,
+		a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2,
+		xxx, xxx, d_3, d_3, d_3, d_3, f_3, f_3,
+		a_3, a_3, a_3, a_3, g_3, g_3, f_3, f_3,
+		e_3, e_3, e_3, e_3, e_3, e_3, c_3, c_3,
+		e_3, e_3, e_3, e_3, d_3, d_3, c_3, c_3,
+		b_2, b_2, b_2, b_2, b_2, b_2, c_3, c_3,
+		d_3, d_3, d_3, d_3, e_3, e_3, e_3, e_3,
+		c_3, c_3, c_3, c_3, a_2, a_2, a_2, a_2,
+		a_2, a_2, a_2, a_2, xxx, xxx, xxx, xxx,
 	}
 };
 
 
-static uint16_t	osc0 = 0;
-static uint16_t	osc1 = 0;
-static uint16_t	sample = 0;
-static uint8_t	row = 0;
-static uint16_t	speedtime = 3000;
 
 
 ISR(TIMER0_COMPA_vect,ISR_NOBLOCK)
@@ -87,12 +104,19 @@ ISR(TIMER0_COMPA_vect,ISR_NOBLOCK)
 	osc1 += pgm_read_word(&freq_table[ pgm_read_byte(&music_data[1][row])]);
 	if (++sample == speedtime ) {
 		sample = 0;
+
 		if (speedtime > 600) speedtime -= 4;
 		if (++row == SONG_LENGTH) {
 			row = 0;
 			if (speedtime <= 600) speedtime = 3000;
 		}
-	}
+		if (row&4){
+			led_on(LED_R);
+			led_off(LED_L);
+		}else{
+			led_on(LED_L);
+			led_off(LED_R);
+		}	}
 
 	if (osc0 >= 0x8000) PORTB |= (1 << PORTB2);
 	else PORTB &= ~(1<< PORTB2);
