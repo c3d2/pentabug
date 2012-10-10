@@ -1,204 +1,101 @@
 #include <inttypes.h>
-#include "synth.h"
-#include "freq_table.h"
-#include <avr/pgmspace.h>
+#include <avr/io.h>
 #include <avr/interrupt.h>
+#define __DELAY_BACKWARD_COMPATIBLE__
+#include <util/delay.h>
+#include <stdlib.h>
+#include <avr/pgmspace.h>
+#include "freq_table.h"
 
-// sample rate is 8M / (3 * 64)
+
+void synth_init(void){
+	cli();
+	/* 
+	 * Timer 0
+	 */
+
+	/* set timer0 to CTC & prescaler 64 → 125kHz increment */
+	TCCR0A = (1 << WGM01);
+	TCCR0B = (1 << CS00) | (1 << CS01);
+
+	OCR0A = 4;		/* TOP */
+	TCNT0 = 0;
+	/*enable interrupt */
+	TIMSK0 |= (1 << OCIE0A);
+
+	sei();
+	return;
+}
+
+
+void synth_deinit(void) {
+	cli();
+	TIMSK0 = 0;
+	sei();
+	return;
+}
+
+
+
 
 enum {
-	channel_count = 3,
-	//tick_length = 400,
-//	tick_length = 256,
-	row_length = 4,
-	pattern_length = 16
+	SONG_LENGTH = 128,
+	xxx = 0,
+	c_0 = 0, cs0 = 1, d_0 = 2, ds0 = 3, e_0 = 4, f_0 = 5,
+	fs0 = 6, g_0 = 7, gs0 = 8, a_0 = 9, as0 = 10, b_0 = 11,
+	c_1 = 12, cs1 = 13, d_1 = 14, ds1 = 15, e_1 = 16, f_1 = 17,
+	fs1 = 18, g_1 = 19, gs1 = 20, a_1 = 21, as1 = 22, b_1 = 23,
+	c_2 = 24, cs2 = 25, d_2 = 26, ds2 = 27, e_2 = 28, f_2 = 29,
+	fs2 = 30, g_2 = 31, gs2 = 32, a_2 = 33, as2 = 34, b_2 = 35,
+	c_3 = 36, cs3 = 37, d_3 = 38, ds3 = 39, e_3 = 40, f_3 = 41,
+	fs3 = 42, g_3 = 43, gs3 = 44, a_3 = 45, as3 = 46, b_3 = 47,
 };
 
-static const synth_instrument_t instruments[] = { { 1 << 15, 100, 12, 0 }, { 0,
-		100, 12, 0 }, { 0, 200, 10, 0 }, { 1 << 13, 0, 0, 2 }, { 1 << 13, 0, 5,
-		2 }, };
-
-static const uint8_t wave_table[][2] = { { 0, WAVE_PULSE }, { 3, WAVE_PULSE }, {
-		7, WAVE_PULSE }, { 12, WAVE_PULSE }, { 256 - 4, 0xff },
-
-{ 0, WAVE_PULSE }, { 2, WAVE_PULSE }, { 7, WAVE_PULSE }, { 10, WAVE_PULSE }, {
-		256 - 4, 0xff },
-
-{ 0, WAVE_NOISE }, { 0, WAVE_PULSE }, { 0xff, 0xff },
-
-{ 0, WAVE_PULSE }, { 0xff, 0xff },
-
-};
-
-static const uint8_t patterns[][pattern_length][2] PROGMEM = { { }, { { 33 - 12,
-		0 }, { 0, 0 }, { 0xff, 1 }, { 0, 0 }, { 33, 1 }, { 0xff, 1 }, { 33, 1 },
-		{ 0xff, 1 }, { 33, 1 }, { 0xff, 1 }, { 33 - 12, 1 }, { 0xff, 1 }, { 33
-				- 12, 1 }, { 0xff, 1 }, { 33, 1 }, { 0xff, 1 }, }, { { 28 - 12,
-		0 }, { 0, 0 }, { 0xff, 1 }, { 0, 0 }, { 28, 1 }, { 0xff, 1 }, { 28, 1 },
-		{ 0xff, 1 }, { 28, 1 }, { 0xff, 1 }, { 28 - 12, 1 }, { 0xff, 1 }, { 28
-				- 12, 1 }, { 0xff, 1 }, { 28, 1 }, { 0xff, 1 }, }, { { 0, 0 }, {
-		0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, {
-		57, 3 }, }, { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 },
-		{ 0, 0 }, { 0, 0 }, { 0, 0 }, { 57, 4 }, },
-
-{ { 60, 2 }, }, { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 57, 2 }, { 0, 0 }, {
-		0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 55, 2 }, {
-		0, 0 }, { 57, 2 }, { 0, 0 }, }, { { 55, 2 }, }, { { 0, 0 }, { 0, 0 }, {
-		0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0,
-		0 }, { 0, 0 }, { 0, 0 }, { 57, 2 }, }, { { 55 - 3, 2 }, },
-
-};
-
-static const uint8_t pattern_table[][channel_count] = { { 1, 0, 5 },
-		{ 1, 3, 0 }, { 1, 0, 7 }, { 1, 3, 6 }, { 2, 0, 7 }, { 2, 4, 8 }, { 2, 0,
-				9 }, { 2, 4, 0 }, };
-enum {
-	pattern_table_length = sizeof(pattern_table) / sizeof(pattern_table[0])
-};
-
-static synth_channel_t channels[channel_count];
-static int8_t sample;
-static int8_t tick;
-static int8_t row;
-static int8_t seq;
-
-/* PROTOTYPES */
-uint8_t synth_mix(void);
-
-static uint8_t timeslots[SYNTH_BUFSIZE];
-static uint8_t timeslots_write; // current write head 
-static uint8_t timeslots_read; // current read head 
-
-/*register for atomic ++ and -- */
-register uint8_t timeslots_fill asm("r2");
-
-static void enqueue_timeslot(uint8_t synthval);
-static uint8_t dequeue_timeslot(void);
-
-void synth_init(void) {
-	sample = 0;
-	tick = 0;
-	row = 0;
-	seq = 0;
-	timeslots_fill = 0;
-}
-
-inline uint8_t synth_mix(void) {
-	if (sample == 0) { // new tick
-		for (int i = 1; i < channel_count; i++) {
-			synth_channel_t* chan = &channels[i];
-
-			const synth_instrument_t* inst = &instruments[chan->inst_nr];
-
-			if (chan->level > inst->decay)
-				chan->level -= inst->decay;
-			else
-				chan->level = 0;
-
-			chan->pulse_width += inst->pulse_sweep;
-
-			chan->pos++;
-			if (wave_table[chan->pos][1] == 0xff)
-				chan->pos += wave_table[chan->pos][0];
-
-			// enter new rol
-			// w
-			if (tick == 0) {
-				uint8_t pattern_nr = pattern_table[seq][i];
-				uint8_t note = pgm_read_byte(&patterns[pattern_nr][row][0]);
-
-				if (note) { // new note, maybe?
-					if (note == 0xff) {
-						chan->level = 0;
-					} else {
-						chan->level = 80; // TODO: less?
-						chan->note = note;
-						chan->inst_nr =
-								pgm_read_byte(&patterns[pattern_nr][row][1]);
-						inst = &instruments[chan->inst_nr];
-						chan->pos = inst->wave_table_pos;
-						if (inst->pulse_width)
-							chan->pulse_width = inst->pulse_width;
-					}
-				}
-			}
-		}
+const char music_data[2][SONG_LENGTH] PROGMEM = {
+	{
+		e_1, xxx, e_2, xxx, e_1, xxx, e_2, xxx, e_1, xxx, e_2, xxx, e_1, xxx, e_2, xxx,
+		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx,
+		gs0, xxx, gs1, xxx, gs0, xxx, gs1, xxx, gs0, xxx, gs1, xxx, gs0, xxx, gs1, xxx,
+		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx, a_0, xxx, a_0, xxx, b_0, xxx, c_1, xxx,
+		d_1, xxx, d_2, xxx, d_1, xxx, d_2, xxx, d_1, xxx, d_2, xxx, d_1, xxx, d_2, xxx,
+		c_1, xxx, c_2, xxx, c_1, xxx, c_2, xxx, c_1, xxx, c_2, xxx, c_1, xxx, c_2, xxx,
+		b_0, xxx, b_1, xxx, b_0, xxx, b_1, xxx, b_0, xxx, b_1, xxx, b_0, xxx, b_1, xxx,
+		a_0, xxx, a_1, xxx, a_0, xxx, a_1, xxx, a_0, xxx, xxx, xxx, xxx, xxx, xxx, xxx,
+	}, {
+		e_3, e_3, e_3, e_3, b_2, b_2, c_3, c_3, d_3, d_3, e_3, d_3, c_3, c_3, b_2, b_2,
+		a_2, a_2, a_2, a_2, a_2, a_2, c_3, c_3, e_3, e_3, e_3, e_3, d_3, d_3, c_3, c_3,
+		b_2, b_2, b_2, b_2, b_2, b_2, c_3, c_3, d_3, d_3, d_3, d_3, e_3, e_3, e_3, e_3,
+		c_3, c_3, c_3, c_3, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2,
+		xxx, xxx, d_3, d_3, d_3, d_3, f_3, f_3, a_3, a_3, a_3, a_3, g_3, g_3, f_3, f_3,
+		e_3, e_3, e_3, e_3, e_3, e_3, c_3, c_3, e_3, e_3, e_3, e_3, d_3, d_3, c_3, c_3,
+		b_2, b_2, b_2, b_2, b_2, b_2, c_3, c_3, d_3, d_3, d_3, d_3, e_3, e_3, e_3, e_3,
+		c_3, c_3, c_3, c_3, a_2, a_2, a_2, a_2, a_2, a_2, a_2, a_2, xxx, xxx, xxx, xxx,
 	}
-	if (++sample == 0) {
-		if (++tick == row_length) {
-			tick = 0;
-			if (++row == pattern_length) {
-				row = 0;
-				if (++seq == pattern_table_length) {
-					seq = 0;
-				}
-			}
+};
+
+
+static uint16_t	osc0 = 0;
+static uint16_t	osc1 = 0;
+static uint16_t	sample = 0;
+static uint8_t	row = 0;
+static uint16_t	speedtime = 3000;
+
+
+ISR(TIMER0_COMPA_vect,ISR_NOBLOCK)
+{
+	osc0 += pgm_read_word(&freq_table[ pgm_read_byte(&music_data[0][row])]);
+	osc1 += pgm_read_word(&freq_table[ pgm_read_byte(&music_data[1][row])]);
+	if (++sample == speedtime ) {
+		sample = 0;
+		if (speedtime > 600) speedtime -= 4;
+		if (++row == SONG_LENGTH) {
+			row = 0;
+			if (speedtime <= 600) speedtime = 3000;
 		}
 	}
 
-	uint8_t output = 0;
-	for (int i = 0; i < channel_count; i++) {
-		synth_channel_t* chan = &channels[i];
-		//	const synth_instrument_t* inst = &instruments[chan->inst_nr];
-
-		chan->phase +=
-				pgm_read_word(&freq_table[(uint8_t)(chan->note + wave_table[chan->pos][0])]);
-
-		uint8_t amp;
-		switch (wave_table[chan->pos][1]) {
-		case WAVE_PULSE:
-			amp = -(chan->phase < chan->pulse_width);
-			break;
-
-		case WAVE_SAW:
-			amp = (chan->phase >> 8);
-			break;
-
-		case WAVE_NOISE: // shitty noise
-			chan->phase = (chan->phase >> 1) ^ (-(chan->phase & 1) & 0xb400);
-			amp = (chan->phase >> 8);
-			break;
-
-		default:
-			amp = 0;
-			break;
-		}
-
-		output += (((amp & 0xff) * chan->level) >> 8);
-	}
-
-	return output;
+	if (osc0 >= 0x8000) PORTB |= (1 << PORTB2);
+	else PORTB &= ~(1<< PORTB2);
+	if (osc1 >= 0xc000) PORTC |= (1 << PORTC5);
+	else PORTC &= ~(1<< PORTC5);
 }
-
-/* fill all the timeslots */
-inline void synth_poll(void) {
-	/* refill timeslots queue */
-//	while (timeslots_fill < (SYNTH_BUFSIZE-1))
-	if (timeslots_fill < (SYNTH_BUFSIZE - 1))
-		enqueue_timeslot(synth_mix());
-}
-
-/* timeslot queue handling */
-static inline void enqueue_timeslot(uint8_t synthval) {
-	timeslots[timeslots_write & SYNTH_BUFMASK] = synthval;
-	timeslots_fill++;
-	timeslots_write++;
-}
-
-static inline uint8_t dequeue_timeslot() {
-	uint8_t t = timeslots[timeslots_read & SYNTH_BUFMASK];
-	if (timeslots_fill) {
-		/* buffer not underrun... move forward in readbuffer */
-
-		timeslots_fill--;
-		timeslots_read++;
-	}
-
-	return t;
-}
-
-ISR(TIMER0_COMPA_vect) {
-	/* calculate next analog sample value in synth mixer:*/
-	OCR1B = dequeue_timeslot();
-}
-
