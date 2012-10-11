@@ -54,6 +54,7 @@ void do_powerDown(void)
 	static timer_t mytimer;
 	static uint8_t pwdn_state;
 	static bool ledRon;
+	uint8_t oldreg;
 	if (mode_uninitialized) {
 		mode_uninitialized = false;
 		pwdn_state = 0;
@@ -104,12 +105,14 @@ void do_powerDown(void)
 			break;
 		case 5:	//now we can really power down
 			// lets switch everything off
-
+			oldreg = PCMSK2;
+			PCMSK2 |= 3; //PCINT16 PCINT17
 			set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 			sleep_enable();
 			sei();
 			sleep_cpu();
 			sleep_disable();
+			PCMSK2 = oldreg;
 			NextMode = 0;
 			break;
 		default:
@@ -119,6 +122,10 @@ void do_powerDown(void)
 
 	}			//end timer expired
 }				// end do_powerDown
+
+
+ISR(PCINT2_vect){ ; }
+
 
 void __attribute__ ((noreturn)) main(void)
 {

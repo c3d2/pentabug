@@ -8,7 +8,7 @@ FUSES = lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0x01:m
 
 #########################################################################
 
-SRC=$(wildcard lib/*.c *.c apps/*.c)
+SRC=$(wildcard lib/*.c apps/*.c *.c) 
 OBJECTS= $(SRC:.c=.o) 
 LSTFILES= $(SRC:.c=.lst)
 HEADERS=$(wildcard lib/*.h *.h)
