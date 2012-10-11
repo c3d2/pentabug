@@ -6,7 +6,6 @@
 #include "../lib/bughal.h"
 #include "../lib/util.h"
 #include "../lib/music.h"
-#include "../lib/synth.h"
 #include "../lib/usart.h"
 
 /**
