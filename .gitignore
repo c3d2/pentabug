@@ -11,3 +11,8 @@
 *.la
 *.a
 fysick
+
+*.lst
+*.swp
+*.elf
+*.hex
