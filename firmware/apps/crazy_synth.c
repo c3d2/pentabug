@@ -5,16 +5,16 @@
 #include <util/delay.h>
 #include <stdlib.h>
 #include <avr/pgmspace.h>
-#include "freq_table.h"
+#include "../lib/freq_table.h"
 #include <lib/bughal.h> 
 
 #include "../lib/apps.h"
 
 
-static uint16_t	osc0     ;
-static uint16_t	osc1     ;
-static uint16_t	sample   ;
-static uint8_t	row      ;
+static uint16_t	osc0;
+static uint16_t	osc1;
+static uint16_t	sample;
+static uint8_t	row;
 static uint16_t	speedtime;
 
 
@@ -117,7 +117,8 @@ ISR(TIMER0_COMPA_vect,ISR_NOBLOCK)
 		}else{
 			led_on(LED_L);
 			led_off(LED_R);
-		}	}
+		}
+	}
 
 	if (osc0 >= 0x8000) PORTB |= (1 << PORTB2);
 	else PORTB &= ~(1<< PORTB2);
