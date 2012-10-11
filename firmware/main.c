@@ -107,11 +107,14 @@ void do_powerDown(void)
 		case 5:	//now we can really power down
 			// lets switch everything off
 			oldreg = PCMSK2;
+			PCIFR  = 0; 
+			PCICR |= (1<<PCIE2); 
 			PCMSK2 |= 3; //PCINT16 PCINT17
 			set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 			sleep_enable();
 			sei();
 			sleep_cpu();
+			PCICR &= ~(1<<PCIE2);
 			sleep_disable();
 			PCMSK2 = oldreg;
 			NextMode = 0;
