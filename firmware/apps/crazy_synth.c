@@ -105,21 +105,14 @@ ISR(TIMER0_COMPA_vect,ISR_NOBLOCK)
 	osc1 += pgm_read_word(&freq_table[ pgm_read_byte(&music_data[1][row])]);
 	if (++sample == speedtime ) {
 		sample = 0;
-
 		if (speedtime > 600) speedtime -= 4;
 		if (++row == SONG_LENGTH) {
 			row = 0;
 			if (speedtime <= 600) speedtime = 3000;
 		}
-		if (row&4){
-			led_on(LED_R);
-			led_off(LED_L);
-		}else{
-			led_on(LED_L);
-			led_off(LED_R);
-		}
+		led_on(row&4 ? LED_R : LED_L);
+		led_off(row&4 ? LED_L : LED_R);
 	}
-
 	if (osc0 >= 0x8000) PORTB |= (1 << PORTB2);
 	else PORTB &= ~(1<< PORTB2);
 	if (osc1 >= 0xc000) PORTC |= (1 << PORTC5);
