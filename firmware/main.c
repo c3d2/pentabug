@@ -34,7 +34,7 @@ void modeswitch_poll(void)
 {
 	if (btn_state(BTNST_LUP, BTN_LEFT)) {
 		//opmode --
-		NextMode = (OpMode -1) % mode_num;
+		NextMode = OpMode <= 0 ? mode_num - 1 : OpMode - 1;
 		button_clear(BTN_LEFT);
 	}
 	if (btn_state(BTNST_LUP, BTN_RIGHT)) {
