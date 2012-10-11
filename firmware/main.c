@@ -137,7 +137,10 @@ void __attribute__ ((noreturn)) main(void)
 	for ever {
 		//main polling loop;
 		button_poll();
-		modeswitch_poll();
+
+		if(OpMode < mode_num) {
+			modeswitch_poll();
+		}
 
 		if (OpMode != NextMode){
 			mode_last_tick = true;
