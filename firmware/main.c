@@ -1,5 +1,6 @@
 #include <inttypes.h>
 #include <avr/io.h>
+#include <avr/sleep.h>
 #include <avr/interrupt.h>
 #define __DELAY_BACKWARD_COMPATIBLE__
 #include <util/delay.h>
@@ -7,7 +8,7 @@
 
 #include "main.h"
 
-#define ever (;;) /* awesomnes++ */
+#define ever (;;)		/* awesomnes++ */
 
 #include "lib/usart.h"
 #include "lib/bughal.h"
@@ -21,35 +22,34 @@
 #define MODE2 2
 #define MODE3 3
 #define MODE4 4
-#define MODE5 5		
+#define MODE5 5
 #define NUM_MODES 6
 
-//special modes, not in normal mode loop
-#define MODE_PWDN 42 //go to sleep
+/*specialmodes, not in normal mode loop*/
+#define MODE_PWDN 42		//go to sleep
 
-uint8_t OpMode   = MODE1;	
+uint8_t OpMode   = MODE1;
 uint8_t NextMode = MODE1;
 
 bool mode_uninitialized = true;
 
-// check if mode should be changed (one of the buttons long pressed)
+/*check if mode should be changed (one of the buttons long pressed)*/
 void modeswitch_poll(void)
 {
 	if (btn_state(BTNST_LUP, BTN_LEFT)) {
-		//opmode -
-		NextMode = (0 == OpMode) ? (NUM_MODES - 1) : (OpMode - 1);
-		//mode_uninitialized = true;
+		//opmode --
+		NextMode = (OpMode -1) % NUM_MODES;
 		button_clear(BTN_LEFT);
-	};
+	}
 	if (btn_state(BTNST_LUP, BTN_RIGHT)) {
-		//opmode +
-		//mode_uninitialized = true;
-		NextMode = ((NUM_MODES - 1) == OpMode) ? 0 : (OpMode + 1);
+		//opmode ++
+		NextMode = (OpMode +1) % NUM_MODES;
 		button_clear(BTN_RIGHT);
-	};
-	if (btn_state(BTNST_LDN,BTN_RIGHT) && btn_state(BTNST_LDN,BTN_LEFT)){
+	}
+	if ( btn_state(BTNST_LDN, BTN_RIGHT) &&
+	     btn_state(BTNST_LDN, BTN_LEFT)   ) {
 		NextMode = MODE_PWDN;
-	};
+	}
 	return;
 }
 
@@ -62,30 +62,29 @@ void modeswitch_poll(void)
 void do_mode0(void)
 {
 	static timer_t mytimer;
-	static uint16_t maxval;		//maximum of ADC values read during the las timer interval
-	static uint16_t lastmaxval;	//maximum of values during last timer interval
-	uint16_t curval;		//current value on D5 (one pin of the piezo,the other is on GND)
-	static bool signaling;		//are we currently signaling (beeping, blinking etc...)
-	static bool sound_on;		//should sound be on when signaling
-	static bool motor_on;		//should motor be on when signaling
+	static uint16_t maxval;     // maximum of ADC values read during the las timer interval
+	static uint16_t lastmaxval; // maximum of values during last timer interval
+	uint16_t curval;            // value on D5 (pin of piezo,the other is on GND)
+	static bool signaling;      // are we currently signaling (beeping, blinking etc...)
+	static bool sound_on;       // should sound be on when signaling
+	static bool motor_on;       // should motor be on when signaling
 
 	if (mode_uninitialized) {	//init after mode change
-		maxval = 0;
-		lastmaxval = 000;
+		maxval             = 0;
+		lastmaxval         = 0;
 		mode_uninitialized = false;
-		signaling = false;
-		sound_on = true;
-		motor_on = true;
+		signaling          = false;
+		sound_on           = true;
+		motor_on           = true;
 		init_mic();
 		init_leds();
 		timer_set(&mytimer, 10);
 	}
-
-	// single ADC measurement
+	/*single ADC measurement*/
 	curval = ADCW;		// read result
 	maxval = (curval > maxval) ? curval : maxval;
 
-	//check for Buttons
+	/*check for Buttons*/
 	if (btn_state(BTNST_SUP, BTN_LEFT)) {
 		button_clear(BTN_LEFT);
 		sound_on = !sound_on;
@@ -121,12 +120,12 @@ void do_mode0(void)
 				timer_set(&mytimer, 1);
 			}
 			lastmaxval = maxval;
-			maxval     = 0;
+			maxval = 0;
 		}//end if soundon
 
 	}//end if timer_expired
 
-} /* end mode0 */
+}				/* end mode0 */
 
 /**
  * do crazy synthesizer mode
@@ -134,19 +133,19 @@ void do_mode0(void)
  */
 void do_mode1(void)
 {
+	/* initialisation required */
 	if (mode_uninitialized) {
 		mode_uninitialized = false;
 		synth_init();
 	}
 
-	/*deinialisation required*/
-	if(OpMode != NextMode){
+	/*deinialisation required */
+	if (OpMode != NextMode) {
 		synth_deinit();
 	}
 
 	return;
 }
-
 
 /**
  * crazymoves mode
@@ -155,8 +154,8 @@ void do_mode1(void)
 void do_mode2(void)
 {
 	static timer_t mytimer;
-	uint8_t max = 50;
-	uint8_t min = 5;
+	uint8_t max      = 50;
+	uint8_t min      = 5;
 	uint16_t maxfreq = 5000;
 	uint16_t minfreq = 1000;
 
@@ -172,26 +171,18 @@ void do_mode2(void)
 	if (timer_expired(&mytimer)) {
 		set_motor(MOTOR_OFF);
 		music_setNote(NOTE_PAUSE, 0);	//mute
-		// set random led
+		/*set random led*/
 		switch (rand() % 4) {
-		case 0:
-			led_on(LED_L);
-			break;
-		case 1:
-			led_on(LED_R);
-			break;
-		case 2:
-			led_on(LED_L | LED_R);
-			break;
-		default:
-			led_off(LED_L | LED_R);
-			break;
+		case 0: led_on(LED_L); break;
+		case 1: led_on(LED_R); break;
+		case 2: led_on(LED_L | LED_R); break;
+		default: led_off(LED_L | LED_R); break;
 		};
-		// decide if to switch motor on (40% chance)
+		/*decide if to switch motor on (40% chance)*/
 		if (rand() % 5 > 2)
 			set_motor(MOTOR_ON);
 
-		//decide if to play sound (70% chance)
+		/*decide if to play sound (70% chance)*/
 		if (rand() % 10 > 2) {
 			music_setNote((rand() % (maxfreq - minfreq)) + minfreq,
 				      0);
@@ -202,12 +193,11 @@ void do_mode2(void)
 	}//end if timer_expired
 
 	/*deinialisation */
-	if(OpMode != NextMode){
+	if (OpMode != NextMode) {
 		set_motor(MOTOR_OFF);
 		music_setNote(NOTE_PAUSE, 0);	//mute
 	}
 }
-
 
 /**
  *   just blink mode
@@ -228,18 +218,18 @@ void do_mode3(void)
 
 	if (timer_expired(&mytimer)) {
 		if (!blink) {
-			//lets blink
+			/*lets blink*/
 			led_on(LED_L | LED_R);
 			timer_set(&mytimer, 1);
 			blink = true;
 		} else {
-			//stop blink
+			/*stop blink*/
 			led_off(LED_L | LED_R);
 			timer_set(&mytimer, 123);
 			blink = false;
 		}
 
-	}			//end if timer_expired
+	}//end if timer_expired
 
 	if (btn_state(BTNST_SUP, BTN_LEFT)) {
 		button_clear(BTN_LEFT);
@@ -252,8 +242,6 @@ void do_mode3(void)
 	}
 
 }
-
-
 
 /**
  * ggrbug mode
@@ -275,18 +263,12 @@ void do_mode4(void)
 	};
 	if (timer_expired(&mytimer)) {
 		if (!blink) {
-			//lets blink
+			/*lets blink*/
 			int i = (rand() % 3);
 			switch (i) {
-			case 0:
-				led_on(LED_L);
-				break;
-			case 1:
-				led_on(LED_R);
-				break;
-			default:
-				led_on(LED_L | LED_R);
-				break;
+				case 0: led_on(LED_L); break;
+				case 1: led_on(LED_R); break;
+				default: led_on(LED_L | LED_R); break;
 			};
 			if (rand() % 10 > 8)
 				set_motor(MOTOR_ON);
@@ -294,7 +276,7 @@ void do_mode4(void)
 			timer_set(&mytimer, 2);
 			blink = true;
 		} else {
-			//stop blink
+			/*stop blink*/
 			led_off(LED_L | LED_R);
 			set_motor(MOTOR_OFF);
 			music_setNote(NOTE_PAUSE, 0);
@@ -302,7 +284,7 @@ void do_mode4(void)
 			blink = false;
 		}
 
-	}			//end if timer_expired
+	}//end if timer_expired
 
 }
 
@@ -316,50 +298,57 @@ void do_mode5(void)
 	if (mode_uninitialized) {
 		mode_uninitialized = false;
 		set_motor(MOTOR_OFF);
-		ADMUX = (1 << REFS0);	//use VCC reference
-		ADCSRA = (1 << ADPS1) | (1 << ADPS0);	// prescaler F_CPU/8
-		ADCSRA |= (1 << ADEN);	// ADC enable - turn it on
-		// do one conversion
+		ADMUX   = (1 << REFS0);                // use VCC reference
+		ADCSRA  = (1 << ADPS1) | (1 << ADPS0); // prescaler F_CPU/8
+		ADCSRA |= (1 << ADEN);                 // ADC enable - turn it on
+		/*do one conversion*/
 		ADCSRA |= (1 << ADSC);
 		while (ADCSRA & (1 << ADSC)) {
-		}		//wait for conversion to end
+		/*wait for conversion to end */
+		}
 		uint16_t __attribute__ ((unused)) dummy = ADCW;	//read once
 		timer_set(&mytimer, 10);
 		discharge = true;
 	}
 	if (timer_expired(&mytimer)) {
 		if (discharge) {
-			DDRC |= (1 << PORTC0) | (1 << PORTC1) | //set LED Ports  to output:
-			        (1 << PORTC2) | (1 << PORTC3)  ;
-			// discharge
+			DDRC |= (1 << PORTC0) | (1 << PORTC1) |	//set LED Ports  to output:
+			    (1 << PORTC2) | (1 << PORTC3);
+			/*discharge*/
 			PORTC = (PORTC & 0b11110000);
-			//set C0 and C2 to input (disable pullups)
-			DDRC &= ~((1 << PORTC0) | (1 << PORTC2)); //set Led Ports to input
-			//pull ups off
+			/*set C0 and C2 to input (disable pullups)*/
+			DDRC &= ~((1 << PORTC0) | (1 << PORTC2));	//set Led Ports to input
+			/*pull ups off*/
 			PORTC &= ~((1 << PORTC0) | (1 << PORTC2));
 			discharge = false;
 		} else {
-			// single measurement
-			ADMUX   = (ADMUX & ~(0x1F)) | 0;	// select channel 0
-			ADCSRA |= (1 << ADSC);			// start single conversion
-			while     (ADCSRA & (1 << ADSC)) ;	// wait for conversion to end
-			led1    = ADCW;				// read result
+			/*single measurement*/
+			ADMUX = (ADMUX & ~(0x1F)) | 0; // select channel 0
+			ADCSRA |= (1 << ADSC);         // start single conversion
+			while (ADCSRA & (1 << ADSC)) ; // wait for conversion to end
+			led1 = ADCW;                   // read result
 
-			ADMUX   = (ADMUX & ~(0x1F)) | 2;	// select channel 2
-			ADCSRA |= (1 << ADSC);			// start single conversion
-			while     (ADCSRA & (1 << ADSC)) ;	// wait for conversion to end
-			led2    = ADCW;				// read result
+			ADMUX = (ADMUX & ~(0x1F)) | 2; // select channel 2
+			ADCSRA |= (1 << ADSC);         // start single conversion
+			while (ADCSRA & (1 << ADSC)) ; // wait for conversion to end
+			led2 = ADCW;                   // read result
 #if 0
-			USART0_putc('1');USART0_putc(':');USART0_put_uint16(led1);USART0_crlf();
-			USART0_putc('2');USART0_putc(':');USART0_put_uint16(led2);USART0_crlf();
+			USART0_putc('1');
+			USART0_putc(':');
+			USART0_put_uint16(led1);
+			USART0_crlf();
+			USART0_putc('2');
+			USART0_putc(':');
+			USART0_put_uint16(led2);
+			USART0_crlf();
 #endif
-			music_setNote(400 +((0x1ff - led1) + (0x1ff - led2)) * 5, 0);
+			music_setNote(400 +
+				      ((0x1ff - led1) + (0x1ff - led2)) * 5, 0);
 			discharge = true;
 		}
-		timer_set(&mytimer, 2); //relaunch timer
-	}//end if timer_expired
-}//end mode5
-
+		timer_set(&mytimer, 2);	//relaunch timer
+	}			//end if timer_expired
+}				//end mode5
 
 void do_powerDown(void)
 {
@@ -369,49 +358,68 @@ void do_powerDown(void)
 	if (mode_uninitialized) {
 		mode_uninitialized = false;
 		pwdn_state = 0;
-		timer_set(&mytimer,5);
+		timer_set(&mytimer, 5);
 		ledRon = true;
 	};
-	if(timer_expired(&mytimer)){
-		switch(pwdn_state){
-			case 0:
-				if (ledRon){
-					led_on(LED_L);led_off(LED_R);
-				} else {
-					led_off(LED_L);led_on(LED_R);
-				};
-				ledRon = !ledRon;
-				timer_set(&mytimer,6);
-				if ((btn_state(BTNST_SUP, BTN_RIGHT)||btn_state(BTNST_LUP, BTN_RIGHT))&&(btn_state(BTNST_SUP, BTN_LEFT)||btn_state(BTNST_LUP, BTN_LEFT))){
-					//both buttons released
-					led_off(LED_L|LED_R);
-					pwdn_state = 1;
-					timer_set(&mytimer,10);
-				}
-				break;
-			case 1: music_setNote(NOTE_A, 4);timer_set(&mytimer,10);pwdn_state++;break;
-			case 2: music_setNote(NOTE_F, 4);timer_set(&mytimer,5);pwdn_state++;break;
-			case 3: music_setNote(NOTE_D, 3);timer_set(&mytimer,15);pwdn_state++;break;
-			case 4: music_setNote(NOTE_PAUSE, 4);timer_set(&mytimer,1);pwdn_state++;break;
-			case 5: //now we can really power down
-				// lets switch everything off
-				//TODO: find out how to do this
+	if (timer_expired(&mytimer)) {
+		switch (pwdn_state) {
+		case 0:
+			if (ledRon) {
+				led_on(LED_L);
+				led_off(LED_R);
+			} else {
+				led_off(LED_L);
+				led_on(LED_R);
+			};
+			ledRon = !ledRon;
+			timer_set(&mytimer, 6);
+			if ((btn_state(BTNST_SUP, BTN_RIGHT)
+			     || btn_state(BTNST_LUP, BTN_RIGHT))
+			    && (btn_state(BTNST_SUP, BTN_LEFT)
+				|| btn_state(BTNST_LUP, BTN_LEFT))) {
+				//both buttons released
+				led_off(LED_L | LED_R);
+				pwdn_state = 1;
+				timer_set(&mytimer, 10);
+			}
+			break;
+		case 1:
+			music_setNote(NOTE_A, 4);
+			timer_set(&mytimer, 10);
+			pwdn_state++;
+			break;
+		case 2:
+			music_setNote(NOTE_F, 4);
+			timer_set(&mytimer, 5);
+			pwdn_state++;
+			break;
+		case 3:
+			music_setNote(NOTE_D, 3);
+			timer_set(&mytimer, 15);
+			pwdn_state++;
+			break;
+		case 4:
+			music_setNote(NOTE_PAUSE, 4);
+			timer_set(&mytimer, 1);
+			pwdn_state++;
+			break;
+		case 5:	//now we can really power down
+			// lets switch everything off
 
+			set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+			sleep_enable();
+			sei();
+			sleep_cpu();
+			sleep_disable();
+			NextMode = MODE2;
+			break;
+		default:
+			break;
 
-				//meanwhile: switch back to normal operation (silent mode 2)
-				NextMode=MODE2;
-				break;
-			default: break;
+		}		//end switch
 
-
-
-	} //end switch
-
-
-
-	}  //end timer expired
-} // end do_powerDown
-
+	}			//end timer expired
+}				// end do_powerDown
 
 void __attribute__ ((noreturn)) main(void)
 {
@@ -425,26 +433,25 @@ void __attribute__ ((noreturn)) main(void)
 	timer_init();
 	music_init();
 
-
 	/* here the show begins: */
 	sei();
-
 	for ever {
 		//main polling loop;
 		button_poll();
-		if (OpMode != MODE_PWDN) modeswitch_poll(); //there is no way out of PWND
+		modeswitch_poll();
+
 		switch (OpMode) {
-		case MODE1: do_mode1() ; break ;
-		case MODE2: do_mode2() ; break ;
-		case MODE3: do_mode3() ; break ;
-		case MODE4: do_mode4() ; break ;
-		case MODE5: do_mode5() ; break ;
-		case MODE_PWDN: do_powerDown() ; break ;
-		default: do_mode0()    ; break ;
+		case MODE1     : do_mode1();     break ; 
+		case MODE2     : do_mode2();     break ; 
+		case MODE3     : do_mode3();     break ; 
+		case MODE4     : do_mode4();     break ; 
+		case MODE5     : do_mode5();     break ; 
+		case MODE_PWDN : do_powerDown(); break ; 
+		default        : do_mode0();     break ; 
 		}
-		if (OpMode!=NextMode) mode_uninitialized = true;
-		OpMode = NextMode;
+		if (OpMode != NextMode){
+			mode_uninitialized = true;
+			OpMode = NextMode;
+		}
 	}
 }
-
-
