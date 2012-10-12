@@ -59,6 +59,7 @@ void do_powerDown(void)
 		mode_uninitialized = false;
 		pwdn_state = 0;
 		timer_set(&mytimer, 5);
+		set_motor(MOTOR_OFF);
 		ledRon = true;
 	};
 	if (timer_expired(&mytimer)) {
