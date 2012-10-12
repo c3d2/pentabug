@@ -19,7 +19,7 @@ static uint16_t	speedtime;
 
 
 void synth_init(void){
-	init_buzzer();
+	init_buzzr();
 
 	cli();
 	osc0 = osc1 = sample = row = 0;
