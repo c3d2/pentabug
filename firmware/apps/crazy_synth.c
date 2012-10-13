@@ -8,8 +8,10 @@
 #include "../lib/freq_table.h"
 #include <lib/bughal.h> 
 
-#include "../lib/apps.h"
+#include <lib/timer.h>
+#include <lib/apps.h>
 
+void tetris_play(void);
 
 static uint16_t	osc0;
 static uint16_t	osc1;
@@ -21,29 +23,17 @@ static uint16_t	speedtime;
 void synth_init(void){
 	init_buzzr();
 
-	cli();
 	osc0 = osc1 = sample = row = 0;
 	speedtime = 3000;
 
-	/* set timer0 to CTC & prescaler 64 → 125kHz increment */
-	TCCR0A = (1 << WGM01);
-	TCCR0B = (1 << CS00) | (1 << CS01);
+	start_timer(tetris_play);
 
-	OCR0A = 4;  /* TOP */
-	TCNT0 = 0;
-
-	/*enable interrupt */
-	TIMSK0 |= (1 << OCIE0A);
-
-	sei();
 	return;
 }
 
 
 void synth_deinit(void) {
-	cli();
-	TIMSK0 = 0;
-	sei();
+	stop_timer();
 	return;
 }
 
@@ -101,8 +91,7 @@ const char music_data[2][SONG_LENGTH] PROGMEM = {
 
 
 
-ISR(TIMER0_COMPA_vect,ISR_NOBLOCK)
-{
+void tetris_play(void) {
 	osc0 += pgm_read_word(&freq_table[ pgm_read_byte(&music_data[0][row])]);
 	osc1 += pgm_read_word(&freq_table[ pgm_read_byte(&music_data[1][row])]);
 	if (++sample == speedtime ) {
