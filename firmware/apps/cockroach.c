@@ -18,6 +18,13 @@ static void led_sound(void)
 	static timer_t mytimer;
 	uint16_t led1;
 
+	if(mode_last_tick) {
+		led_off(LED_L | LED_R);
+		set_motor(MOTOR_OFF);
+		music_setNote(NOTE_PAUSE, 0);
+		return;
+	}
+
 	if (mode_uninitialized) {
 		mode_uninitialized = false;
 		set_motor(MOTOR_OFF);
