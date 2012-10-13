@@ -16,6 +16,13 @@
  */
 static void sound_detection(void)
 {
+	if(mode_last_tick) {
+		led_off(LED_L | LED_R);
+		set_motor(MOTOR_OFF);
+		music_setNote(NOTE_PAUSE, 0);
+		return;
+	}
+
 	static timer_t mytimer;
 	static uint16_t maxval;     // maximum of ADC values read during the las timer interval
 	static uint16_t lastmaxval; // maximum of values during last timer interval
