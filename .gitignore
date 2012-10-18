@@ -16,3 +16,11 @@ fysick
 *.swp
 *.elf
 *.hex
+
+# Eagle backup files
+*.b#?
+*.s#?
+
+# Editor backup files
+*~
+
