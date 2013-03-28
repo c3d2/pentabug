@@ -7,10 +7,10 @@ At the event [Datenspuren 2012](http://datenspuren.de/2012/ "Datenspuren 2012") 
 Meanwhile you can watch [this video](http://www.youtube.com/watch?v=HTBhXqNR6LY "Dresdner Piratencast Folge 14 - Datenspuren") of Frank and his sons beeing interviewed at our workshop table.
 
 
-![Slightly Advanced Prototype Hardware](/c3d2/pentabug/raw/master/img/prototype.jpg)  
+![Slightly Advanced Prototype Hardware](https://github.com/c3d2/pentabug/raw/master/img/prototype.jpg)  
 Img. 1: A slightly advanced prototype version of the bug with single layer pcb.
 
-![Top Layer of Version 1.0 Board](/c3d2/pentabug/raw/master/img/board_top.png)  
+![Top Layer of Version 1.0 Board](https://github.com/c3d2/pentabug/raw/master/img/board_top.png)  
 Img. 2: The top layer view of the Version 1.0 production board (two layer pcb).
 
 ![Version 1.0 Schematics (Thumbnail)](https://github.com/c3d2/pentabug/raw/master/img/schematics_v1_0_thumb.png)  
