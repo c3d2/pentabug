@@ -6076,7 +6076,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <part name="LED2" library="SparkFun" deviceset="LED" device="5MM"/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
 <part name="P+1" library="supply1" deviceset="VCC" device=""/>
-<part name="JP1" library="pinhead" deviceset="PINHD-1X3" device=""/>
+<part name="JP3" library="pinhead" deviceset="PINHD-1X3" device=""/>
 <part name="FRAME1" library="frames" deviceset="A4L-LOC" device=""/>
 <part name="BAT1" library="buglbr" deviceset="BATTERY_2XAAA" device=""/>
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
@@ -6089,17 +6089,17 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <part name="R1" library="rcl" deviceset="R-EU_" device="0207/10" value="100K"/>
 <part name="R2" library="rcl" deviceset="R-EU_" device="0207/10" value="22K"/>
 <part name="GND13" library="supply1" deviceset="GND" device=""/>
-<part name="JP3" library="pinhead" deviceset="PINHD-1X5" device=""/>
+<part name="JP5" library="pinhead" deviceset="PINHD-1X5" device=""/>
 <part name="JP4" library="pinhead" deviceset="PINHD-1X5" device=""/>
 <part name="GND14" library="supply1" deviceset="GND" device=""/>
 <part name="GND15" library="supply1" deviceset="GND" device=""/>
 <part name="P+4" library="supply1" deviceset="VCC" device=""/>
 <part name="P+6" library="supply1" deviceset="VCC" device=""/>
-<part name="JP5" library="pinhead" deviceset="PINHD-1X3" device=""/>
+<part name="JP1" library="pinhead" deviceset="PINHD-1X3" device=""/>
 <part name="Q2" library="transistors" deviceset="2N700*" device="_TO92" technology="0"/>
 <part name="R4" library="rcl" deviceset="R-EU_" device="0207/10" value="22R"/>
 <part name="P+5" library="supply1" deviceset="VCC" device=""/>
-<part name="U$2" library="buglbr" deviceset="TSOP382" device=""/>
+<part name="IR" library="buglbr" deviceset="TSOP382" device=""/>
 <part name="LED3" library="SparkFun" deviceset="LED" device="3MM"/>
 <part name="P+7" library="supply1" deviceset="VCC" device=""/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
@@ -6131,7 +6131,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <text x="71.12" y="-20.32" size="1.778" layer="94">Taster</text>
 <text x="104.14" y="-20.32" size="1.778" layer="94">Piezo Buzzer</text>
 <text x="160.02" y="-20.32" size="1.778" layer="94">Batterie und Spannungssensor</text>
-<text x="119.38" y="-38.1" size="3.81" layer="94">Pentabug V1.0</text>
+<text x="119.38" y="-38.1" size="3.81" layer="94">Pentabug V2.0</text>
 </plain>
 <instances>
 <instance part="IC1" gate="G$1" x="10.16" y="27.94"/>
@@ -6175,7 +6175,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 </instance>
 <instance part="GND1" gate="1" x="127" y="58.42" smashed="yes"/>
 <instance part="P+1" gate="VCC" x="127" y="96.52"/>
-<instance part="JP1" gate="A" x="190.5" y="91.44"/>
+<instance part="JP3" gate="A" x="190.5" y="91.44"/>
 <instance part="FRAME1" gate="G$1" x="-50.8" y="-55.88"/>
 <instance part="BAT1" gate="G$1" x="182.88" y="10.16" rot="R90"/>
 <instance part="GND9" gate="1" x="182.88" y="-2.54" smashed="yes"/>
@@ -6190,17 +6190,17 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <instance part="R1" gate="G$1" x="172.72" y="15.24" rot="R270"/>
 <instance part="R2" gate="G$1" x="172.72" y="5.08" rot="R270"/>
 <instance part="GND13" gate="1" x="172.72" y="-2.54" smashed="yes"/>
-<instance part="JP3" gate="A" x="91.44" y="91.44"/>
+<instance part="JP5" gate="A" x="91.44" y="91.44"/>
 <instance part="JP4" gate="A" x="91.44" y="68.58"/>
 <instance part="GND14" gate="1" x="78.74" y="60.96" smashed="yes"/>
 <instance part="GND15" gate="1" x="78.74" y="83.82" smashed="yes"/>
 <instance part="P+4" gate="VCC" x="78.74" y="76.2"/>
 <instance part="P+6" gate="VCC" x="78.74" y="99.06"/>
-<instance part="JP5" gate="A" x="195.58" y="30.48"/>
+<instance part="JP1" gate="A" x="195.58" y="30.48"/>
 <instance part="Q2" gate="G$1" x="-76.2" y="66.04"/>
 <instance part="R4" gate="G$1" x="-91.44" y="86.36" rot="R180"/>
 <instance part="P+5" gate="VCC" x="-106.68" y="134.62"/>
-<instance part="U$2" gate="G$1" x="-71.12" y="119.38"/>
+<instance part="IR" gate="G$1" x="-71.12" y="119.38"/>
 <instance part="LED3" gate="G$1" x="-81.28" y="86.36" rot="R90"/>
 <instance part="P+7" gate="VCC" x="-63.5" y="137.16"/>
 <instance part="GND3" gate="1" x="-63.5" y="109.22" smashed="yes"/>
@@ -6220,7 +6220,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <label x="38.1" y="20.32" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="JP3" gate="A" pin="2"/>
+<pinref part="JP5" gate="A" pin="2"/>
 <wire x1="88.9" y1="93.98" x2="78.74" y2="93.98" width="0.1524" layer="91"/>
 <label x="78.74" y="93.98" size="1.778" layer="95"/>
 </segment>
@@ -6258,12 +6258,12 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <wire x1="78.74" y1="73.66" x2="88.9" y2="73.66" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="JP3" gate="A" pin="1"/>
+<pinref part="JP5" gate="A" pin="1"/>
 <pinref part="P+6" gate="VCC" pin="VCC"/>
 <wire x1="78.74" y1="96.52" x2="88.9" y2="96.52" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="JP5" gate="A" pin="2"/>
+<pinref part="JP1" gate="A" pin="2"/>
 <wire x1="193.04" y1="30.48" x2="172.72" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="172.72" y1="30.48" x2="172.72" y2="33.02" width="0.1524" layer="91"/>
 <pinref part="R1" gate="G$1" pin="1"/>
@@ -6272,7 +6272,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <junction x="172.72" y="30.48"/>
 </segment>
 <segment>
-<pinref part="U$2" gate="G$1" pin="V+"/>
+<pinref part="IR" gate="G$1" pin="V+"/>
 <pinref part="P+7" gate="VCC" pin="VCC"/>
 <wire x1="-63.5" y1="134.62" x2="-63.5" y2="124.46" width="0.1524" layer="91"/>
 </segment>
@@ -6334,7 +6334,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <wire x1="187.96" y1="88.9" x2="170.18" y2="88.9" width="0.1524" layer="91"/>
 <wire x1="170.18" y1="88.9" x2="170.18" y2="86.36" width="0.1524" layer="91"/>
 <label x="172.72" y="88.9" size="1.778" layer="95"/>
-<pinref part="JP1" gate="A" pin="3"/>
+<pinref part="JP3" gate="A" pin="3"/>
 <pinref part="GND12" gate="1" pin="GND"/>
 </segment>
 <segment>
@@ -6358,12 +6358,12 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <pinref part="GND13" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="JP3" gate="A" pin="5"/>
+<pinref part="JP5" gate="A" pin="5"/>
 <pinref part="GND15" gate="1" pin="GND"/>
 <wire x1="78.74" y1="86.36" x2="88.9" y2="86.36" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$2" gate="G$1" pin="GND"/>
+<pinref part="IR" gate="G$1" pin="GND"/>
 <pinref part="GND3" gate="1" pin="GND"/>
 <wire x1="-63.5" y1="111.76" x2="-63.5" y2="114.3" width="0.1524" layer="91"/>
 </segment>
@@ -6388,7 +6388,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <segment>
 <wire x1="187.96" y1="91.44" x2="170.18" y2="91.44" width="0.1524" layer="91"/>
 <label x="172.72" y="91.44" size="1.778" layer="95"/>
-<pinref part="JP1" gate="A" pin="2"/>
+<pinref part="JP3" gate="A" pin="2"/>
 </segment>
 <segment>
 <wire x1="35.56" y1="30.48" x2="48.26" y2="30.48" width="0.1524" layer="91"/>
@@ -6405,7 +6405,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <segment>
 <wire x1="187.96" y1="93.98" x2="170.18" y2="93.98" width="0.1524" layer="91"/>
 <label x="172.72" y="93.98" size="1.778" layer="95"/>
-<pinref part="JP1" gate="A" pin="1"/>
+<pinref part="JP3" gate="A" pin="1"/>
 </segment>
 </net>
 <net name="BUZZR" class="0">
@@ -6446,7 +6446,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <label x="38.1" y="17.78" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="JP3" gate="A" pin="3"/>
+<pinref part="JP5" gate="A" pin="3"/>
 <wire x1="88.9" y1="91.44" x2="78.74" y2="91.44" width="0.1524" layer="91"/>
 <label x="78.74" y="91.44" size="1.778" layer="95"/>
 </segment>
@@ -6527,11 +6527,11 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <label x="38.1" y="55.88" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$9" class="0">
+<net name="BAT" class="0">
 <segment>
 <pinref part="BAT1" gate="G$1" pin="+"/>
 <wire x1="182.88" y1="15.24" x2="182.88" y2="27.94" width="0.1524" layer="91"/>
-<pinref part="JP5" gate="A" pin="3"/>
+<pinref part="JP1" gate="A" pin="3"/>
 <wire x1="182.88" y1="27.94" x2="193.04" y2="27.94" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -6542,7 +6542,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <label x="190.5" y="71.12" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="JP5" gate="A" pin="1"/>
+<pinref part="JP1" gate="A" pin="1"/>
 <wire x1="193.04" y1="33.02" x2="182.88" y2="33.02" width="0.1524" layer="91"/>
 <label x="182.88" y="33.02" size="1.778" layer="95"/>
 </segment>
@@ -6616,7 +6616,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <wire x1="50.8" y1="50.8" x2="35.56" y2="50.8" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="PB1" class="0">
+<net name="PB2" class="0">
 <segment>
 <wire x1="48.26" y1="5.08" x2="35.56" y2="5.08" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="G$1" pin="PB2(SS/OC1B)"/>
@@ -6635,7 +6635,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <label x="38.1" y="15.24" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="JP3" gate="A" pin="4"/>
+<pinref part="JP5" gate="A" pin="4"/>
 <wire x1="88.9" y1="88.9" x2="78.74" y2="88.9" width="0.1524" layer="91"/>
 <label x="78.74" y="88.9" size="1.778" layer="95"/>
 </segment>
@@ -6689,7 +6689,7 @@ http://de.mouser.com/ProductDetail/TDK/PS1720P02/?qs=%2fha2pyFadujtCAfY3DKBdXuzQ
 <label x="38.1" y="25.4" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$2" gate="G$1" pin="OUT"/>
+<pinref part="IR" gate="G$1" pin="OUT"/>
 <wire x1="-63.5" y1="119.38" x2="-55.88" y2="119.38" width="0.1524" layer="91"/>
 <label x="-63.5" y="119.38" size="1.778" layer="95"/>
 </segment>
