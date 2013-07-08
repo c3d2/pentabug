@@ -66,7 +66,7 @@ fuse:
 	$(AVRDUDE) -p m88 -F -c usbtiny  -v -v  -U $(FUSES)
 
 flash: $(PROJECT).hex Makefile
-	$(AVRDUDE) -p m88 -F -c usbtiny  -v -v  -U flash:w:$(PROJECT).hex
+	$(AVRDUDE) -p m88 -F -c usbtiny  -B 1  -U flash:w:$(PROJECT).hex
 
 fljohn: $(PROJECT).hex Makefile
 	$(AVRDUDE) -p m88 -F  -P /dev/serial/by-id/usb-FTDI_USB__-__Serial-if00-port0   -c stk500v2 -v -v  -U flash:w:$(PROJECT).hex

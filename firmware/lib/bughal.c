@@ -135,14 +135,13 @@ void button_clear(uint8_t button) {
 
 void stateswitch(uint8_t i) {
 	switch (btnstates[i]) {
-	case BTNST_NTRL:
+	case BTNST_NTRL: //NEUTRAL
 		if (curinput & (1 << i)) { //button down
 			btncounters[i] = 0;
 			btnstates[i] = BTNST_DBNC;
 		}
 		break;
-		//intermediate state, check if button is still pressed to debounce
-	case BTNST_DBNC:
+	case BTNST_DBNC: //intermediate state, check if button is still pressed to debounce
 		btnstates[i] = (curinput & (1 << i)) ? BTNST_SDN : BTNST_NTRL;
 		(btncounters[i])++;
 		break;
