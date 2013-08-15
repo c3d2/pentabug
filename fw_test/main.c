@@ -33,12 +33,10 @@ int main(void) {
 	PORTC |= (1 << 4) | (1 << 5);
 	PORTD |= (1 << 5) | (1 << 6) | (1 << 7);
 
-	/*PORTD |= 1 << 2;*/
+	// we need to get real fast (8MHz) to handle 38kHz IR frequency ...
 
-	// we need to get real fast ...
-
-	CLKPR = 0b10000000 ; 
-	CLKPR = 0b00000000 ; //4MHz Clock 
+	CLKPR = 0b10000000;
+	CLKPR = 0b00000000;
 
 	// initialize timer
 
