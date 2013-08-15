@@ -10,6 +10,11 @@
 #define follow(from_port, from_pin, to_port, to_pin)	{ if(from_port & (1 << from_pin)) to_port &= ~(1 << to_pin); else to_port |= 1 << to_pin; }
 #define not_follow(from_port, from_pin, to_port, to_pin)	{ if(from_port & (1 << from_pin)) to_port |= 1 << to_pin; else to_port &= ~(1 << to_pin); }
 
+ISR(TIMER0_COMPA_vect) {
+	TCNT0 = 0;
+	PORTD ^= 1 << 2;
+}
+
 int main(void) {
 	uint8_t vib_delay = 0;
 
@@ -26,17 +31,33 @@ int main(void) {
 
 	PORTB |= (1 << 0) | (1 << 1) | (1 << 2);
 	PORTC |= (1 << 4) | (1 << 5);
-	PORTD |= (1 << 7);
+	PORTD |= (1 << 5) | (1 << 6) | (1 << 7);
 
-	PORTD |= 1 << 2;
+	/*PORTD |= 1 << 2;*/
+
+	// we need to get real fast ...
+
+	CLKPR = 0b10000000 ; 
+	CLKPR = 0b00000000 ; //4MHz Clock 
+
+	// initialize timer
+
+	TIMSK0 |= (1 << OCIE0A);
+	// this should be a 105 or something ... measure multiple bugs with a real measurement device
+	OCR0A = 85;
+
+	// no prescaler
+
+	sei();
 
 	// looping
 
 	for ever {
-		// LEDs
+		// LED by button
 
-		not_follow(PINB, 0, PORTD, 4);
-		/*not_follow(PINB, 1, PORTC, 2);*/
+		not_follow(PIND, 5, PORTD, 4);
+
+		// LED by IR
 
 		not_follow(PIND, 3, PORTC, 2);
 
@@ -64,6 +85,15 @@ int main(void) {
 			PORTC &= ~(1 << 0);
 		}
 
+		// send IR
+
+		if(!(PIND & (1 << 6))) {
+			TCCR0B = (1 << CS00);
+		} else {
+			TCCR0B = 0;
+			PORTD &= ~(1 << 2);
+		}
+
 		// wait
 
 		_delay_ms(1);
@@ -72,5 +102,3 @@ int main(void) {
 	/* never  return 0; */
 	return 0;
 }
-
-
