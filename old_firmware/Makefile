@@ -11,16 +11,16 @@ FUSES = lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0x01:m
 SRC=$(wildcard lib/*.c apps/*.c *.c) 
 OBJECTS= $(SRC:.c=.o) 
 LSTFILES= $(SRC:.c=.lst)
-HEADERS=$(wildcard */*/*.h */*.h *.h)
+HEADERS=$(wildcard lib/*.h *.h)
 
 #  Compiler Options
-GCFLAGS = -ffreestanding -std=gnu99 -mmcu=$(MCU) $(OPTIMIZATION) -Wl,-gc-sections -nostdlib -I. -Iinclude
+GCFLAGS = -ffreestanding -std=gnu99 -mmcu=$(MCU) $(OPTIMIZATION) -Wl,-gc-sections -nostdlib -I. 
 # Warnings
 GCFLAGS += -Wstrict-prototypes -Wundef -Wall -Wextra -Wunreachable-code  
 # Optimizazions
 GCFLAGS += -fsingle-precision-constant -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -fno-builtin -ffunction-sections -fno-common -fdata-sections 
 # Debug stuff
-GCFLAGS += -Wa,-adhlns=$(<:.c=.lst),-gstabs -g
+GCFLAGS += -Wa,-adhlns=$(<:.c=.lst),-gstabs -g 
 
 GCFLAGS += -DF_CPU=$(F_CPU) -DQUARZ=$(QUARZ)
 
