@@ -11,7 +11,6 @@
 #define not_follow(from_port, from_pin, to_port, to_pin)	{ if(from_port & (1 << from_pin)) to_port |= 1 << to_pin; else to_port &= ~(1 << to_pin); }
 
 ISR(TIMER0_COMPA_vect) {
-	TCNT0 = 0;
 	PORTD ^= 1 << 2;
 }
 
@@ -41,8 +40,7 @@ int main(void) {
 	// initialize timer
 
 	TIMSK0 |= (1 << OCIE0A);
-	// this should be a 105 or something ... measure multiple bugs with a real measurement device
-	OCR0A = 85;
+	OCR0A = 105;
 
 	// no prescaler
 
@@ -86,6 +84,7 @@ int main(void) {
 		// send IR
 
 		if(!(PIND & (1 << 6))) {
+			TCCR0A = (1 << WGM01);
 			TCCR0B = (1 << CS00);
 		} else {
 			TCCR0B = 0;
