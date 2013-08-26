@@ -3,12 +3,34 @@
 
 #include <stdint.h>
 
-#define BUTTON_L	0
-#define BUTTON_R	1
+#define LEFT		0
+#define RIGHT		1
 
+
+// INITIALIZATION
+
+// initializes the hardware (timers, ...)
 void init_hw(void);
+
+// resets hardware to a state which is convenient for starting applications
 void reset_hw(void);
 
-int8_t button_state(void);
+
+// BUTTONS
+
+// returns 1 if the button is pressed, 0 otherwise
+uint8_t button_state(uint8_t btn);
+
+
+// LEDS
+
+void led_on(uint8_t led);
+void led_off(uint8_t led);
+void led_inv(uint8_t led);
+
+// MOTOR
+
+void motor_on(uint8_t led);
+void motor_off(uint8_t led);
 
 #endif /* HAL_H */

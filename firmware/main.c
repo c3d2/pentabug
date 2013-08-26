@@ -5,6 +5,11 @@
 #include <pentabug/hal.h>
 #include <pentabug/app.h>
 #include <pentabug/lifecycle.h>
+#include <pentabug/music.h>
+#include <pentabug/helper.h>
+
+static uint16_t up_mldy[] = { NOTE_C, NOTE_D, NOTE_F, NOTE_PAUSE };
+static uint16_t down_mldy[] = { NOTE_F, NOTE_E, NOTE_C, NOTE_PAUSE };
 
 static inline void run_app(struct app_t* app) {
 	app_should_stop = 0;
@@ -43,13 +48,19 @@ int main(void) {
 
 		run_app(&apps[app_index]);
 
+		reset_hw();
+
 		if(app_direction > 0) {
+			play_melody(up_mldy, ARRAY_SIZE(up_mldy), 4, 60);
+
 			app_index++;
 
 			if(apps[app_index].run == NULL) {
 				app_index = 0;
 			}
 		} else {
+			play_melody(down_mldy, ARRAY_SIZE(down_mldy), 4, 60);
+
 			if(app_index == 0) {
 				app_index = MAX_APPS - 1;
 				while(apps[app_index].run == NULL) --app_index;

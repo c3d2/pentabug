@@ -13,8 +13,11 @@
 
 typedef void (*timer_fun)(void);
 
-void start_timer(uint8_t scaler, uint16_t compare, timer_fun fun);
+// start a timer and call fun() after prescaler*compare ticks
+// use the defines above for prescaler
+void start_timer(uint8_t prescaler, uint16_t compare, timer_fun fun);
 
+// stops the timer
 void stop_timer(void);
 
 #endif /* TIMER_H */
