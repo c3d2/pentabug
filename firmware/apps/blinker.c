@@ -8,24 +8,17 @@
 #include <pentabug/lifecycle.h>
 
 static void init(void) {
-	PIND |= 1 << 4;
-	DDRD |= 1 << 4;
-
-	_delay_ms(2000);
+	_delay_ms(1000);
 }
 
 static void blinker(void) {
-	size_t i;
+	PORTD |= 1 << 4;
+	_delay_ms(800);
+	test_stop_app();
 
-	for(i = 0; i < 5; ++i) {
-		PORTD |= 1 << 4;
-		_delay_ms(800);
-
-		PORTD &= ~(1 << 4);
-		_delay_ms(200);
-	}
-
-	stop_app();
+	PORTD &= ~(1 << 4);
+	_delay_ms(200);
+	test_stop_app();
 }
 
 REGISTER(blinker, init, NULL);

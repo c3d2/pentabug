@@ -2,28 +2,16 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include <avr/io.h>
-
+#include <pentabug/hal.h>
 #include <pentabug/app.h>
 #include <pentabug/lifecycle.h>
 
-static inline void reset_hw(void) {
-	DDRB = 0;
-	DDRC = 0;
-	DDRD = 0;
-
-	PORTB = 0;
-	PORTC = 0;
-	PORTD = 0;
-
-	PINB = 0;
-	PINC = 0;
-	PIND = 0;
-}
-
 static inline void run_app(struct app_t* app) {
-	should_stop = 0;
+	app_should_stop = 0;
+
 	if(setjmp(app_jmp_buf) == 0) {
+		// initial call
+
 		if(app->init) {
 			app->init();
 		}
@@ -34,7 +22,8 @@ static inline void run_app(struct app_t* app) {
 		}
 	}
 
-	// this is the exit
+	// returned after longjmp()
+
 	if(app->cleanup) {
 		app->cleanup();
 	}
@@ -44,12 +33,8 @@ static inline void run_app(struct app_t* app) {
 
 int main(void) {
 	uint8_t app_index = 0;
-	int8_t direction = 1;
 
-	// we need to get real fast (8MHz) to handle 38kHz IR frequency ...
-
-	CLKPR = 0b10000000;
-	CLKPR = 0b00000000;
+	init_hw();
 
 	// cycle through apps
 
@@ -58,7 +43,7 @@ int main(void) {
 
 		run_app(&apps[app_index]);
 
-		if(direction > 0) {
+		if(app_direction > 0) {
 			app_index++;
 
 			if(apps[app_index].run == NULL) {
