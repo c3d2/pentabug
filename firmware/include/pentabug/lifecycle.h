@@ -5,13 +5,17 @@
 #include <stdint.h>
 
 extern jmp_buf app_jmp_buf;
-extern uint8_t should_stop;
+extern volatile uint8_t should_stop;
 
+// this code does not work ... i have no idea why
+// putting the exact same statements at the calling line works ...
+/*
 // initialize lifecycle, stopped if return != 0
-inline static int enter_app(void) {
+static int enter_app(void) {
 	should_stop = 0;
 	return setjmp(app_jmp_buf);
 }
+*/
 
 // stop the running app
 inline static void stop_app(void) {

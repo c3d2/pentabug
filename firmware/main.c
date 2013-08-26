@@ -22,23 +22,24 @@ static inline void reset_hw(void) {
 }
 
 static inline void run_app(struct app_t* app) {
-	if(enter_app()) {
-		// this is the exit
-		if(app->cleanup) {
-			app->cleanup();
+	should_stop = 0;
+	if(setjmp(app_jmp_buf) == 0) {
+		if(app->init) {
+			app->init();
 		}
 
-		return;
+		for(;;) {
+			app->run();
+			test_stop_app();
+		}
 	}
 
-	if(app->init) {
-		app->init();
+	// this is the exit
+	if(app->cleanup) {
+		app->cleanup();
 	}
 
-	for(;;) {
-		app->run();
-		test_stop_app();
-	}
+	return;
 }
 
 int main(void) {
@@ -56,8 +57,6 @@ int main(void) {
 		reset_hw();
 
 		run_app(&apps[app_index]);
-
-		for(;;);
 
 		if(direction > 0) {
 			app_index++;
