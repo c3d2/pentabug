@@ -47,4 +47,5 @@ call the REGISTER() macro to define the entry point to your application.
 * _delay_ms() function will be replaced (it waits too long and the application
   cannot be quit while waiting)
 * add more functions to the hardware abstraction layer
+* a mechanism to select which applications to include in the firmware
 

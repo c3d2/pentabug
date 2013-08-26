@@ -9,7 +9,7 @@
 
 #include <pentabug/timer.h>
 
-static uint8_t ir_active = 1;
+static uint8_t ir_active = 0;
 static int int_skip = 0;
 
 static int button_count[2];
@@ -83,5 +83,29 @@ void reset_hw(void) {
 	// 4: LED
 	PORTD = (1 << 4);
 	DDRD = (1 << 2) | (1 << 4);
+}
+
+void led_on(uint8_t led) {
+	if(led == RIGHT) {
+		PORTC &= ~(1 << 2);
+	} else {
+		PORTD &= ~(1 << 4);
+	}
+}
+
+void led_off(uint8_t led) {
+	if(led == RIGHT) {
+		PORTC |= 1 << 2;
+	} else {
+		PORTD |= 1 << 4;
+	}
+}
+
+void led_inv(uint8_t led) {
+	if(led == RIGHT) {
+		PORTC ^= 1 << 2;
+	} else {
+		PORTD ^= 1 << 4;
+	}
 }
 

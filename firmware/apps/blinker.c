@@ -6,19 +6,16 @@
 
 #include <pentabug/app.h>
 #include <pentabug/lifecycle.h>
+#include <pentabug/hal.h>
 
 static void init(void) {
-	_delay_ms(1000);
+	led_on(RIGHT);
 }
 
 static void blinker(void) {
-	PORTD |= 1 << 4;
-	_delay_ms(800);
-	test_stop_app();
-
-	PORTD &= ~(1 << 4);
-	_delay_ms(200);
-	test_stop_app();
+	led_inv(RIGHT);
+	led_inv(LEFT);
+	_delay_ms(500);
 }
 
 REGISTER(blinker, init, NULL);
