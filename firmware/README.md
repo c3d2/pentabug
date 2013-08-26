@@ -39,3 +39,12 @@ be started if the `test_app_stop()` function is called in your application
 regularly. You most propably won't have to worry about this as most functions
 in the hardware abstraction layer are already doing this for you.
 
+To write your own application simply create a .c file in the apps folder and
+call the REGISTER() macro to define the entry point to your application.
+
+## Bugs and TODOs
+
+* _delay_ms() function will be replaced (it waits too long and the application
+  cannot be quit while waiting)
+* add more functions to the hardware abstraction layer
+
