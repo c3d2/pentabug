@@ -1,15 +1,19 @@
 # Test firmware
 
-Use this firmware to test all hardware components of a Pentabug. Add a
-`pentatonic` extension and press all buttons. The buttons test the following
-components (from left to right):
+Use this firmware to test all hardware components of a Pentabug. It can test
+nearly all hardware features of the device.
 
-* flash LED 1
-* send IR signal; receiving this signal flashes LED 2
-* plays (lower) tone using BUZGND
-* plays (higher) tone using BUZZR
-* starts the vibration motor
+The following things exist in all modes:
 
-This test should catch most obvious errors, but not all possible errors. Some
-pinouts are not tested (e.g. JP3 and some pins of JP4 and JP5).
+* right LED is on when IR signals are received (use a remote or first mode to
+  test)
+* pressing the right button activates next mode
+
+Here is a description what happens on a right button press in which mode:
+
+* activate left LED and send IR signal
+* activates motor
+* plays sound using BUZZGND
+* activates all pins on the extension board for a short time (add a penetatonic
+  to get feedback on all but one of those pins)
 
