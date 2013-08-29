@@ -13,7 +13,8 @@ static volatile uint8_t ir_active = 0;
 static int int_skip = 0;
 static volatile int16_t wait_time = 0;
 
-static int button_count[2];
+static uint16_t button_count[2];
+static uint8_t button_pressed[2];
 
 // major interrupt for button handling, every 5ms
 inline static void major_interrupt(void) {
@@ -21,6 +22,10 @@ inline static void major_interrupt(void) {
 
 	for(i = 0; i < 2; ++i) {
 		if(PINB & (1 << i)) {
+			if(button_count[i] && button_count[i] > 10 && button_count[i] < 200) {
+				button_pressed[i] = 1;
+			}
+
 			button_count[i] = 0;
 		} else {
 			++button_count[i];
@@ -29,7 +34,6 @@ inline static void major_interrupt(void) {
 		// 1s pressed
 		if(button_count[i] == 200) {
 			next_app(i ? 1 : -1);
-			PORTC ^= 1 << 2;
 		}
 	}
 }
@@ -87,6 +91,21 @@ void reset_hw(void) {
 	// 4: LED
 	PORTD = (1 << 4);
 	DDRD = (1 << 2) | (1 << 4);
+
+	// do not carry button state
+
+	button_pressed[0] = 0;
+	button_pressed[1] = 0;
+}
+
+uint8_t button_clicked(uint8_t btn) {
+	uint8_t clicked = button_pressed[btn];
+	button_pressed[btn] = 0;
+	return clicked;
+}
+
+void button_reset(uint8_t btn) {
+	button_pressed[btn] = 0;
 }
 
 void led_on(uint8_t led) {
@@ -119,6 +138,10 @@ void motor_on(void) {
 
 void motor_off(void) {
 	PORTB &= ~(1 << 6);
+}
+
+void motor_inv(void) {
+	PORTB ^= 1 << 6;
 }
 
 void wait_ms(uint16_t ms) {

@@ -1,6 +1,8 @@
 #ifndef APP_H
 #define APP_H 
 
+#include <stdlib.h>
+
 #define MAX_APPS		8
 
 #define REG(run)			REGISTER(run, NULL, NULL);
