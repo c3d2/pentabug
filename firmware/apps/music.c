@@ -1,36 +1,23 @@
 #include <stdlib.h>
 
-#include <pentabug/app.h>
 #include <pentabug/music.h>
 #include <pentabug/hal.h>
+#include <pentabug/helper.h>
+#include <pentabug/app.h>
 
-#define NOTE_BREAK		0xfffe
-#define NOTE_SHORT		0xfffd
+#define NOTE_BREAK		MLDY_LENGTH, 16, NOTE_PAUSE
 
 static uint16_t notes[] = {
-	NOTE_C, NOTE_D, NOTE_E, NOTE_F, NOTE_SHORT, NOTE_G, NOTE_G, NOTE_BREAK,
-	NOTE_A, NOTE_A, NOTE_A, NOTE_A, NOTE_SHORT, NOTE_G, NOTE_BREAK,
-	NOTE_A, NOTE_A, NOTE_A, NOTE_A, NOTE_SHORT, NOTE_G, NOTE_BREAK,
-	NOTE_F, NOTE_F, NOTE_F, NOTE_F, NOTE_SHORT, NOTE_E, NOTE_E, NOTE_BREAK,
-	NOTE_D, NOTE_D, NOTE_D, NOTE_D, NOTE_SHORT, NOTE_C, NOTE_BREAK,
+	NOTE_C, NOTE_D, NOTE_E, NOTE_F, MLDY_LENGTH, 2, NOTE_G, MLDY_LENGTH, 2, NOTE_G, NOTE_BREAK,
+	NOTE_A, NOTE_A, NOTE_A, NOTE_A, MLDY_LENGTH, 2, NOTE_G, NOTE_BREAK,
+	NOTE_A, NOTE_A, NOTE_A, NOTE_A, MLDY_LENGTH, 2, NOTE_G, NOTE_BREAK,
+	NOTE_F, NOTE_F, NOTE_F, NOTE_F, MLDY_LENGTH, 2, NOTE_E, MLDY_LENGTH, 2, NOTE_E, NOTE_BREAK,
+	NOTE_D, NOTE_D, NOTE_D, NOTE_D, MLDY_LENGTH, 1, NOTE_C, NOTE_BREAK,
 	NOTE_PAUSE, NOTE_PAUSE, NOTE_PAUSE,
 };
 
-static void run(void) {
-	size_t i;
-	for(i = 0; i < sizeof(notes) / sizeof(*notes); ++i) {
-		if(notes[i] == NOTE_BREAK) {
-			wait_ms(180);
-		} else if(notes[i] == NOTE_SHORT) {
-			wait_ms(30);
-		} else {
-			set_note(notes[i], 4);
-			wait_ms(500);
-
-			stop_note();
-			wait_ms(10);
-		}
-	}
+static void music(void) {
+	play_melody(notes, ARRAY_SIZE(notes), 4, 500);
 }
 
-REG(run);
+REG(music);

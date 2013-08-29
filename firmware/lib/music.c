@@ -4,6 +4,7 @@
 
 #include <pentabug/timer.h>
 #include <pentabug/lifecycle.h>
+#include <pentabug/hal.h>
 
 static void tune(void) {
 	PORTB ^= 1 << 7;
