@@ -1,8 +1,6 @@
 #include <pentabug/music.h>
 
 #include <avr/io.h>
-#define __DELAY_BACKWARD_COMPATIBLE__
-#include <util/delay.h>
 
 #include <pentabug/timer.h>
 #include <pentabug/lifecycle.h>

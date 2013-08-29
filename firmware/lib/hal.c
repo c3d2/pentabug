@@ -2,8 +2,6 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#define __DELAY_BACKWARD_COMPATIBLE__
-#include <util/delay.h>
 
 #include <pentabug/lifecycle.h>
 
@@ -38,6 +36,7 @@ inline static void major_interrupt(void) {
 	}
 }
 
+// WARNING: this interrupt is already way too big. extend only in case of emergency!
 ISR(TIMER0_COMPA_vect) {
 	if(ir_active) {
 		PORTD ^= 1 << 2;
@@ -99,6 +98,10 @@ void reset_hw(void) {
 	button_pressed[1] = 0;
 }
 
+uint8_t button_state(uint8_t btn) {
+	return !(PINB & (1 << btn));
+}
+
 uint8_t button_clicked(uint8_t btn) {
 	uint8_t clicked = button_pressed[btn];
 	button_pressed[btn] = 0;
@@ -107,6 +110,14 @@ uint8_t button_clicked(uint8_t btn) {
 
 void button_reset(uint8_t btn) {
 	button_pressed[btn] = 0;
+}
+
+void led_set(uint8_t led, uint8_t state) {
+	if(state) {
+		led_on(led);
+	} else {
+		led_off(led);
+	}
 }
 
 void led_on(uint8_t led) {
@@ -130,6 +141,14 @@ void led_inv(uint8_t led) {
 		PORTC ^= 1 << 2;
 	} else {
 		PORTD ^= 1 << 4;
+	}
+}
+
+void motor_set(uint8_t state) {
+	if(state) {
+		motor_on();
+	} else {
+		motor_off();
 	}
 }
 

@@ -6,6 +6,9 @@
 #define LEFT		0
 #define RIGHT		1
 
+#define OFF		0
+#define ON		1
+
 // INITIALIZATION
 
 // initializes the hardware (timers, ...)
@@ -18,6 +21,7 @@ void reset_hw(void);
 // BUTTONS
 
 // returns 1 if the button is currently pressed, 0 otherwise
+// WARNING: you should really use button_clicked() instead
 uint8_t button_state(uint8_t btn);
 
 // returns 1 if the button was clicked since the last call to this function or button_reset()
@@ -26,12 +30,14 @@ void button_reset(uint8_t btn);
 
 // LEDS
 
+void led_set(uint8_t led, uint8_t state);
 void led_on(uint8_t led);
 void led_off(uint8_t led);
 void led_inv(uint8_t led);
 
 // MOTOR
 
+void motor_set(uint8_t state);
 void motor_on(void);
 void motor_off(void);
 void motor_inv(void);
