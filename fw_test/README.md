@@ -7,7 +7,7 @@ The following things exist in all modes:
 
 * right LED is on when IR signals are received (use a remote or first mode to
   test)
-* pressing the right button activates next mode
+* pressing the right button activates next mode, plays a sound using BUZZR
 
 Here is a description what happens on a right button press in which mode:
 

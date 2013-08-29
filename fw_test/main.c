@@ -49,7 +49,7 @@ static void reset_hw(void) {
 	// 2: SHIELD
 	// 7: BUZZR
 	PORTB = (1 << 0) | (1 << 1) | (1 << 2) | (1 << 7);
-	DDRB = (1 << 2) | (1 << 7);
+	DDRB = (1 << 2) | (1 << 6) | (1 << 7);
 
 	// 0: BUZGND
 	// 2: LED2
@@ -71,6 +71,7 @@ static void reset_hw(void) {
 
 int main(void) {
 	uint8_t vib_delay = 0;
+	uint16_t count = 0;
 
 	// we need to get real fast (8MHz) to handle 38kHz IR frequency ...
 
@@ -136,9 +137,14 @@ int main(void) {
 
 		switch(mode) {
 			case PHOTONS:
-				ir_active = button;
-				follow(button, PORTD, 4);
-				break;
+				{
+					ir_active = button;
+					if(count % 0x2000 == 0) {
+						PORTD ^= 1 << 4;
+					}
+					++count;
+					break;
+				}
 			case MOTOR:
 				not_follow(button, PORTB, 6);
 				break;
