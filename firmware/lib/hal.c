@@ -77,9 +77,10 @@ void reset_hw(void) {
 
 	// 0: S1
 	// 1: S2
+	// 6: MOTOR
 	// 7: BUZZR
 	PORTB = (1 << 0) | (1 << 1) | (1 << 7);
-	DDRB = (1 << 7);
+	DDRB = (1 << 6) | (1 << 7);
 
 	// 0: BUZGND
 	// 2: LED2
