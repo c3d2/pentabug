@@ -9,8 +9,9 @@
 
 #include <pentabug/timer.h>
 
-static uint8_t ir_active = 0;
+static volatile uint8_t ir_active = 0;
 static int int_skip = 0;
+static volatile int16_t wait_time = 0;
 
 static int button_count[2];
 
@@ -25,7 +26,8 @@ inline static void major_interrupt(void) {
 			++button_count[i];
 		}
 
-		if(button_count[i] == 400) {
+		// 1s pressed
+		if(button_count[i] == 200) {
 			next_app(i ? 1 : -1);
 			PORTC ^= 1 << 2;
 		}
@@ -39,10 +41,12 @@ ISR(TIMER0_COMPA_vect) {
 
 	++int_skip;
 
-	if(int_skip >= 38 * 5) {
+	if(int_skip >= 64 * 5) {
 		int_skip = 0;
 		major_interrupt();
 	}
+
+	--wait_time;
 }
 
 void init_hw(void) {
@@ -106,6 +110,34 @@ void led_inv(uint8_t led) {
 		PORTC ^= 1 << 2;
 	} else {
 		PORTD ^= 1 << 4;
+	}
+}
+
+void motor_on(void) {
+	PORTB |= 1 << 6;
+}
+
+void motor_off(void) {
+	PORTB &= ~(1 << 6);
+}
+
+void wait_ms(uint16_t ms) {
+	// TODO: this function seems to be ~10% too fast
+	int32_t cycles = ms * (int32_t)64;
+
+	while(cycles >= INT16_MAX) {
+		cycles -= INT16_MAX;
+		wait_time = INT16_MAX;
+
+		while(wait_time > 0) {
+			test_stop_app();
+		}
+	}
+
+	wait_time = cycles;
+
+	while(wait_time > 0) {
+		test_stop_app();
 	}
 }
 

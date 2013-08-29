@@ -24,16 +24,16 @@ static void run(void) {
 	size_t i;
 	for(i = 0; i < sizeof(notes) / sizeof(*notes); ++i) {
 		if(notes[i] == NOTE_BREAK) {
-			_delay_ms(120);
+			wait_ms(180);
 		} else if(notes[i] == NOTE_SHORT) {
-			_delay_ms(20);
+			wait_ms(30);
 		} else {
 			set_note(notes[i], 4);
-			_delay_ms(180);
+			wait_ms(500);
 			test_stop_app();
 
 			stop_note();
-			_delay_ms(10);
+			wait_ms(10);
 			test_stop_app();
 		}
 	}

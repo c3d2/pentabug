@@ -15,7 +15,7 @@ static void init(void) {
 static void blinker(void) {
 	led_inv(RIGHT);
 	led_inv(LEFT);
-	_delay_ms(500);
+	wait_ms(500);
 }
 
 REGISTER(blinker, init, NULL);

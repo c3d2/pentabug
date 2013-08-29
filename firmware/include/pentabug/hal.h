@@ -30,7 +30,11 @@ void led_inv(uint8_t led);
 
 // MOTOR
 
-void motor_on(uint8_t led);
-void motor_off(uint8_t led);
+void motor_on(void);
+void motor_off(void);
+
+// WAITING
+
+void wait_ms(uint16_t ms);
 
 #endif /* HAL_H */
