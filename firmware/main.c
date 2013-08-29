@@ -8,8 +8,8 @@
 #include <pentabug/music.h>
 #include <pentabug/helper.h>
 
-static uint16_t up_mldy[] = { NOTE_C, NOTE_D, NOTE_F, NOTE_PAUSE };
-static uint16_t down_mldy[] = { NOTE_F, NOTE_E, NOTE_C, NOTE_PAUSE };
+static uint16_t up_mldy[] = { NOTE_C, NOTE_D, MLDY_LENGTH, 2, NOTE_F, NOTE_PAUSE };
+static uint16_t down_mldy[] = { NOTE_F, NOTE_E, MLDY_LENGTH, 2, NOTE_C, NOTE_PAUSE };
 
 static inline void run_app(struct app_t* app) {
 	app_should_stop = 0;
@@ -51,7 +51,7 @@ int main(void) {
 		reset_hw();
 
 		if(app_direction > 0) {
-			play_melody(up_mldy, ARRAY_SIZE(up_mldy), 4, 60);
+			play_melody(up_mldy, ARRAY_SIZE(up_mldy), 4, 100);
 
 			app_index++;
 
@@ -59,7 +59,7 @@ int main(void) {
 				app_index = 0;
 			}
 		} else {
-			play_melody(down_mldy, ARRAY_SIZE(down_mldy), 4, 60);
+			play_melody(down_mldy, ARRAY_SIZE(down_mldy), 4, 100);
 
 			if(app_index == 0) {
 				app_index = MAX_APPS - 1;

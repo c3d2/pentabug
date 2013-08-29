@@ -19,6 +19,7 @@
 #define NOTE_B		16198 // note B 
 
 #define MLDY_PAUSE	0xfffe	// user defined pause for melody, the next value is the amount of ms to wait
+#define MLDY_LENGTH	0xfffd	// user defined note length for melody, the next value is the "shortness" of the note (1/n)
 
 // plays the note (see defines above) at the given octave until another note is played or the note is stopped
 void set_note(uint16_t note, uint8_t octave);

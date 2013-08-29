@@ -23,6 +23,7 @@ void stop_note(void) {
 
 void play_melody(uint16_t notes[], size_t len, uint8_t octave, int speed) {
 	int pause = speed / 20;
+	uint8_t length = 4;
 
 	size_t i;
 
@@ -30,15 +31,20 @@ void play_melody(uint16_t notes[], size_t len, uint8_t octave, int speed) {
 	for(i = 0; i < len; ++i) {
 		if(notes[i] == MLDY_PAUSE) {
 			++i;
-			_delay_ms(notes[i]);
+			wait_ms(notes[i] * 4 / length);
+		} else if(notes[i] == MLDY_LENGTH) {
+			++i;
+			length = notes[i];
 		} else {
 			set_note(notes[i], octave);
 			test_stop_app();
-			_delay_ms(speed);
+			wait_ms(speed * 4 / length);
 
 			stop_note();
 			test_stop_app();
-			_delay_ms(pause);
+			wait_ms(pause);
+
+			length = 4;
 		}
 	}
 }
