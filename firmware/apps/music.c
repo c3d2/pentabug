@@ -1,12 +1,8 @@
 #include <stdlib.h>
 
-#include <avr/io.h>
-#define __DELAY_BACKWARD_COMPATIBLE__
-#include <util/delay.h>
-
 #include <pentabug/app.h>
-#include <pentabug/lifecycle.h>
 #include <pentabug/music.h>
+#include <pentabug/hal.h>
 
 #define NOTE_BREAK		0xfffe
 #define NOTE_SHORT		0xfffd
@@ -30,11 +26,9 @@ static void run(void) {
 		} else {
 			set_note(notes[i], 4);
 			wait_ms(500);
-			test_stop_app();
 
 			stop_note();
 			wait_ms(10);
-			test_stop_app();
 		}
 	}
 }
