@@ -1,21 +1,30 @@
 #include <pentabug/app.h>
 #include <pentabug/pentatonic.h>
+#include <pentabug/hal.h>
 
 static void init(void) {
-	pentatonic_direction(ALL_OUT);
+	pentatonic_direction(ALL_IN);
 }
 
 static void run(void) {
-	pentatonic_led_on(0);
+	pentatonic_direction(ALL_IN);
 
-	for(uint8_t i = 0; i < 5; ++i) {
-		wait_ms(500);
+	for(;;) {
+		uint8_t buttons = pentatonic_buttons();
 
-		pentatonic_led_on((i + 1) % 5);
+		if(buttons) {
+			pentatonic_direction(ALL_OUT);
 
-		wait_ms(200);
+			pentatonic_all_led_set(buttons);
 
-		pentatonic_led_off(i);
+			led_inv(RIGHT);
+
+			wait_ms(1000);
+
+			break;
+		}
+
+		wait_ms(1);
 	}
 }
 
