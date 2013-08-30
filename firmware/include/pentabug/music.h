@@ -25,7 +25,7 @@
 void set_note(uint16_t note, uint8_t octave);
 
 // plays a melody consisting of the array of tunes of length len with speed ms for each tune
-void play_melody(uint16_t melody[], size_t len, uint8_t octave, int speed);
+void play_melody(const uint16_t melody[], size_t len, uint8_t octave, int speed);
 
 // stop the currently playing note
 void stop_note(void);

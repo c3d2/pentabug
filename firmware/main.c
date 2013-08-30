@@ -2,14 +2,16 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include <avr/pgmspace.h>
+
 #include <pentabug/hal.h>
 #include <pentabug/app.h>
 #include <pentabug/lifecycle.h>
 #include <pentabug/music.h>
 #include <pentabug/helper.h>
 
-static uint16_t up_mldy[] = { NOTE_C, NOTE_D, MLDY_LENGTH, 2, NOTE_F, NOTE_PAUSE };
-static uint16_t down_mldy[] = { NOTE_F, NOTE_E, MLDY_LENGTH, 2, NOTE_C, NOTE_PAUSE };
+static const uint16_t up_mldy[] PROGMEM = { NOTE_C, NOTE_D, MLDY_LENGTH, 2, NOTE_F, NOTE_PAUSE };
+static const uint16_t down_mldy[] PROGMEM = { NOTE_F, NOTE_E, MLDY_LENGTH, 2, NOTE_C, NOTE_PAUSE };
 
 static inline void run_app(struct app_t* app) {
 	app_should_stop = 0;
