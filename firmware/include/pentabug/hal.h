@@ -17,7 +17,6 @@ void init_hw(void);
 // resets hardware to a state which is convenient for starting applications
 void reset_hw(void);
 
-
 // BUTTONS
 
 // returns 1 if the button is currently pressed, 0 otherwise
@@ -44,9 +43,12 @@ void motor_inv(void);
 
 // BUZZER
 
+// turns buzzer into one of the sound wave creating states
 void buzzer_up(void);
 void buzzer_down(void);
+// inverts both buzzer pins, creates a sound wave if buzzer was previously up or down (see above)
 void buzzer_inv(void);
+// turns buzzer off, buzzer_inv() won't create a sound wave after this call
 void buzzer_off(void);
 
 // WAITING
