@@ -51,6 +51,17 @@ void buzzer_inv(void);
 // turns buzzer off, buzzer_inv() won't create a sound wave after this call
 void buzzer_off(void);
 
+// IR
+
+// all this functions control whether a 38kHz modulated IR signal is sent
+void ir_on(void);
+void ir_off(void);
+void ir_inv(void);
+void ir_set(uint8_t state);
+
+// returns 1 if a 38kHz modulated IR signal is received
+uint8_t ir_recv(void);
+
 // WAITING
 
 // waits the given amount of ms

@@ -99,7 +99,8 @@ void reset_hw(void) {
 	PORTC = (1 << 2) | (1 << 3);
 	DDRC = (1 << 0) | (1 << 2) | (1 << 3);
 
-	// 2: IR
+	// 2: IRSEND
+	// 3: IRRECV
 	// 4: LED
 	PORTD = (1 << 4);
 	DDRD = (1 << 2) | (1 << 4);
@@ -108,6 +109,10 @@ void reset_hw(void) {
 
 	button_pressed[0] = 0;
 	button_pressed[1] = 0;
+
+	// turn ir off
+
+	ir_off();
 }
 
 uint8_t button_state(uint8_t btn) {
@@ -218,5 +223,34 @@ void wait_ms(uint16_t ms) {
 	while(wait_time > 0) {
 		test_stop_app();
 	}
+}
+
+void ir_on(void) {
+	ir_active = 1;
+}
+
+void ir_off(void) {
+	ir_active = 0;
+	PORTD &= ~(1 << 2);
+}
+
+void ir_inv(void) {
+	if(ir_active) {
+		ir_off();
+	} else {
+		ir_on();
+	}
+}
+
+void ir_set(uint8_t state) {
+	if(state) {
+		ir_on();
+	} else {
+		ir_off();
+	}
+}
+
+uint8_t ir_recv(void) {
+	return !(PIND & (1 << 3));
 }
 
