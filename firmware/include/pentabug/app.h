@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-#define MAX_APPS		8
+#define MAX_APPS		16
 
 #define REG(run)			REGISTER(run, NULL, NULL);
 #define REGISTER(_run, _init, _cleanup)	static void __init(void) __attribute__ ((naked, used, section (".init8")));	\
