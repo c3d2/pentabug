@@ -30,7 +30,6 @@ void play_melody(uint16_t notes[], size_t len, uint8_t octave, int speed) {
 
 	size_t i;
 
-	// TODO: get away from the int to double conversion to free half of our flash ...
 	for(i = 0; i < len; ++i) {
 		if(notes[i] == MLDY_PAUSE) {
 			++i;
