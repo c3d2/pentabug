@@ -42,6 +42,13 @@ void motor_on(void);
 void motor_off(void);
 void motor_inv(void);
 
+// BUZZER
+
+void buzzer_up(void);
+void buzzer_down(void);
+void buzzer_inv(void);
+void buzzer_off(void);
+
 // WAITING
 
 // waits the given amount of ms

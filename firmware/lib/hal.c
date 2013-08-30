@@ -19,17 +19,21 @@ inline static void major_interrupt(void) {
 	uint8_t i = 0;
 
 	for(i = 0; i < 2; ++i) {
+		// button pressed?
 		if(PINB & (1 << i)) {
-			if(button_count[i] && button_count[i] > 10 && button_count[i] < 200) {
+			// pressed for more than 50ms is a click
+			if(button_count[i] > 10 && button_count[i] < 200) {
 				button_pressed[i] = 1;
 			}
 
+			// not pressed, reset
 			button_count[i] = 0;
 		} else {
+			//.count time pressed
 			++button_count[i];
 		}
 
-		// 1s pressed
+		// 1s pressed, request next app
 		if(button_count[i] == 200) {
 			next_app(i ? 1 : -1);
 		}
@@ -38,9 +42,13 @@ inline static void major_interrupt(void) {
 
 // WARNING: this interrupt is already way too big. extend only in case of emergency!
 ISR(TIMER0_COMPA_vect) {
+	// generate 38kHz signal
+
 	if(ir_active) {
 		PORTD ^= 1 << 2;
 	}
+
+	// call button handling less often
 
 	++int_skip;
 
@@ -48,6 +56,8 @@ ISR(TIMER0_COMPA_vect) {
 		int_skip = 0;
 		major_interrupt();
 	}
+
+	// tell wait_ms() that 1/38 ms has passed
 
 	--wait_time;
 }
@@ -67,6 +77,8 @@ void init_hw(void) {
 
 	TCCR0A = (1 << WGM01);
 	TCCR0B = (1 << CS00);
+
+	// activate interrupts
 
 	sei();
 }
@@ -164,9 +176,31 @@ void motor_inv(void) {
 	PORTB ^= 1 << 6;
 }
 
+void buzzer_up(void) {
+	PORTB |= 1 << 7;
+	PORTC &= ~(1 << 0);
+}
+
+void buzzer_down(void) {
+	PORTB &= ~(1 << 7);
+	PORTC |= 1 << 0;
+}
+
+void buzzer_inv(void) {
+	PORTB ^= 1 << 7;
+	PORTC ^= 1 << 0;
+}
+
+void buzzer_off(void) {
+	PORTB &= ~(1 << 7);
+	PORTC &= ~(1 << 0);
+}
+
 void wait_ms(uint16_t ms) {
 	// TODO: this function seems to be ~10% too fast
 	int32_t cycles = ms * (int32_t)64;
+
+	// wait_time is int16_t for performance reasons, so we have to wait multiple times
 
 	while(cycles >= INT16_MAX) {
 		cycles -= INT16_MAX;
@@ -176,6 +210,8 @@ void wait_ms(uint16_t ms) {
 			test_stop_app();
 		}
 	}
+
+	// wait the odd time left
 
 	wait_time = cycles;
 

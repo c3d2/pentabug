@@ -7,18 +7,20 @@
 #include <pentabug/hal.h>
 
 static void tune(void) {
-	PORTB ^= 1 << 7;
+	buzzer_inv();
 }
 
 void set_note(uint16_t note, uint8_t octave) {
 	if(note != NOTE_PAUSE) {
+		buzzer_up();
 		start_timer(PRESCALE_8, note >> octave, tune);
 	} else {
-		stop_timer();
+		stop_note();
 	}
 }
 
 void stop_note(void) {
+	buzzer_off();
 	stop_timer();
 }
 
