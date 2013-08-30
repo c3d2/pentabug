@@ -29,7 +29,7 @@ void stop_note(void) {
 	stop_timer();
 }
 
-void play_melody(const uint16_t notes[], size_t len, uint8_t octave, int speed) {
+void play_melody(uint16_t notes[], size_t len, uint8_t octave, int speed) {
 	int pause = speed / 20;
 	uint8_t length = 4;
 

@@ -1,7 +1,5 @@
 #include <stdlib.h>
 
-#include <avr/pgmspace.h>
-
 #include <pentabug/music.h>
 #include <pentabug/hal.h>
 #include <pentabug/helper.h>
@@ -9,7 +7,7 @@
 
 #define NOTE_BREAK		MLDY_LENGTH, 16, NOTE_PAUSE
 
-static const uint16_t notes[] PROGMEM = {
+static uint16_t notes[] = {
 	NOTE_C, NOTE_D, NOTE_E, NOTE_F, MLDY_LENGTH, 2, NOTE_G, MLDY_LENGTH, 2, NOTE_G, NOTE_BREAK,
 	NOTE_A, NOTE_A, NOTE_A, NOTE_A, MLDY_LENGTH, 2, NOTE_G, NOTE_BREAK,
 	NOTE_A, NOTE_A, NOTE_A, NOTE_A, MLDY_LENGTH, 2, NOTE_G, NOTE_BREAK,
