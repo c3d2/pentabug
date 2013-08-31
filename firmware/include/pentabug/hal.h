@@ -55,7 +55,7 @@ void buzzer_off(void);
 
 // IR
 
-// all this functions control whether a 38kHz modulated IR signal is sent
+// all these functions control whether a 38kHz modulated IR signal is sent
 void ir_on(void);
 void ir_off(void);
 void ir_inv(void);

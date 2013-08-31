@@ -113,6 +113,10 @@ void reset_hw(void) {
 	// turn ir off
 
 	ir_off();
+
+	// disable adc
+
+	ADCSRA &= ~(1 << ADEN);
 }
 
 uint8_t button_state(uint8_t btn) {
