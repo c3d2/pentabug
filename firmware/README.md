@@ -46,4 +46,7 @@ call the REGISTER() macro to define the entry point to your application.
 
 * add more functions to the hardware abstraction layer
 * a mechanism to select which applications to include in the firmware
+* working RC-5 sending and receiving
+* light and sound detection
+* actual applications which do more than blinking
 
