@@ -9,6 +9,8 @@
 #define OFF		0
 #define ON		1
 
+#define TICKS_PER_MS	38
+
 // INITIALIZATION
 
 // initializes the hardware (timers, ...)
@@ -67,5 +69,8 @@ uint8_t ir_recv(void);
 // waits the given amount of ms
 // WARNING: the time is actually measured in pentamilliseconds which are similar but not identical to regular milliseconds
 void wait_ms(uint16_t ms);
+
+// wait the given amount of ticks, see TICKS_PER_MS
+void wait_ticks(int16_t ticks);
 
 #endif /* HAL_H */

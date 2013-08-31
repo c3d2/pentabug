@@ -225,6 +225,14 @@ void wait_ms(uint16_t ms) {
 	}
 }
 
+void wait_ticks(int16_t ticks) {
+	wait_time = ticks;
+
+	while(wait_time > 0) {
+		test_stop_app();
+	}
+}
+
 void ir_on(void) {
 	ir_active = 1;
 }
