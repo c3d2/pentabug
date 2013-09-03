@@ -8,8 +8,8 @@
 #include <pentabug/music.h>
 #include <pentabug/helper.h>
 
-static uint16_t up_mldy[] = { NOTE_C, NOTE_D, MLDY_LENGTH, 2, NOTE_F, NOTE_PAUSE };
-static uint16_t down_mldy[] = { NOTE_F, NOTE_E, MLDY_LENGTH, 2, NOTE_C, NOTE_PAUSE };
+static uint16_t up_mldy[] = { NOTE_C, NOTE_E, NOTE_G, MLDY_LENGTH, 2, NOTE_C/2, NOTE_PAUSE };
+static uint16_t down_mldy[] = { NOTE_C/2, NOTE_G, NOTE_E, MLDY_LENGTH, 2, NOTE_C, NOTE_PAUSE };
 
 static inline void run_app(struct app_t* app) {
 	app_should_stop = 0;
