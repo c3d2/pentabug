@@ -5,9 +5,11 @@
 #include <pentabug/hal.h>
 #include <pentabug/lifecycle.h>
 
-void photons_init(void) {}
+void photons_init(void) {
+	ADCSRA |= (1 << ADEN);
+}
 
-uint16_t photons_measure(void) {
+uint8_t photons_measure(void) {
 	// save old state
 
 	uint8_t old_port = PORTC;
@@ -18,34 +20,40 @@ uint16_t photons_measure(void) {
 	led_off(RIGHT);
 	led_off(LEFT);
 
-	// set direction, no pullups
+	// set to ground for discharge
 
-	DDRC &= ~(1 << 3);
 	PORTC &= ~(1 << 3);
 
 	// wait for discharge
-	// TODO: needed?
 
-	wait_ms(10);
+	wait_ms(1);
+
+	// set direction to input for measurement
+
+	DDRC &= ~(1 << 3);
+
+	// collect some photons
+
+	wait_ms(1);
 
 	// start measurement
 
-	ADMUX  = (1 << REFS0);
-	ADCSRA = (1 << ADPS2) | (1 << ADPS1);
-	ADCSRA |= (1 << ADEN);
+	ADMUX  = (1 << REFS0) | (1 << ADLAR);
+	ADCSRA |= (1 << ADPS2) | (1 << ADPS1);
 
 	ADMUX = (ADMUX & ~(0x1F)) | 3;
+
 	ADCSRA |= (1 << ADSC);
 
 	// wait for measurement to finish
 
 	while (ADCSRA & (1 << ADSC)) test_stop_app();
 
-	uint16_t res = ADCW;
+	uint8_t res = ADCH;
 
 	// disable adc
 
-	ADCSRA &= ~(1 << ADEN);
+	/*ADCSRA &= ~(1 << ADEN);*/
 
 	// restore state
 

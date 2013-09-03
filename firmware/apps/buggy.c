@@ -13,7 +13,7 @@ static void init(void) {
 static void run(void) {
 	uint16_t light = photons_measure();
 
-	pentatonic_all_led_set(light >> 7);
+	pentatonic_all_led_set(light >> 3);
 
 	wait_ms(500);
 }

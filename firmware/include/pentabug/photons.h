@@ -5,6 +5,6 @@
 
 void photons_init(void);
 
-uint16_t photons_measure(void);
+uint8_t photons_measure(void);
 
 #endif /* PHOTONS_H */
