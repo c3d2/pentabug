@@ -8,7 +8,7 @@
 #include <pentabug/timer.h>
 
 static volatile uint8_t ir_active = 0;
-static int int_skip = 0;
+static uint16_t int_skip = 0;
 static volatile int16_t wait_time = 0;
 
 static uint16_t button_count[2];
