@@ -165,6 +165,14 @@ void led_inv(uint8_t led) {
 	}
 }
 
+uint8_t led_state(uint8_t led) {
+	if(led == RIGHT) {
+		return !(PORTC & (1 << 2));
+	} else {
+		return !(PORTD & (1 << 4));
+	}
+}
+
 void motor_set(uint8_t state) {
 	if(state) {
 		motor_on();

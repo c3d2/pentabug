@@ -9,11 +9,15 @@ void photons_init(void) {
 	ADCSRA |= (1 << ADEN);
 }
 
+void photons_stop(void) {
+	ADCSRA &= ~(1 << ADEN);
+}
+
 uint8_t photons_measure(void) {
 	// save old state
 
-	uint8_t old_port = PORTC;
-	uint8_t old_ddr = DDRC;
+	uint8_t old_right = led_state(RIGHT);
+	uint8_t old_left = led_state(LEFT);
 
 	// all leds off
 
@@ -22,6 +26,7 @@ uint8_t photons_measure(void) {
 
 	// set to ground for discharge
 
+	DDRC |= 1 << 3;
 	PORTC &= ~(1 << 3);
 
 	// wait for discharge
@@ -38,6 +43,7 @@ uint8_t photons_measure(void) {
 
 	// start measurement
 
+	// TODO: why can't i move this to the initialization?
 	ADMUX  = (1 << REFS0) | (1 << ADLAR);
 	ADCSRA |= (1 << ADPS2) | (1 << ADPS1);
 
@@ -51,14 +57,13 @@ uint8_t photons_measure(void) {
 
 	uint8_t res = ADCH;
 
-	// disable adc
-
-	/*ADCSRA &= ~(1 << ADEN);*/
-
 	// restore state
 
-	PORTC = old_port;
-	DDRC = old_ddr;
+	PORTC |= 1 << 3;
+	DDRC |= 1 << 3;
+
+	led_set(RIGHT, old_right);
+	led_set(LEFT, old_left);
 
 	// done
 

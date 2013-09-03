@@ -8,14 +8,19 @@
 static void init(void) {
 	pentatonic_direction(ALL_OUT);
 	photons_init();
+
+	led_on(RIGHT);
 }
 
 static void run(void) {
-	uint16_t light = photons_measure();
+	uint8_t light = photons_measure();
 
 	pentatonic_all_led_set(light >> 3);
 
-	wait_ms(500);
+	led_inv(LEFT);
+	led_inv(RIGHT);
+
+	wait_ms(100);
 }
 
 REGISTER(run, init, NULL);
