@@ -10,7 +10,19 @@ static void init(void) {
 static void blinker(void) {
 	led_inv(RIGHT);
 	led_inv(LEFT);
-	wait_ms(500);
+
+	uint8_t i;
+	for(i = 0; i < 50; ++i) {
+		if(button_clicked(RIGHT)) {
+			motor_on();
+		}
+
+		if(button_clicked(LEFT)) {
+			motor_off();
+		}
+
+		wait_ms(10);
+	}
 }
 
 REGISTER(blinker, init, NULL);

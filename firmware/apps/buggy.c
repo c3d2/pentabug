@@ -4,6 +4,7 @@
 #include <pentabug/hal.h>
 #include <pentabug/photons.h>
 #include <pentabug/pentatonic.h>
+#include <pentabug/music.h>
 
 inline uint16_t biased_random(uint8_t value) {
 	return value / 4 * (rand() & 7);
