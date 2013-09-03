@@ -26,7 +26,7 @@ static void run(void) {
 	led_set(RIGHT, biased_random(light) > 0x20);
 	led_set(LEFT, biased_random(light) > 0x20);
 
-	if(biased_random(light) > 0x90) {
+	if(biased_random(light) > 0x70) {
 		uint16_t tone = (biased_random(light) * 2) + 500;
 		set_note(tone, 0);
 	} else {
