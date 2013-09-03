@@ -30,8 +30,8 @@ void stop_note(void) {
 }
 
 void play_melody(uint16_t notes[], size_t len, uint8_t octave, int speed) {
-	int pause = speed / 20;
-	uint8_t length = 4;
+	uint8_t length = 1;
+	uint8_t pause = speed / 20;
 
 	size_t i;
 
@@ -39,7 +39,7 @@ void play_melody(uint16_t notes[], size_t len, uint8_t octave, int speed) {
 		if(notes[i] == MLDY_PAUSE) {
 			// user defined pause
 			++i;
-			wait_ms(notes[i]);
+			wait_ms(speed * notes[i]);
 		} else if(notes[i] == MLDY_LENGTH) {
 			// sets length for next tone
 			++i;
@@ -48,15 +48,15 @@ void play_melody(uint16_t notes[], size_t len, uint8_t octave, int speed) {
 			// play note
 			set_note(notes[i], octave);
 			test_stop_app();
-			wait_ms(speed * 4 / length);
+			wait_ms(speed * length - pause);
 
-			// pause after note
+			// pause
 			stop_note();
 			test_stop_app();
 			wait_ms(pause);
 
 			// reset length for next note
-			length = 4;
+			length = 1;
 		}
 	}
 }
