@@ -12,8 +12,6 @@ inline uint16_t biased_random(uint8_t value) {
 static void init(void) {
 	pentatonic_direction(ALL_OUT);
 	photons_init();
-
-	led_on(RIGHT);
 }
 
 static void run(void) {
