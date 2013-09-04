@@ -28,35 +28,29 @@ enum {
 
 const int patterns[][3][48] PROGMEM = {
 	{
-		{e_3,xxx,end,e_3,xxx,end,xxx,xxx,xxx,e_3,xxx,end,xxx,xxx,xxx,c_3,xxx,end,e_3,xxx,end,xxx,xxx,xxx,g_3,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx},
-		{fs2,xxx,end,fs2,xxx,end,xxx,xxx,xxx,fs2,xxx,end,xxx,xxx,xxx,fs2,xxx,end,fs2,xxx,end,xxx,xxx,xxx,b_2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,g_2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx},
-		{d_1,xxx,end,d_1,xxx,end,xxx,xxx,xxx,d_1,xxx,end,xxx,xxx,xxx,d_1,xxx,end,d_1,xxx,end,xxx,xxx,xxx,g_2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,g_1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx}
-	},
-	{
-		{c_3,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,g_2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,e_2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,a_2,xxx,end,xxx,xxx,xxx,b_2,xxx,end,xxx,xxx,xxx,as2,xxx,end,a_2,xxx,end,xxx,xxx,xxx},
-		{e_2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,c_2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,g_1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,c_2,xxx,end,xxx,xxx,xxx,d_2,xxx,end,xxx,xxx,xxx,cs2,xxx,end,c_2,xxx,end,xxx,xxx,xxx},
-		{g_1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,e_1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,c_1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,f_1,xxx,end,xxx,xxx,xxx,g_1,xxx,end,xxx,xxx,xxx,fs1,xxx,end,f_1,xxx,end,xxx,xxx,xxx}
-	},
-	{
-		{g_2,xxx,xxx,end,e_3,xxx,xxx,end,g_3,xxx,xxx,end,a_3,xxx,end,xxx,xxx,xxx,f_3,xxx,end,g_3,xxx,end,xxx,xxx,xxx,e_3,xxx,end,xxx,xxx,xxx,c_3,xxx,end,d_3,xxx,end,b_2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx},
-		{c_2,xxx,xxx,end,g_2,xxx,xxx,end,b_2,xxx,xxx,end,c_3,xxx,end,xxx,xxx,xxx,a_2,xxx,end,b_2,xxx,end,xxx,xxx,xxx,a_2,xxx,end,xxx,xxx,xxx,e_2,xxx,end,f_2,xxx,end,d_2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx},
-		{e_1,xxx,xxx,end,c_2,xxx,xxx,end,e_2,xxx,xxx,end,f_2,xxx,end,xxx,xxx,xxx,d_2,xxx,end,e_2,xxx,end,xxx,xxx,xxx,c_2,xxx,end,xxx,xxx,xxx,a_1,xxx,end,b_1,xxx,end,g_1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx}
-	},
-	{
-
-		{xxx,xxx,xxx,xxx,xxx,xxx,g_3,xxx,end,fs3,xxx,end,f_3,xxx,end,ds3,xxx,end,xxx,xxx,xxx,e_3,xxx,end,xxx,xxx,xxx,gs2,xxx,end,a_2,xxx,end,c_3,xxx,end,xxx,xxx,xxx,a_2,xxx,end,c_3,xxx,end,d_3,xxx,end},
-		{xxx,xxx,xxx,xxx,xxx,xxx,e_3,xxx,end,ds3,xxx,end,d_3,xxx,end,b_2,xxx,end,xxx,xxx,xxx,c_3,xxx,end,xxx,xxx,xxx,e_2,xxx,end,f_2,xxx,end,g_2,xxx,end,xxx,xxx,xxx,c_2,xxx,end,e_2,xxx,end,f_2,xxx,end},
-		{c_1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,g_1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,c_2,xxx,end,xxx,xxx,xxx,f_1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,c_2,xxx,end,c_2,xxx,end,xxx,xxx,xxx,f_1,xxx,end,xxx,xxx,xxx}
-	},
-	{
-		{xxx,xxx,xxx,xxx,xxx,xxx,g_3,xxx,end,fs3,xxx,end,f_3,xxx,end,ds3,xxx,end,xxx,xxx,xxx,e_3,xxx,end,xxx,xxx,xxx,c_4,xxx,end,xxx,xxx,xxx,c_4,xxx,end,c_4,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx},
-		{xxx,xxx,xxx,xxx,xxx,xxx,e_3,xxx,end,ds3,xxx,end,d_3,xxx,end,b_2,xxx,end,xxx,xxx,xxx,c_3,xxx,end,xxx,xxx,xxx,g_3,xxx,end,xxx,xxx,xxx,g_3,xxx,end,g_3,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx},
-		{c_1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,e_1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,g_1,xxx,end,c_2,xxx,end,xxx,xxx,xxx,f_3,xxx,end,xxx,xxx,xxx,f_3,xxx,end,f_3,xxx,end,xxx,xxx,xxx,g_1,xxx,end,xxx,xxx,xxx}
-	},
-	{
-		{xxx,xxx,xxx,xxx,xxx,xxx,ds3,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,d_3,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,c_3,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx},
-		{xxx,xxx,xxx,xxx,xxx,xxx,gs2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,f_2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,e_2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx},
-		{c_1,xxx,end,xxx,xxx,xxx,gs1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,as1,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,c_2,xxx,end,xxx,xxx,xxx,xxx,xxx,xxx,g_1,xxx,end,g_1,xxx,end,xxx,xxx,xxx,c_1,xxx,end,xxx,xxx,xxx}
+		{e_3,e_3,xxx,e_3,e_3,xxx,xxx,xxx,xxx,e_3,e_3,xxx,xxx,xxx,xxx,c_3,c_3,xxx,e_3,e_3,xxx,xxx,xxx,xxx,g_3,g_3,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,},
+		{fs2,fs2,xxx,fs2,fs2,xxx,xxx,xxx,xxx,fs2,fs2,xxx,xxx,xxx,xxx,fs2,fs2,xxx,fs2,fs2,xxx,xxx,xxx,xxx,b_2,b_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,g_2,g_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,},
+		{d_1,d_1,xxx,d_1,d_1,xxx,xxx,xxx,xxx,d_1,d_1,xxx,xxx,xxx,xxx,d_1,d_1,xxx,d_1,d_1,xxx,xxx,xxx,xxx,g_2,g_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,g_1,g_1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,},
+	},{
+		{c_3,c_3,xxx,xxx,xxx,xxx,xxx,xxx,xxx,g_2,g_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,e_2,e_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,a_2,a_2,xxx,xxx,xxx,xxx,b_2,b_2,xxx,xxx,xxx,xxx,as2,as2,xxx,a_2,a_2,xxx,xxx,xxx,xxx,},
+		{e_2,e_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,c_2,c_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,g_1,g_1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,c_2,c_2,xxx,xxx,xxx,xxx,d_2,d_2,xxx,xxx,xxx,xxx,cs2,cs2,xxx,c_2,c_2,xxx,xxx,xxx,xxx,},
+		{g_1,g_1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,e_1,e_1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,c_1,c_1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,f_1,f_1,xxx,xxx,xxx,xxx,g_1,g_1,xxx,xxx,xxx,xxx,fs1,fs1,xxx,f_1,f_1,xxx,xxx,xxx,xxx,},
+	},{
+		{g_2,g_2,g_2,xxx,e_3,e_3,e_3,xxx,g_3,g_3,g_3,xxx,a_3,a_3,xxx,xxx,xxx,xxx,f_3,f_3,xxx,g_3,g_3,xxx,xxx,xxx,xxx,e_3,e_3,xxx,xxx,xxx,xxx,c_3,c_3,xxx,d_3,d_3,xxx,b_2,b_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,},
+		{c_2,c_2,c_2,xxx,g_2,g_2,g_2,xxx,b_2,b_2,b_2,xxx,c_3,c_3,xxx,xxx,xxx,xxx,a_2,a_2,xxx,b_2,b_2,xxx,xxx,xxx,xxx,a_2,a_2,xxx,xxx,xxx,xxx,e_2,e_2,xxx,f_2,f_2,xxx,d_2,d_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,},
+		{e_1,e_1,e_1,xxx,c_2,c_2,c_2,xxx,e_2,e_2,e_2,xxx,f_2,f_2,xxx,xxx,xxx,xxx,d_2,d_2,xxx,e_2,e_2,xxx,xxx,xxx,xxx,c_2,c_2,xxx,xxx,xxx,xxx,a_1,a_1,xxx,b_1,b_1,xxx,g_1,g_1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,},
+	},{
+		{xxx,xxx,xxx,xxx,xxx,xxx,g_3,g_3,xxx,fs3,fs3,xxx,f_3,f_3,xxx,ds3,ds3,xxx,xxx,xxx,xxx,e_3,e_3,xxx,xxx,xxx,xxx,gs2,gs2,xxx,a_2,a_2,xxx,c_3,c_3,xxx,xxx,xxx,xxx,a_2,a_2,xxx,c_3,c_3,xxx,d_3,d_3,xxx,},
+		{xxx,xxx,xxx,xxx,xxx,xxx,e_3,e_3,xxx,ds3,ds3,xxx,d_3,d_3,xxx,b_2,b_2,xxx,xxx,xxx,xxx,c_3,c_3,xxx,xxx,xxx,xxx,e_2,e_2,xxx,f_2,f_2,xxx,g_2,g_2,xxx,xxx,xxx,xxx,c_2,c_2,xxx,e_2,e_2,xxx,f_2,f_2,xxx,},
+		{c_1,c_1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,g_1,g_1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,c_2,c_2,xxx,xxx,xxx,xxx,f_1,f_1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,c_2,c_2,xxx,c_2,c_2,xxx,xxx,xxx,xxx,f_1,f_1,xxx,xxx,xxx,xxx,},
+	},{
+		{xxx,xxx,xxx,xxx,xxx,xxx,g_3,g_3,xxx,fs3,fs3,xxx,f_3,f_3,xxx,ds3,ds3,xxx,xxx,xxx,xxx,e_3,e_3,xxx,xxx,xxx,xxx,c_4,c_4,xxx,xxx,xxx,xxx,c_4,c_4,xxx,c_4,c_4,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,},
+		{xxx,xxx,xxx,xxx,xxx,xxx,e_3,e_3,xxx,ds3,ds3,xxx,d_3,d_3,xxx,b_2,b_2,xxx,xxx,xxx,xxx,c_3,c_3,xxx,xxx,xxx,xxx,g_3,g_3,xxx,xxx,xxx,xxx,g_3,g_3,xxx,g_3,g_3,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,},
+		{c_1,c_1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,e_1,e_1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,g_1,g_1,xxx,c_2,c_2,xxx,xxx,xxx,xxx,f_3,f_3,xxx,xxx,xxx,xxx,f_3,f_3,xxx,f_3,f_3,xxx,xxx,xxx,xxx,g_1,g_1,xxx,xxx,xxx,xxx,},
+	},{
+		{xxx,xxx,xxx,xxx,xxx,xxx,ds3,ds3,xxx,xxx,xxx,xxx,xxx,xxx,xxx,d_3,d_3,xxx,xxx,xxx,xxx,xxx,xxx,xxx,c_3,c_3,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,},
+		{xxx,xxx,xxx,xxx,xxx,xxx,gs2,gs2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,f_2,f_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,e_2,e_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,},
+		{c_1,c_1,xxx,xxx,xxx,xxx,gs1,gs1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,as1,as1,xxx,xxx,xxx,xxx,xxx,xxx,xxx,c_2,c_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,g_1,g_1,xxx,g_1,g_1,xxx,xxx,xxx,xxx,c_1,c_1,xxx,xxx,xxx,xxx,},
 	},
 };
 
