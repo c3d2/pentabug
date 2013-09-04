@@ -14,8 +14,8 @@ static volatile int16_t wait_time = 0;
 static uint16_t button_count[2];
 static uint8_t button_pressed[2];
 
-// major interrupt for button handling, every 5ms
-inline static void major_interrupt(void) {
+// interrupt for button handling, every 5ms
+ISR(TIMER2_COMPA_vect) {
 	uint8_t i = 0;
 
 	for(i = 0; i < 2; ++i) {
@@ -48,15 +48,6 @@ ISR(TIMER0_COMPA_vect) {
 		PORTD ^= 1 << 2;
 	}
 
-	// call button handling less often
-
-	++int_skip;
-
-	if(int_skip >= 64 * 5) {
-		int_skip = 0;
-		major_interrupt();
-	}
-
 	// tell wait_ms() that 1/38 ms has passed
 
 	--wait_time;
@@ -68,7 +59,7 @@ void init_hw(void) {
 	CLKPR = 0b10000000;
 	CLKPR = 0b00000000;
 
-	// initialize timer
+	// IR timer
 
 	TIMSK0 |= (1 << OCIE0A);
 
@@ -77,6 +68,15 @@ void init_hw(void) {
 
 	TCCR0A = (1 << WGM01);
 	TCCR0B = (1 << CS00);
+
+	// button timer
+
+	TIMSK2 |= (1 << OCIE2A);
+
+	OCR2A = 35;
+
+	TCCR2A = (1 << WGM01);
+	TCCR2B = (1 << CS22) | (1 << CS21) | (1 << CS20);
 
 	// activate interrupts
 
