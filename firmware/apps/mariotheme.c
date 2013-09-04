@@ -103,7 +103,7 @@ uint16_t freq[] = {
 };
 
 
-uint8_t order[] = { //0, 1, 2, 1, 2
+uint8_t order[] = {
 	0,
 	1, 2, 1, 2,
 	3, 4, 3, 5,
@@ -124,10 +124,18 @@ static void mix_mario(void) {
 
 
 	uint8_t	p = order[row];
+	uint8_t n;
 
-	osc[0] += freq[pgm_read_byte(&patterns[p][0][note])];
-	osc[1] += freq[pgm_read_byte(&patterns[p][1][note])];
-	osc[2] += freq[pgm_read_byte(&patterns[p][2][note])];
+	n = pgm_read_byte(&patterns[p][0][note]);
+	if (n == 0) osc[0] = 0;
+	osc[0] += freq[n];
+	n = pgm_read_byte(&patterns[p][1][note]);
+	if (n == 0) osc[1] = 0;
+	osc[1] += freq[n];
+	n = pgm_read_byte(&patterns[p][2][note]);
+	if (n == 0) osc[2] = 0;
+	osc[2] += freq[n];
+
 
 	uint8_t amp =	(osc[0] > 0xf000) |
 					(osc[1] > 0xf000) |
