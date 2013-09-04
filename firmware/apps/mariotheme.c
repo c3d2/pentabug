@@ -9,16 +9,15 @@
 
 
 static uint16_t osc[3];
-static uint16_t speed[3];
 static uint16_t sample;
 static uint8_t note;
 static uint8_t row;
 
 enum {
 	NOTE_LENGTH = 600,
-	end = 0,
-	xxx = 0,
+	DUTY = 0xf000,
 
+	xxx = 0,
 	g_0, gs0, a_0, as0, b_0,
 	c_1, cs1, d_1, ds1, e_1, f_1, fs1, g_1, gs1, a_1, as1, b_1,
 	c_2, cs2, d_2, ds2, e_2, f_2, fs2, g_2, gs2, a_2, as2, b_2,
@@ -56,54 +55,16 @@ const int patterns[][3][48] PROGMEM = {
 
 
 
-uint16_t freq[] = {
+const uint16_t freq[] PROGMEM = {
 	0,
-	412,
-	436,
-	462,
-	489,
-	518,
-	549,
-	582,
-	617,
-	653,
-	692,
-	733,
-	777,
-	823,
-	872,
-	924,
-	979,
-	1037,
-	1099,
-	1164,
-	1233,
-	1306,
-	1384,
-	1466,
-	1554,
-	1646,
-	1744,
-	1848,
-	1957,
-	2074,
-	2197,
-	2328,
-	2466,
-	2613,
-	2768,
-	2933,
-	3107,
-	3292,
-	3488,
-	3695,
-	3915,
-	4148,
-	4394,
+	412, 436, 462, 489, 518, 549, 582, 617, 653, 692, 733, 777,
+	823, 872, 924, 979, 1037, 1099, 1164, 1233, 1306, 1384, 1466,
+	1554, 1646, 1744, 1848, 1957, 2074, 2197, 2328, 2466, 2613,
+	2768, 2933, 3107, 3292, 3488, 3695, 3915, 4148, 4394
 };
 
 
-uint8_t order[] = {
+const uint8_t order[] = {
 	0,
 	1, 2, 1, 2,
 	3, 4, 3, 5,
@@ -118,7 +79,7 @@ static void mix_mario(void) {
 		sample = 0;
 		if (++note >= 48) {
 			note = 0;
-			if (++row >= ARRAY_SIZE(order)) row = 1;
+			if (++row >= ARRAY_SIZE(order)) row = 1; // skip 0th row
 		}
 	}
 
@@ -128,19 +89,17 @@ static void mix_mario(void) {
 
 	n = pgm_read_byte(&patterns[p][0][note]);
 	if (n == 0) osc[0] = 0;
-	osc[0] += freq[n];
+	osc[0] += pgm_read_word(&freq[n]);
+
 	n = pgm_read_byte(&patterns[p][1][note]);
 	if (n == 0) osc[1] = 0;
-	osc[1] += freq[n];
+	osc[1] += pgm_read_word(&freq[n]);
+
 	n = pgm_read_byte(&patterns[p][2][note]);
 	if (n == 0) osc[2] = 0;
-	osc[2] += freq[n];
+	osc[2] += pgm_read_word(&freq[n]);
 
-
-	uint8_t amp =	(osc[0] > 0xf000) |
-					(osc[1] > 0xf000) |
-					(osc[2] > 0xf000);
-
+	uint8_t amp = (osc[0] > DUTY) | (osc[1] > DUTY) | (osc[2] > DUTY);
 
 	if (amp != prev_amp) {
 		buzzer_inv();
