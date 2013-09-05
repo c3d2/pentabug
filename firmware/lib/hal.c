@@ -8,13 +8,12 @@
 #include <pentabug/timer.h>
 
 static volatile uint8_t ir_active = 0;
-static uint16_t int_skip = 0;
 static volatile int16_t wait_time = 0;
 
-static uint16_t button_count[2];
+static uint8_t button_count[2];
 static uint8_t button_pressed[2];
 
-// interrupt for button handling, every 5ms
+// interrupt for button handling, every 10ms
 ISR(TIMER2_COMPA_vect) {
 	uint8_t i = 0;
 
@@ -22,7 +21,7 @@ ISR(TIMER2_COMPA_vect) {
 		// button pressed?
 		if(PINB & (1 << i)) {
 			// pressed for more than 50ms is a click
-			if(button_count[i] > 10 && button_count[i] < 200) {
+			if(button_count[i] > 5 && button_count[i] < 100) {
 				button_pressed[i] = 1;
 			}
 
@@ -34,7 +33,7 @@ ISR(TIMER2_COMPA_vect) {
 		}
 
 		// 1s pressed, request next app
-		if(button_count[i] == 200) {
+		if(button_count[i] == 100) {
 			next_app(i ? 1 : -1);
 		}
 	}
@@ -73,7 +72,7 @@ void init_hw(void) {
 
 	TIMSK2 |= (1 << OCIE2A);
 
-	OCR2A = 35;
+	OCR2A = 70;
 
 	TCCR2A = (1 << WGM01);
 	TCCR2B = (1 << CS22) | (1 << CS21) | (1 << CS20);
