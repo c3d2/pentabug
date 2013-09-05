@@ -151,6 +151,7 @@ static void init_mario(void) {
 	note = 0;
 	row = 0;
 	start_timer(PRESCALE_8, 100, mix_mario);
+	led_on(RIGHT);
 }
 
 static void run_mario(void) {}
