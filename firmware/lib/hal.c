@@ -10,11 +10,13 @@
 static volatile uint8_t ir_active = 0;
 static volatile int16_t wait_time = 0;
 
+static uint8_t timerdivider;
+
 static uint8_t button_count[2];
 static uint8_t button_pressed[2];
 
 // interrupt for button handling, every 10ms
-ISR(TIMER2_COMPA_vect) {
+ISR(TIMER2_COMPA_vect,ISR_NOBLOCK) {
 	uint8_t i = 0;
 
 	for(i = 0; i < 2; ++i) {
@@ -40,15 +42,20 @@ ISR(TIMER2_COMPA_vect) {
 }
 
 ISR(TIMER0_COMPA_vect) {
-	// generate 38kHz signal
+	// (2*38)kHz  ISR
+	//
 
+	//generate 38kHz signal:
 	if(ir_active) {
 		PORTD ^= 1 << 2;
 	}
+	timerdivider ++;
+	
+	//quaterdivider for wait_ms
+	if(!(timerdivider & 0x03)) {
+		--wait_time;
+	}
 
-	// tell wait_ms() that 1/38 ms has passed
-
-	--wait_time;
 }
 
 void init_hw(void) {
@@ -211,25 +218,10 @@ void buzzer_off(void) {
 	PORTC &= ~(1 << 0);
 }
 
+
+// uses the 76k ISR dividet by 4 -> 4 * 19 == 76
 void wait_ms(uint16_t ms) {
-	// TODO: this function seems to be ~10% too fast
-	int32_t cycles = ms * (int32_t) 76;
-
-	// wait_time is int16_t for performance reasons, so we have to wait multiple times
-
-	while(cycles >= INT16_MAX) {
-		cycles -= INT16_MAX;
-		wait_time = INT16_MAX;
-
-		while(wait_time > 0) {
-			test_stop_app();
-		}
-	}
-
-	// wait the odd time left
-
-	wait_time = cycles;
-
+	wait_time = ms * (int16_t) 19;
 	while(wait_time > 0) {
 		test_stop_app();
 	}
