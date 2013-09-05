@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#include <avr/io.h>
+
 // this library addresses the 16 bit timer
 
 #define PRESCALE_1		(1 << CS10)
