@@ -2,7 +2,7 @@
 
 #include <pentabug/hal.h>
 
-#define HALF_BIT_TICKS		34
+#define HALF_BIT_TICKS		68
 
 static uint8_t toggle = 0;
 

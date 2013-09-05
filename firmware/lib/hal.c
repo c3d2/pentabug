@@ -214,7 +214,7 @@ void buzzer_off(void) {
 
 void wait_ms(uint16_t ms) {
 	// TODO: this function seems to be ~10% too fast
-	int32_t cycles = ms * (int32_t)64;
+	int32_t cycles = ms * (int32_t) 76;
 
 	// wait_time is int16_t for performance reasons, so we have to wait multiple times
 
