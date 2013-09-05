@@ -112,19 +112,13 @@ static void mix_mario(void) {
 
 	uint8_t	p = order[row];
 	uint8_t n;
-	static uint8_t prev_n;
+	static uint8_t prev_n = 0;
 
 
 	n = pgm_read_byte(&patterns[p][0][note]);
 	if (n == 0) osc[0] = 0;
-	else {
-		// toggle leds on every new beep
-		if (n != prev_n) {
-			led_inv(LEFT);
-			led_inv(RIGHT);
-		}
-		osc[0] += pgm_read_word(&freq[n]);
-	}
+	osc[0] += pgm_read_word(&freq[n]);
+	if (n != prev_n) led_set(RIGHT, (n > 0));
 	prev_n = n;
 
 
