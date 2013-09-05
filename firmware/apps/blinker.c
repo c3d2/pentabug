@@ -11,18 +11,16 @@ static void blinker(void) {
 	led_inv(RIGHT);
 	led_inv(LEFT);
 
-	uint8_t i;
-	for(i = 0; i < 50; ++i) {
-		if(button_clicked(RIGHT)) {
-			motor_on();
-		}
+	wait_ms(500);
 
-		if(button_clicked(LEFT)) {
-			motor_off();
-		}
-
-		wait_ms(10);
+	if(button_clicked(RIGHT)) {
+		motor_on();
 	}
+
+	if(button_clicked(LEFT)) {
+		motor_off();
+	}
+
 }
 
 REGISTER(blinker, init, NULL);
