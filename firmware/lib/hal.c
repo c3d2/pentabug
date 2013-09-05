@@ -39,7 +39,6 @@ ISR(TIMER2_COMPA_vect) {
 	}
 }
 
-// WARNING: this interrupt is already way too big. extend only in case of emergency!
 ISR(TIMER0_COMPA_vect) {
 	// generate 38kHz signal
 
