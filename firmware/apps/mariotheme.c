@@ -25,7 +25,7 @@ enum {
 };
 
 
-const int patterns[][3][48] PROGMEM = {
+const uint8_t patterns[][3][48] PROGMEM = {
 	{
 		{e_3,e_3,xxx,e_3,e_3,xxx,xxx,xxx,xxx,e_3,e_3,xxx,xxx,xxx,xxx,c_3,c_3,xxx,e_3,e_3,xxx,xxx,xxx,xxx,g_3,g_3,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx},
 		{fs2,fs2,xxx,fs2,fs2,xxx,xxx,xxx,xxx,fs2,fs2,xxx,xxx,xxx,xxx,fs2,fs2,xxx,fs2,fs2,xxx,xxx,xxx,xxx,b_2,b_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,g_2,g_2,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx,xxx},
