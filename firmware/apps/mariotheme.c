@@ -118,7 +118,7 @@ static void mix_mario(void) {
 	n = pgm_read_byte(&patterns[p][0][note]);
 	if (n == 0) osc[0] = 0;
 	osc[0] += pgm_read_word(&freq[n]);
-	if (n != prev_n) led_set(RIGHT, (n > 0));
+	if (n != prev_n) led_set(RIGHT, (n > 0)); // blink
 	prev_n = n;
 
 
