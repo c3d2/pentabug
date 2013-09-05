@@ -8,7 +8,7 @@
 #include <pentabug/helper.h>
 
 inline uint16_t biased_random(uint8_t value) {
-	return value / 8 * (rand() & 7);
+	return value / 4 * (rand() & 7);
 }
 
 static void init(void) {
