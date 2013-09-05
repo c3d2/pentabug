@@ -5,6 +5,7 @@
 #include <pentabug/photons.h>
 #include <pentabug/pentatonic.h>
 #include <pentabug/music.h>
+#include <pentabug/helper.h>
 
 inline uint16_t biased_random(uint8_t value) {
 	return value / 8 * (rand() & 7);
@@ -16,23 +17,82 @@ static void init(void) {
 }
 
 static void run(void) {
-	uint8_t light = photons_measure();
+	if(ir_recv()) {
+		// receive a ir signal, react
 
-	pentatonic_all_led_set(light >> 3);
+		motor_on();
 
-	motor_set(biased_random(light) > 0x40);
+		led_on(RIGHT);
 
-	led_set(RIGHT, biased_random(light) > 0x20);
-	led_set(LEFT, biased_random(light) > 0x20);
+		set_note(NOTE_B, 5);
+		wait_ms(200);
+		set_note(NOTE_F, 5);
+		wait_ms(100);
 
-	if(biased_random(light) > 0x50) {
-		uint16_t tone = (biased_random(light) * 2) + 500;
-		set_note(tone, 0);
-	} else {
+		led_off(RIGHT);
+		led_on(LEFT);
+
+		set_note(NOTE_G, 5);
+		wait_ms(100);
+		set_note(NOTE_Ab, 5);
+		wait_ms(100);
+		set_note(NOTE_A, 5);
+		wait_ms(100);
+
+		led_off(LEFT);
+
+		motor_off();
+	} else if(button_clicked(RIGHT)) {
+		// button clicked, send ir signal and do some stuff
+
+		led_on(RIGHT);
+
+		set_note(NOTE_A, 5);
+		wait_ms(100);
+		set_note(NOTE_Ab, 5);
+		wait_ms(100);
+		set_note(NOTE_G, 5);
+		wait_ms(100);
+
+		led_off(RIGHT);
+		led_on(LEFT);
+
+		set_note(NOTE_F, 5);
+		wait_ms(100);
+		set_note(NOTE_B, 5);
+		wait_ms(200);
 		stop_note();
-	}
 
-	wait_ms(200);
+		led_off(LEFT);
+
+		ir_on();
+
+		wait_ms(400);
+
+		ir_off();
+
+		wait_ms(10);
+	} else {
+		// regular bug behaviour
+
+		uint8_t light = photons_measure();
+
+		pentatonic_all_led_set(light >> 3);
+
+		motor_set(biased_random(light) > 0x40);
+
+		led_set(RIGHT, biased_random(light) > 0x20);
+		led_set(LEFT, biased_random(light) > 0x20);
+
+		if(biased_random(light) > 0x50) {
+			uint16_t tone = (biased_random(light) * 2) + 500;
+			set_note(tone, 0);
+		} else {
+			stop_note();
+		}
+
+		wait_ms(200);
+	}
 }
 
 REGISTER(run, init, NULL);
