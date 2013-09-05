@@ -43,8 +43,6 @@ ISR(TIMER2_COMPA_vect,ISR_NOBLOCK) {
 
 ISR(TIMER0_COMPA_vect) {
 	// (2*38)kHz  ISR
-	//
-
 	//generate 38kHz signal:
 	if(ir_active) {
 		PORTD ^= 1 << 2;
@@ -53,10 +51,58 @@ ISR(TIMER0_COMPA_vect) {
 	
 	//quaterdivider for wait_ms
 	if(!(timerdivider & 0x03)) {
-		--wait_time;
+			--wait_time;
 	}
 
 }
+
+#if 0
+pinchangeportisr(ireingangport)
+{
+	if pinchanged is ir input:
+		if ir inactive
+			irrstate = IRR_IDLE
+			return
+		time_since_last  = timedivider - oldtime  //2d handle overflow
+
+		//State machine:
+		select (irrstate){
+			case ( IRR_IDLE):
+				irrstate = IRR_AWAIT_START_COMP;
+				…
+				break;
+			case (IRR_AWAIT_START_COMP):
+				//check for transition in time
+				if (time_since_last > IR_MAX_STARTBIT_TICKS)
+				{
+					irrstate = IRR_GET_BIT_FIRSTHALF;
+					bitnum = 0;
+				} else { irrstate = IRR_IDLE // errorreset}
+				break;
+			case (IRR_GET_BIT_FIRSTHALF)
+				//check beeing in time
+				// -> buffer bit[bitnum]
+				// else reset
+				irrstate = IRR_GET_BIT_SECHALF;
+				break;
+			case (IRR_GET_BIT_SECHALF)
+				//check beeing in time
+				// -> inc bitnum
+				// -> irrstate = (maxbits)?IRR_GET_STOP_COND:IRR_GET_BIT_FIRSTHALF;
+				// else reset
+				…
+				break;
+			case (IRR_GET_STOP_COND):
+				//check beeing in time <- need macro for this :-)
+				//-> mark received done and set ir inactive (mainloop has to poll done or idle loop callback registration?)
+				//-> else reset
+		}
+}
+
+
+
+#endif 
+
 
 void init_hw(void) {
 	// we need to get real fast (8MHz) to handle 38kHz IR frequency ...
