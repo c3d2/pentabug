@@ -1,5 +1,7 @@
 PROJECT=pentabug
 
+APPS = buggy mariotheme geiger ducklings blinker
+
 OPTIMIZATION = -Os
 MCU = atmega88pa
 F_CPU = 8000000
@@ -8,7 +10,8 @@ FUSES = lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0x01:m
 
 #########################################################################
 
-SRC=$(wildcard lib/*.c apps/*.c *.c) 
+APP_SRC=$(APPS:%=apps/%.c)
+SRC=$(wildcard lib/*.c *.c) $(APP_SRC)
 OBJECTS= $(SRC:.c=.o) 
 LSTFILES= $(SRC:.c=.lst)
 HEADERS=$(wildcard */*/*.h */*.h *.h)
