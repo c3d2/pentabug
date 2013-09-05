@@ -112,14 +112,14 @@ static void mix_mario(void) {
 
 	uint8_t	p = order[row];
 	uint8_t n;
-	static uint8_t prev_n = 0;
+	static uint8_t prev_n0 = 0, prev_n2 = 0;
 
 
 	n = pgm_read_byte(&patterns[p][0][note]);
 	if (n == 0) osc[0] = 0;
 	osc[0] += pgm_read_word(&freq[n]);
-	if (n != prev_n) led_set(RIGHT, (n > 0)); // blink
-	prev_n = n;
+	if (n != prev_n0) led_set(RIGHT, (n > 0)); // blink
+	prev_n0 = n;
 
 
 	n = pgm_read_byte(&patterns[p][1][note]);
@@ -129,6 +129,8 @@ static void mix_mario(void) {
 	n = pgm_read_byte(&patterns[p][2][note]);
 	if (n == 0) osc[2] = 0;
 	osc[2] += pgm_read_word(&freq[n]);
+	if (n != prev_n2) led_set(LEFT, (n > 0)); // blink
+	prev_n2 = n;
 
 	uint8_t amp = (osc[0] > DUTY) | (osc[1] > DUTY) | (osc[2] > DUTY);
 
@@ -145,7 +147,6 @@ static void init_mario(void) {
 	note = 0;
 	row = 0;
 	start_timer(PRESCALE_8, 100, mix_mario);
-	led_on(RIGHT);
 }
 
 static void run_mario(void) {}
