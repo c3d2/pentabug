@@ -39,7 +39,7 @@ uint8_t photons_measure(void) {
 
 	// collect some photons
 
-	wait_ms(1);
+	wait_ms(10);
 
 	// start measurement
 

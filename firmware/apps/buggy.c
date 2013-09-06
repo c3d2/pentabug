@@ -8,7 +8,7 @@
 #include <pentabug/helper.h>
 
 inline uint16_t biased_random(uint8_t value) {
-	return value / 4 * (rand() & 7);
+	return value / 2 * (rand() & 15);
 }
 
 static void init(void) {
@@ -79,12 +79,12 @@ static void run(void) {
 
 		pentatonic_all_led_set(light >> 3);
 
-		motor_set(biased_random(light) > 0x40);
+		motor_set(biased_random(light) > 0x70);
 
-		led_set(RIGHT, biased_random(light) > 0x20);
-		led_set(LEFT, biased_random(light) > 0x20);
+		led_set(RIGHT, biased_random(light) > 0x30);
+		led_set(LEFT, biased_random(light) > 0x30);
 
-		if(biased_random(light) > 0x50) {
+		if(biased_random(light) > 0x60) {
 			uint16_t tone = (biased_random(light) * 2) + 500;
 			set_note(tone, 0);
 		} else {
