@@ -13,24 +13,24 @@ void matrix_init(void) {
 }
 
 static void move_line(uint8_t line) {
-	PORTD &= ~0xe0;
-	PORTD |= 1 << (line + 5);
+	PORTD |= 0xe0;
+	PORTD &= ~(1 << (line + 5));
 }
 
 static void write_line(uint8_t data[]) {
-	PORTC |= (1 << 5) | (1 << 4);
-	PORTB |= 1 << 2;
+	PORTC &= ~((1 << 5) | (1 << 4));
+	PORTB &= ~(1 << 2);
 
 	if(data[0]) {
-		PORTC &= ~(1 << 5);
+		PORTC |= 1 << 5;
 	}
 
 	if(data[1]) {
-		PORTC &= ~(1 << 4);
+		PORTC |= 1 << 4;
 	}
 
 	if(data[2]) {
-		PORTB &= ~(1 << 2);
+		PORTB |= 1 << 2;
 	}
 }
 
