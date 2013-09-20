@@ -1931,7 +1931,7 @@ design rules under a new name.</description>
 <vertex x="137.16" y="0"/>
 </polygon>
 </signal>
-<signal name="PC5_L">
+<signal name="PD5_L">
 <contactref element="SV__4" pad="2"/>
 <contactref element="LED10" pad="K"/>
 <contactref element="LED13" pad="K"/>
@@ -1942,7 +1942,7 @@ design rules under a new name.</description>
 <wire x1="149.519934375" y1="20.64136875" x2="144.5808" y2="15.70223125" width="0.6096" layer="1"/>
 <wire x1="144.5808" y1="15.70223125" x2="143.8142875" y2="14.935715625" width="0.6096" layer="1"/>
 </signal>
-<signal name="PC4_L">
+<signal name="PD6_L">
 <contactref element="SV__4" pad="3"/>
 <contactref element="LED11" pad="K"/>
 <contactref element="LED14" pad="K"/>
@@ -1953,7 +1953,7 @@ design rules under a new name.</description>
 <wire x1="146.0180875" y1="10.7630875" x2="144.78" y2="9.525" width="0.6096" layer="1"/>
 <wire x1="144.78" y1="9.525" x2="144.78" y2="2.54" width="0.6096" layer="1"/>
 </signal>
-<signal name="PB2_L">
+<signal name="PD7_L">
 <contactref element="SV__4" pad="4"/>
 <contactref element="LED12" pad="K"/>
 <contactref element="LED15" pad="K"/>
@@ -1964,7 +1964,7 @@ design rules under a new name.</description>
 <wire x1="148.063953125" y1="5.823953125" x2="147.32" y2="5.08" width="0.6096" layer="1"/>
 <wire x1="147.32" y1="5.08" x2="147.32" y2="2.54" width="0.6096" layer="1"/>
 </signal>
-<signal name="PD5_L">
+<signal name="PC5_L">
 <contactref element="SV__5" pad="2"/>
 <contactref element="LED18" pad="A"/>
 <contactref element="LED16" pad="A"/>
@@ -1977,7 +1977,7 @@ design rules under a new name.</description>
 <wire x1="147.72388125" y1="12.559140625" x2="147.72388125" y2="14.83611875" width="0.6096" layer="16"/>
 <wire x1="152.663025" y1="9.896975" x2="152.663025" y2="7.62000625" width="0.6096" layer="16"/>
 </signal>
-<signal name="PD6_L">
+<signal name="PC4_L">
 <contactref element="SV__5" pad="3"/>
 <contactref element="LED15" pad="A"/>
 <contactref element="LED13" pad="A"/>
@@ -1992,7 +1992,7 @@ design rules under a new name.</description>
 <wire x1="152.663028125" y1="18.043028125" x2="153.67" y2="19.05" width="0.6096" layer="16"/>
 <wire x1="157.602165625" y1="15.117834375" x2="157.602165625" y2="12.55914375" width="0.6096" layer="16"/>
 </signal>
-<signal name="PD7_L">
+<signal name="PB2_L">
 <contactref element="SV__5" pad="4"/>
 <contactref element="LED12" pad="A"/>
 <contactref element="LED10" pad="A"/>
