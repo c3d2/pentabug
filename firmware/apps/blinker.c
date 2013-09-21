@@ -2,6 +2,7 @@
 
 #include <pentabug/app.h>
 #include <pentabug/hal.h>
+#include <pentabug/matrix.h>
 
 #ifdef MATRIX
 uint8_t inv = 0;

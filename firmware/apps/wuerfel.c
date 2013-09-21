@@ -12,32 +12,32 @@ static void init(void) {
 }
 static void wuerfel(void) {
 
-    void w_eins(){
+    void w_eins(void){
         matrix_set(1,1,1);
     }
-    void w_zwei(){
+    void w_zwei(void){
         matrix_set(0,0,1);
         matrix_set(2,2,2);
     }
-    void w_drei(){
+    void w_drei(void){
         matrix_set(0,0,1);
         matrix_set(2,2,1);
         matrix_set(1,1,1);
     }
-    void w_vier(){
+    void w_vier(void){
         matrix_set(0,0,1);
         matrix_set(0,2,1);
         matrix_set(2,2,1);
         matrix_set(2,0,1);
     }
-    void w_funf(){
+    void w_funf(void){
         matrix_set(1,1,1);
         matrix_set(0,0,1);
         matrix_set(0,2,1);
         matrix_set(2,2,1);
         matrix_set(2,0,1);
     }
-    void w_sechs(){
+    void w_sechs(void){
         matrix_set(1,0,1);
         matrix_set(0,0,1);
         matrix_set(0,2,1);
@@ -45,7 +45,7 @@ static void wuerfel(void) {
         matrix_set(2,0,1);
         matrix_set(1,2,1);
     }
-    void clear(){
+    void clear(void){
         for(uint8_t x = 0; x < 3; ++x){
             for(uint8_t y = 0; y < 3; ++y){
                 matrix_set(x,y,0);
