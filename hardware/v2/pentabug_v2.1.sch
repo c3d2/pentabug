@@ -5565,7 +5565,7 @@ type 0207, grid 10 mm</description>
 </class>
 </classes>
 <parts>
-<part name="IC1" library="atmel" deviceset="MEGA8-P" device="" value="ATMEGA88"/>
+<part name="IC1" library="atmel" deviceset="MEGA8-P" device="" value="ATMEGA328P-PU"/>
 <part name="P+2" library="supply1" deviceset="VCC" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
 <part name="C1" library="resistor" deviceset="C-EU" device="025-024X044" value="100nF"/>
@@ -5656,8 +5656,6 @@ type 0207, grid 10 mm</description>
 <part name="LED16" library="led" deviceset="LED" device="5MM"/>
 <part name="LED17" library="led" deviceset="LED" device="5MM"/>
 <part name="LED18" library="led" deviceset="LED" device="5MM"/>
-<part name="R6" library="bigalexeasysolder" deviceset="R-EU_EASY-SOLDER" device="0207/10_EASY-SOLDER"/>
-<part name="R7" library="bigalexeasysolder" deviceset="R-EU_EASY-SOLDER" device="0207/10_EASY-SOLDER" value="100K"/>
 </parts>
 <sheets>
 <sheet>
@@ -5665,7 +5663,7 @@ type 0207, grid 10 mm</description>
 <wire x1="157.48" y1="119.38" x2="157.48" y2="40.64" width="0.1524" layer="94"/>
 <wire x1="157.48" y1="40.64" x2="205.74" y2="40.64" width="0.1524" layer="94"/>
 <text x="160.02" y="43.18" size="1.778" layer="94">Serielle Schnittstelle und ISP</text>
-<text x="127.508" y="-46.482" size="3.81" layer="94" font="vector">DEFEKT!</text>
+<text x="127.508" y="-50.8" size="3.81" layer="94" font="vector">DEFEKT!</text>
 <text x="104.14" y="43.18" size="1.778" layer="94">Vibrationsmotor und Treiber</text>
 <wire x1="157.48" y1="40.64" x2="101.6" y2="40.64" width="0.1524" layer="94"/>
 <wire x1="101.6" y1="40.64" x2="101.6" y2="119.38" width="0.1524" layer="94"/>
@@ -5681,7 +5679,9 @@ type 0207, grid 10 mm</description>
 <text x="71.12" y="-20.32" size="1.778" layer="94">Taster</text>
 <text x="104.14" y="-20.32" size="1.778" layer="94">Piezo Buzzer</text>
 <text x="160.02" y="-20.32" size="1.778" layer="94">Batterie und Spannungssensor</text>
-<text x="119.38" y="-38.1" size="3.81" layer="94">Pentabug V2.0</text>
+<text x="119.38" y="-38.1" size="3.81" layer="94">Pentabug V2.1</text>
+<text x="119.38" y="-41.91" size="1.27" layer="94">voll kompatibel zu V2.0
+Lötstellen+Beschriftung verbesert</text>
 </plain>
 <instances>
 <instance part="IC1" gate="G$1" x="7.62" y="-2.54"/>
@@ -5762,8 +5762,6 @@ type 0207, grid 10 mm</description>
 <instance part="LED4" gate="G$1" x="-7.62" y="99.06" rot="R90"/>
 <instance part="P+8" gate="VCC" x="-22.86" y="106.68"/>
 <instance part="P+9" gate="VCC" x="55.88" y="2.54"/>
-<instance part="R6" gate="G$1" x="25.4" y="53.34"/>
-<instance part="R7" gate="G$1" x="-10.16" y="43.18"/>
 </instances>
 <busses>
 </busses>
@@ -6634,4 +6632,10 @@ type 0207, grid 10 mm</description>
 </sheets>
 </schematic>
 </drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+</compatibility>
 </eagle>
