@@ -69,15 +69,17 @@ fuse:
 	$(AVRDUDE) -p m88 -F -P /dev/ttyUSB0 -c stk500v2  -v -v  -U $(FUSES)
 
 
-#flash: $(PROJECT).hex Makefile
+flash: $(PROJECT).hex Makefile
 #	$(AVRDUDE) -p m88 -F -c usbtiny  -v -v  -U flash:w:$(PROJECT).hex
+	$(AVRDUDE) -p m88 -F -P /dev/ttyUSB0  -c stk500v2 -v -v  -U flash:w:$(PROJECT).hex
+	
 
 fljohflsmart: $(PROJECT).hex Makefile
 	$(AVRDUDE) -p m88 -F  -P /dev/ttyUSB0 -c stk500v2 -v -v  -U flash:w:$(PROJECT).hexn: $(PROJECT).hex Makefile
 	$(AVRDUDE) -p m88 -F  -P /dev/serial/by-id/usb-FTDI_USB__-__Serial-if00-port0   -c stk500v2 -v -v  -U flash:w:$(PROJECT).hex
 
-flash: $(PROJECT).hex Makefile
-	$(AVRDUDE) -p m88 -F  -P /dev/ttyUSB0 -c stk500v2 -v -v  -U flash:w:$(PROJECT).hex
+#flash: $(PROJECT).hex Makefile
+#	$(AVRDUDE) -p m88 -F  -P /dev/ttyUSB0 -c stk500v2 -v -v  -U flash:w:$(PROJECT).hex
 
 .PHONY : clean all fuse flash fljohn 
 

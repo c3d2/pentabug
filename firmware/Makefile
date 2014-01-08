@@ -77,6 +77,8 @@ fljohn: $(PROJECT).hex Makefile
 flsmart: $(PROJECT).hex Makefile
 	$(AVRDUDE) -p m88 -F  -P /dev/ttyUSB0 -c stk500v2 -v -v  -U flash:w:$(PROJECT).hex
 
+flusbasp: $(PROJECT).hex Makefile
+	$(AVRDUDE) -p m88 -F -c usbasp -v -v  -U flash:w:$(PROJECT).hex
 
 .PHONY : clean all fuse flash fljohn 
 
