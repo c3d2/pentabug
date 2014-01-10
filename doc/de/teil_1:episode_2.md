@@ -74,6 +74,33 @@ elektrische Messgrößen erfassen (d.h. messen, deswegen
 Für den Pentabug reicht ein ganz billiges aus dem Baumarkt oder halt auch von
 [Amazon](http://www.amazon.de/dp/B003IP80SS/).
 
+## Die Bauteile erklärt
+
+Damit Ihr wisst, was Ihr verbaut, folgt hier noch eine kurze Erklärung der einzelnen Bauteile.
+Die Erklärung folgt ist nicht unbedingt die Reihenfolge in der Ihr die Bauteile auch später verbaut.
+
+### Die Platine
+
+TODO: Insert hier Bild von PLatine
+
+Die Platine ist das Bauteil, auf der alle anderen Bauteile befestigt werden. Sie hat für jedes benötigte Bauteil vorgefertigte Löcher / Bohrungen, sowie Beschriftungen. Zusätzlich liegen auf ihr unter dem Lack Kupferleitungen zwischen einigen Löchern. Diese Kupferleitungen sind wie Kabel und dienen dazu, später den Strom zu transportieren.
+
+### Die Batterie
+
+TODO: Insert hier Bild von Batterie
+
+Eine Batterie kennt Ihr. 
+
+Sie liefert die benötigte Energie um den Pentabug später zu betreiben. Neben der richtigen Form und Größe gibt es noch weitere wichtige Eigenschaften einer Batterie, die ein Jedi kennen muss: 
+
+Eine Batterie hat immer zwei Pole ("+" und "-"). Im inneren dieser Batterie befinden sich an einem Polende viele Elektronen, die gerne an das andere Polende kommen möchten. Da es im inneren der Batterie aber keinen Durchgang gibt, können die Elektronen nur außen herum, wenn man ihnen eine Möglichkeit dazu gibt. Den Weg, den der Pentabug den Elektronen der Batterie bietet, ist der eigentliche Schaltkreis. Die Elektronen werden also von dem einen Pol der Batterie durch die Schaltung des Pentabug, durch alle Bauteile hindurch, zum anderen Pol der Batterie geleitet. Ein bestimmtes, weiter unten besprochenes, Bauteil verhindert, dass die Elektronen immer durch alle Bauteile fließen, sondern nur dann, wenn der Padawan dies wünscht.
+
+Den Wunsch, wie dolle die Elektronen von einem Pol zum anderen wollen, nennt man *Spannung*. Diese Spannung wird in der Einheit *Volt* (V) angegeben. Auf der Batterie ist aufgedruckt, welche Spannung sie liefert. Die Bauteile stellen eine gewisse Hürde auf um überquert zu werden. Diese Hürde nennt man *Widerstand*. Er wird in der Einheit *Ohm* (Ω) angegeben. Dann wäre da noch der Begriff des *Strom*es. Dieser beschreibt (zumindest ungefähr) wie viele Elektronen an einer gewissen Stelle durchfließen. 
+
+TODO: URI jetzt noch im Zusammenhang erklären und paar Beispiele geben. Vielleicht auch noch eine weniger abstrakte Beschreibung liefern?
+
+
+
 ## Auf gehts
 
 Jetzt geht es schon ans Zusammenbauen des Pentabugs. Wenn Du kein Bock auf
