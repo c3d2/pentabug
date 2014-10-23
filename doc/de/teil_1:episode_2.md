@@ -6,7 +6,7 @@ Du ihn zusammenbaust und dann zum Leben erweckst.
 ## Was kann son Pentabug eigentlich?
 
 Der Pentabug ist ein kleiner Roboter, den Du selbst zusammebauen und
-programieren kannst.  Er ist recht einfach gehalten und gerade für Einsteiger
+programmieren kannst.  Er ist recht einfach gehalten und gerade für Einsteiger
 im Bereich der Elektronik besonders gut geeignet.
 
 Der Pentabug kann leuchten, piepen, sich bewegen, auf Geräusche reagieren,
