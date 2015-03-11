@@ -16,7 +16,7 @@ Img. 2: A slightly advanced (but early) prototype version of the bug with a sing
 ![Top Layer of Version 1.0 Board](https://github.com/c3d2/pentabug/raw/master/img/board_top.png)  
 Img. 3: The top layer view of the Version 1.0 production board (two layer pcb).
 
-![Version 1.0 Schematics (Thumbnail)](https://github.com/c3d2/pentabug/raw/master/img/schematics_v1_0_thumb.png)  
-Img. 4: Version 1.0 schematics ([high resolution image](https://github.com/c3d2/pentabug/raw/master/img/schematics_v1_0.png "high resolution image of schematics")).
+![Version 2.1 Schematics (Thumbnail)](https://github.com/c3d2/pentabug/raw/master/img/schematics_v1_1_thumb.png)  
+Img. 4: Version 2.1 schematics ([high resolution image](https://github.com/c3d2/pentabug/raw/master/img/schematics_v2_1.png "high resolution image of schematics")).
 
 [Bill of Materials for Version 1.0](https://github.com/c3d2/pentabug/blob/master/bom.md "bill of materials")
