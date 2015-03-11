@@ -1,6 +1,6 @@
-PROJECT=pentabug
-
 APPS = buggy jumpy mariotheme geiger ducklings blinker
+
+PROJECT=pentabug
 
 OPTIMIZATION = -Os
 MCU = atmega88pa
