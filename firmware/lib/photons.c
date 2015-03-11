@@ -31,7 +31,7 @@ uint8_t photons_measure(void) {
 
 	// wait for discharge
 
-	wait_ms(1);
+	wait_ms(5);
 
 	// set direction to input for measurement
 

@@ -7,6 +7,8 @@
 #include <pentabug/music.h>
 #include <pentabug/helper.h>
 
+#define BASELINE		0xa0
+
 inline uint16_t biased_random(uint8_t value) {
 	return value / 2 * (rand() & 15);
 }
@@ -79,12 +81,12 @@ static void run(void) {
 
 		pentatonic_all_led_set(light >> 3);
 
-		motor_set(biased_random(light) > 0x70);
+		motor_set(biased_random(light) > BASELINE + 0x40);
 
-		led_set(RIGHT, biased_random(light) > 0x30);
-		led_set(LEFT, biased_random(light) > 0x30);
+		led_set(RIGHT, biased_random(light) > BASELINE + 0x00);
+		led_set(LEFT, biased_random(light) > BASELINE + 0x00);
 
-		if(biased_random(light) > 0x60) {
+		if(biased_random(light) > BASELINE + 0x20) {
 			uint16_t tone = (biased_random(light) * 2) + 500;
 			set_note(tone, 0);
 		} else {

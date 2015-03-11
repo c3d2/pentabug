@@ -12,34 +12,13 @@
 
 #define FLASH(port, pin)		{ port &= ~(1 << pin); _delay_ms(50); port |= 1 << pin;}
 
-static volatile uint32_t button_state = 0;
-static volatile uint8_t next_mode = 0;
 static volatile uint8_t ir_active = 0;
-
-enum test_modes {
-	PHOTONS,
-	MOTOR,
-	AUDIO,
-	SHIELD,
-	// the end ... wrap
-	MODE_MAX,
-};
 
 ISR(TIMER0_COMPA_vect) {
 	if(ir_active) {
 		PORTD ^= 1 << 2;
 	} else {
 		PORTD &= ~(1 << 2);
-	}
-
-	if(PINB & (1 << 1)) {
-		button_state = 0;
-	} else {
-		++button_state;
-	}
-
-	if(button_state == (38l * 1000 / 2)) {
-		next_mode = 1;
 	}
 }
 
@@ -70,7 +49,6 @@ static void reset_hw(void) {
 }
 
 int main(void) {
-	uint8_t vib_delay = 0;
 	uint16_t count = 0;
 
 	// we need to get real fast (8MHz) to handle 38kHz IR frequency ...
@@ -96,79 +74,54 @@ int main(void) {
 
 	// looping
 
-	enum test_modes mode = PHOTONS;
-
 	for ever {
-		// next mode?
+		// blinking left led
 
-		if(next_mode) {
-			// cleanup
-			switch(mode) {
-				case PHOTONS:
-					ir_active = 0;
-					break;
-				case MOTOR:
-				case AUDIO:
-				case SHIELD:
-					break;
-				case MODE_MAX: break;
-			}
-
-			reset_hw();
-
-			++mode;
-
-			if(mode == MODE_MAX) {
-				mode = 0;
-			}
-
-			uint32_t i;
-			for(i = 0; i < 50; ++i) {
-				PORTB ^= 1 << 7;
-				_delay_ms(1);
-			}
-
-			next_mode = 0;
+		if(count % 0x4000 == 0) {
+			PORTD ^= 1 << 4;
 		}
 
-		uint8_t button = !(PINB & (1 << 0));
+		++count;
+
+		// right led on ir
 
 		not_follow(PIND & (1 << 3), PORTC, 2);
 
-		switch(mode) {
-			case PHOTONS:
-				{
-					ir_active = button;
-					if(count % 0x2000 == 0) {
-						PORTD ^= 1 << 4;
-					}
-					++count;
-					break;
-				}
-			case MOTOR:
-				not_follow(button, PORTB, 6);
-				break;
-			case AUDIO:
-				{
-					if(button) {
-						PORTC ^= 1 << 0;
-						_delay_ms(2);
-					}
+		// left button
 
-					break;
-				}
-			case SHIELD:
-				if(button) {
-					FLASH(PORTB, 2);
-					FLASH(PORTD, 5);
-					FLASH(PORTD, 6);
-					FLASH(PORTD, 7);
-					FLASH(PORTC, 5);
-					FLASH(PORTC, 4);
-				}
-				break;
-			case MODE_MAX: break;
+		const uint8_t button_r = !(PINB & (1 << 0));
+		const uint8_t button_l = !(PINB & (1 << 1));
+
+		// ir
+
+		ir_active = button_r;
+
+		// motor
+
+		not_follow(button_l, PORTB, 6);
+
+		// sound stuff
+
+		if(button_l) {
+			PORTC ^= 1 << 0;
+			_delay_ms(2);
 		}
+
+		if(button_r) {
+			PORTC ^= 1 << 0;
+			_delay_ms(4);
+		}
+
+		// cycle pins on extension board
+
+		const uint8_t step = (count >> 13) & 7;
+
+		follow(step == 0, PORTB, 2);
+		follow(step == 1, PORTD, 5);
+		follow(step == 2, PORTD, 6);
+		follow(step == 3, PORTD, 7);
+		follow(step == 4, PORTC, 5);
+		follow(step == 5, PORTC, 4);
 	}
 
 	/* never  return 0; */
