@@ -22,3 +22,8 @@ Img. 3: The top layer view of the Version 1.0 production board (two layer pcb).
 Img. 4: Version 2.1 schematics ([high resolution image](https://github.com/c3d2/pentabug/raw/master/img/schematics_v2_1.png "high resolution image of schematics")).
 
 [Bill of Materials for Version 1.0](https://github.com/c3d2/pentabug/blob/master/bom.md "bill of materials") - CAVE: This is outdated for the V2.0 and V2.1 versions.
+
+AVR GCC Toolchain
+==================
+ * install binutils-avr, gcc-avr, avr-libc, avrdude
+ <pre><code>sudo apt-get install binutils-avr gcc-avr avr-libc avrdude</code></pre>
